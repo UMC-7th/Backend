@@ -12,6 +12,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Create .env file
+        run: |
+          echo "port=${{ secrets.PORT }}" >> .env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+
+      - name: Copy .env file to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          source: ".env"
+          target: "/home/ubuntu/Backend"
+
       - name: excuting remote ssh commands
         uses: appleboy/ssh-action@v1.2.0
         with:
