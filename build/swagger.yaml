@@ -1,0 +1,61 @@
+openapi: 3.0.3
+info:
+  title: EatThis Server API
+  version: 1.0.11
+servers:
+  - url: 'http://localhost:3000'
+tags:
+  - name: dummy
+    description: dummyApi Tag
+paths:
+  /temp:
+    put:
+      tags:
+        - dummy
+      summary: Dummy API url
+      description: this is Dummy API URL
+      requestBody:
+        description: Dummy API Request Body
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TempRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Data not found
+components:
+  schemas:
+    TempRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+        name:
+          type: string
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+        result:
+          type: object
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
