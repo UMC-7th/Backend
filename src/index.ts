@@ -5,10 +5,12 @@ import swaggerUi from "swagger-ui-express";
 import YAML from "yamljs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { handleUserSignUp } from "./controller/user.controller.ts";
+
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,6 +28,9 @@ app.get("/", (req: Request, res: Response) => {
 app.post("/temp", (req: Request, res: Response) => {});
 
 app.use("/swagger-ui", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.post("/users/signup", handleUserSignUp);
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
