@@ -3,24 +3,35 @@ info:
   title: EatThis Server API
   version: 1.0.11
 servers:
-  - url: http://3.38.39.238:3000
+  - url: http://localhost:3000
 tags:
   - name: dummy
     description: dummyApi Tag
 
 paths:
-  /temp:
-    put:
+  /user/signup:
+    post:
       tags:
-        - dummy
-      summary: Dummy API url
-      description: this is Dummy API URL
+        - user
+      summary: User Signup
+      description: User 회원가입 API
       requestBody:
-        description: Dummy API Request Body
+        description: User Signup Request Body
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/TempRequest'
+              type: object
+              properties:
+                id:
+                  type: string
+                password:
+                  type: string
+                nickname:
+                  type: string
+                gender:
+                  type: string
+                birth:
+                  type: string
         required: true
       responses:
         '200':
@@ -28,23 +39,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'          
+                $ref: '#/components/schemas/ApiResponse'
         '400':
           description: Invalid ID supplied
         '404':
-          description: Data not found
-
-          
+          description: Data not found 
 components:
   schemas:
-    TempRequest:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-        name:
-          type: string
     ApiResponse:
       type: object
       properties:
