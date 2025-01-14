@@ -5,6 +5,8 @@ import swaggerUi from "swagger-ui-express";
 import YAML from "yamljs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { errorMiddleware, successMiddleware } from "./util/middleware.js";
+import { dummyController } from "./controller/dummy.controller.js";
 dotenv.config();
 
 const app = express();
@@ -20,12 +22,16 @@ app.use(express.urlencoded({ extended: false })); // 단순 객체 문자열 형
 
 const swaggerSpec = YAML.load(path.join(__dirname, "../build/swagger.yaml"));
 
+app.use(successMiddleware)
+
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
-app.post("/temp", (req: Request, res: Response) => {});
+app.get("/temp", dummyController);
 
 app.use("/swagger-ui", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+app.use(errorMiddleware)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
