@@ -5,6 +5,7 @@ import swaggerUi from "swagger-ui-express";
 import YAML from "yamljs";
 import path from "path";
 import { fileURLToPath } from "url";
+import mainRouter from "./routes/index.js";
 dotenv.config();
 
 const app = express();
@@ -20,10 +21,7 @@ app.use(express.urlencoded({ extended: false })); // 단순 객체 문자열 형
 
 const swaggerSpec = YAML.load(path.join(__dirname, "../build/swagger.yaml"));
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
-});
-app.post("/temp", (req: Request, res: Response) => {});
+app.use("/api/v1", mainRouter);
 
 app.use("/swagger-ui", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
