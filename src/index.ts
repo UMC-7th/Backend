@@ -5,6 +5,7 @@ import swaggerUi from "swagger-ui-express";
 import YAML from "yamljs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { createFoodImage } from "./controller/image.controller.js";
 dotenv.config();
 
 const app = express();
@@ -26,6 +27,9 @@ app.get("/", (req: Request, res: Response) => {
 app.post("/temp", (req: Request, res: Response) => {});
 
 app.use("/swagger-ui", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+//image
+app.get("/api/v1/images/:name", createFoodImage);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
