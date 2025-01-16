@@ -13,7 +13,131 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Dummy {
-  id   Int    @id @default(autoincrement())
-  name String @unique(map: "name") @db.VarChar(255)
+model User {
+  userId           Int               @id @default(autoincrement())
+  email            String           
+  password         String
+  birth            DateTime
+  name             String
+  phoneNum         String
+  purpose          String
+  isSub            Boolean
+  address          String
+  createdAt      DateTime @map("created_at") @db.DateTime(6) @default(now())
+  updatedAt      DateTime @map("updated_at") @db.DateTime(6) @default(now())
+
+  agreement       Agreement[]
+  reviewSubs ReviewSub[]
+  markMaterials MarkMaterial[]
+  likeMeals LikeMeal[]
+  eatMeals   EatMeal[]
+  markMeals   MarkMeal[]
+}
+
+model HotMaterial {
+  hotId            Int         @id @default(autoincrement())
+  text             String?
+  material         String?
+}
+
+model Meal {
+  mealId           Int             @id @default(autoincrement())
+  time             String
+  isEate           Boolean
+  isLike           Boolean
+  isFix            Boolean
+  mealDate         DateTime
+
+  mealSubs         MealSub[]
+  mealDetails      MealDetail[]
+  markMeals        MarkMeal[]
+  likeMeals        LikeMeal []
+  eatMeals          EatMeal []
+}
+
+model MarkMaterial {
+  markId           Int             @id @default(autoincrement())
+  userId           Int
+  material         String
+
+  user             User            @relation(fields: [userId], references: [userId])
+}
+
+model Agreement {
+  agreeId          Int             @id @default(autoincrement())
+  userId           Int
+  agreeMarketing   Boolean
+  agreePInfo       Boolean
+
+  user             User            @relation(fields: [userId], references: [userId])
+}
+
+model ReviewSub {
+  reviewId         Int             @id @default(autoincrement())
+  userId           Int
+  score            Int
+  text             String
+
+  user             User            @relation(fields: [userId], references: [userId])
+}
+
+model MealSub {
+  mealSubId          Int        @id @default(autoincrement())
+  mealId             Int
+  categoryId         Int
+  isCook             Boolean
+
+  meal               Meal      @relation(fields: [mealId], references: [mealId])
+  category           MealSubCategory  @relation(fields: [categoryId], references: [categoryId])
+}
+
+model MealDetail {
+  detailId        Int              @id @default(autoincrement())
+  mealId          Int
+  food            String
+  calorieTotal    Int
+  material        String
+  calorieDetail   String
+  price           Int
+  difficulty      String
+  recipe          String
+
+  meal            Meal       @relation(fields: [mealId], references: [mealId])
+}
+
+model EatMeal { 
+  eatId           Int             @id @default(autoincrement())
+  userId          Int
+  mealId          Int
+  eatAt           DateTime
+
+  user            User            @relation(fields: [userId], references: [userId])
+  meal            Meal            @relation(fields: [mealId], references: [mealId])
+}
+
+model MarkMeal {
+  fixId           Int             @id @default(autoincrement())
+  userId          Int
+  mealId          Int
+  fixAt           DateTime
+
+  user            User            @relation(fields: [userId], references: [userId])
+  meal            Meal            @relation(fields: [mealId], references: [mealId])
+} 
+
+model LikeMeal {
+  likeId          Int              @id @default(autoincrement())
+  userId          Int
+  mealId          Int
+  likeAt          DateTime
+
+  user            User            @relation(fields: [userId], references: [userId])
+  meal            Meal            @relation(fields: [mealId], references: [mealId])
+}
+
+model MealSubCategory {
+  categoryId      Int              @id @default(autoincrement())
+  name            String
+
+  mealSubs         MealSub[]
 }
