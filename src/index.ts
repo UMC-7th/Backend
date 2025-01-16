@@ -5,7 +5,6 @@ import swaggerUi from "swagger-ui-express";
 import YAML from "yamljs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { createFoodImage } from "./controller/image.controller.js";
 import { errorMiddleware, successMiddleware } from "./util/middleware.js";
 import { dummyController } from "./controller/dummy.controller.js";
 import mainRouter from "./routes/index.route.js";
@@ -34,8 +33,6 @@ app.use("/api/v1", mainRouter);
 
 app.use("/swagger-ui", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-//image
-app.get("/api/v1/images/:name", createFoodImage);
 app.use(errorMiddleware);
 
 app.listen(port, () => {

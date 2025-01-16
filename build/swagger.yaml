@@ -7,23 +7,25 @@ servers:
 tags:
   - name: image
     description: imageApi Tag
-  - name: test
-    description: testApi Tag
 
+#api paths
 paths:
-  /api/v1/images/{name}:
+  #images 생성 api
+  /api/v1/images/:
     get:
       tags:
         - image
       summary: Get Food Image 
       description: 음식 이미지 조회 API
       parameters:
-        - in: path
+        - in: query
           name: name
+          schema:
+            type: string
           required: true
-          type: "string"
           description: 음식 이름
       responses:
+        #성공 응답
         '200':
           description: Successful operation
           content:
@@ -33,60 +35,32 @@ paths:
                 properties:
                   imageUrl:
                     type: string
-        '400':
+        #실패 응답
+        '500':
           description: Invalid ID supplied
-        '404':
-          description: Data not found
-
-  /test:
-    post:
-      tags:
-        - test
-      summary: Test API
-      description: 예시 용 API
-      requestBody:
-        description: test Request Body
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                password:
-                  type: string
-                nickname:
-                  type: string
-                gender:
-                  type: string
-                birth:
-                  type: string
-        required: true
-      responses:
-        '200':
-          description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'
-        '400':
-          description: Invalid ID supplied
-        '404':
-          description: Data not found 
+                $ref: '#/components/schemas/FailResponse'
+#components
 components:
   schemas:
-    ApiResponse:
+    #실패 응답 Component
+    FailResponse:
       type: object
       properties:
-        code:
-          type: integer
-          format: int32
-        type:
+        resultType:
           type: string
-        message:
-          type: string
-        result:
+        error:
           type: object
+          properties:
+            errorCode:
+              type: string
+            reason:
+              type: string
+            data:
+              type: string
+  #보안 처리
   securitySchemes:
     Bearer:
       type: http

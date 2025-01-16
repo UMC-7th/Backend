@@ -1,12 +1,14 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { createFoodImageService } from "../service/image.service.js";
+import { StatusCodes } from "http-status-codes";
 
 // 음식 이미지 생성
-export const createFoodImage = async(req: Request, res: Response) => {
+export const createFoodImage = async(req: Request, res: Response, next: NextFunction) => {
+    const data = req.query as { name: string };
     try {
-        const imageUrl = await createFoodImageService(req.params.name);
-        res.status(200).send({ imageUrl });
+        const imageUrl = await createFoodImageService(data.name);
+        res.status(StatusCodes.OK).send({ imageUrl });
     } catch (error) {
-        res.status(500).send("서버 내부 오류");
+        next(error);
     }
 }
