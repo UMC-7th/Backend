@@ -3,19 +3,49 @@ info:
   title: EatThis Server API
   version: 1.0.11
 servers:
-  - url: 'http://localhost:3000'
+  - url: http://localhost:3000
 tags:
-  - name: dummy
-    description: dummyApi Tag
+  - name: image
+    description: imageApi Tag
+  - name: test
+    description: testApi Tag
+
 paths:
-  /user/signup:
+  /api/v1/images/{name}:
+    get:
+      tags:
+        - image
+      summary: Get Food Image 
+      description: 음식 이미지 조회 API
+      parameters:
+        - in: path
+          name: name
+          required: true
+          type: "string"
+          description: 음식 이름
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  imageUrl:
+                    type: string
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Data not found
+
+  /test:
     post:
       tags:
-        - user
-      summary: User Signup
-      description: User 회원가입 API
+        - test
+      summary: Test API
+      description: 예시 용 API
       requestBody:
-        description: User Signup Request Body
+        description: test Request Body
         content:
           application/json:
             schema:
@@ -42,7 +72,7 @@ paths:
         '400':
           description: Invalid ID supplied
         '404':
-          description: Data not found
+          description: Data not found 
 components:
   schemas:
     ApiResponse:
