@@ -8,7 +8,7 @@ import { fileURLToPath } from "url";
 import { createFoodImage } from "./controller/image.controller.js";
 import { errorMiddleware, successMiddleware } from "./util/middleware.js";
 import { dummyController } from "./controller/dummy.controller.js";
-import mainRouter from "./routes/index.js";
+import mainRouter from "./routes/index.route.js";
 dotenv.config();
 
 const app = express();
