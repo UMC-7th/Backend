@@ -5,8 +5,8 @@ info:
 servers:
   - url: http://localhost:3000
 tags:
-  - name: dummy
-    description: dummyApi Tag
+  - name: image
+    description: imageApi Tag
 
 paths:
   /user/signup:
