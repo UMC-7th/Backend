@@ -6,8 +6,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "tsx src/index.ts",
-    "api-docs": "swagger-cli bundle ./src/swagger/openapi.yaml --outfile build/swagger.yaml --type yaml",
-    "predev": "npm run api-docs",
     "dev": "nodemon -e js,json,prisma,ts --exec \"prisma generate && tsx src/index.ts\"",
     "build": "tsx scripts/build.ts"
   },

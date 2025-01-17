@@ -3,60 +3,64 @@ info:
   title: EatThis Server API
   version: 1.0.11
 servers:
-  - url: 'http://localhost:3000'
+  - url: http://localhost:3000
 tags:
-  - name: dummy
-    description: dummyApi Tag
+  - name: image
+    description: imageApi Tag
+
+#api paths
 paths:
-  /user/signup:
-    post:
+  #images 생성 api
+  /api/v1/images/:
+    get:
       tags:
-        - user
-      summary: User Signup
-      description: User 회원가입 API
-      requestBody:
-        description: User Signup Request Body
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                id:
-                  type: string
-                password:
-                  type: string
-                nickname:
-                  type: string
-                gender:
-                  type: string
-                birth:
-                  type: string
-        required: true
+        - image
+      summary: Get Food Image 
+      description: 음식 이미지 조회 API
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+          required: true
+          description: 음식 이름
       responses:
+        #성공 응답
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ApiResponse'
-        '400':
+                type: object
+                properties:
+                  imageUrl:
+                    type: string
+        #실패 응답
+        '500':
           description: Invalid ID supplied
-        '404':
-          description: Data not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
+#components
 components:
   schemas:
-    ApiResponse:
+    #실패 응답 Component
+    FailResponse:
       type: object
       properties:
-        code:
-          type: integer
-          format: int32
-        type:
+        resultType:
           type: string
-        message:
-          type: string
-        result:
+        error:
           type: object
+          properties:
+            errorCode:
+              type: string
+            reason:
+              type: string
+            data:
+              type: string
+  #보안 처리
   securitySchemes:
     Bearer:
       type: http
