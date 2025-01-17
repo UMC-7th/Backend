@@ -49,3 +49,16 @@ export class APIError extends Error {
     this.data = data;
   }
 }
+
+export class DBError extends Error {
+  statusCode: number = 500;
+  errorCode: string = "DB_PROCESS_ERROR";
+  reason: string;
+  data: any;
+
+  constructor(reason: string, data: any) {
+    super(reason);
+    this.reason = reason;
+    this.data = data;
+  }
+}
