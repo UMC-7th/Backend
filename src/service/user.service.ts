@@ -1,7 +1,7 @@
 import { APIError, InvalidInputError, NotFoundError } from "../util/error.js";
 import { getUser, addUser } from "../repository/user.repository.js";
 
-export const socialLoginService = async (profile: any) => {
+export const googleLoginService = async (profile: any) => {
     try {
 
         const email = profile.emails?.[0]?.value;
@@ -22,6 +22,24 @@ export const socialLoginService = async (profile: any) => {
         return newUser;
 
     } catch (error: any) {
-        console.error("소셜 로그인 중 에러 발생", error);
+        console.error("구글 로그인 중 에러 발생", error);
+    }
+}
+
+export const kakaoLoginService = async (profile: any) => {
+    try {
+
+        const name = profile.username;
+
+        if (!name) {
+            throw new InvalidInputError("이름이 존재하지 않습니다", "입력 값: " + name);
+        }
+
+        // 사용자 새롭게 생성
+        const newUser= await addUser("", name);
+        return newUser;
+
+    } catch (error: any) {
+        console.error("카카오 로그인 중 에러 발생", error);
     }
 }

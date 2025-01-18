@@ -1,7 +1,7 @@
 import passport from 'passport';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
 import { Strategy as KakaoStrategy } from 'passport-kakao';
-import { socialLoginService } from "../service/user.service.js";
+import { googleLoginService, kakaoLoginService } from "../service/user.service.js";
 
 export const googleStrategy = new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID!,
@@ -9,25 +9,24 @@ export const googleStrategy = new GoogleStrategy({
     callbackURL: '/auth/google/callback',
     scope: ["email", "profile"],
     state: true,
-    }, async (accessToken, refreshToken, profile, cb) => {
+    }, async (accessToken, refreshToken, profile, done) => {
     try {
-        const user = await socialLoginService(profile);
-        return cb(null, user);
+        const user = await googleLoginService(profile);
+        return done(null, user);
     } catch (error) {
-        return cb(error);
+        return done(error);
     }
 });
 
-/*
-passport.use(new KakaoStrategy({
+
+export const kakaoStrategy = new KakaoStrategy({
     clientID: process.env.KAKAO_CLIENT_ID!,
     callbackURL: '/auth/kakao/callback',
     }, async (accessToken, refreshToken, profile, done) => {
     try {
-        const user = await socialLoginService(profile);
+        const user = await kakaoLoginService(profile);
         return done(null, user);
     } catch (error) {
         return done(error, null);
     }
-}));
-*/
+});
