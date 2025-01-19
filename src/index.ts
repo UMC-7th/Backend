@@ -11,14 +11,14 @@ import { errorMiddleware, successMiddleware } from "./util/middleware.js";
 import { dummyController } from "./controller/dummy.controller.js";
 import mainRouter from "./routes/index.route.js";
 import { googleStrategy, kakaoStrategy } from "./config/passport.js";
-import { getUser } from "./repository/user.repository.js";
+import { getUserByEmail } from "./repository/user.repository.js";
 dotenv.config();
 
 passport.use(googleStrategy);
 passport.use(kakaoStrategy);
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user: any, done) => {
-  const existingUser = getUser(user.email);
+  const existingUser = getUserByEmail(user.email);
   if (existingUser !== null) {
     done(null, existingUser);
   } else {
