@@ -10,19 +10,20 @@ export const getUser = async (email: string) => {
     }
 }
 
-export const addUser = async (email: string, name: string) => {
+
+// 사용자 추가
+export const addUser = async (profile: any) => {
     try {
-        // 구글과 카카오 로그인 시 가져올 수 있는 데이터가 email 또는 name이라서 우선 사용자를 생성하고, 그 후에 사용자의 추가적인 정보를 입력받을 예정
         const user = await prisma.user.create({
             data: {
-                email: email,
-                password: "",
-                birth: new Date(2000, 1, 1),
-                name: name,
-                phoneNum: "",
-                purpose: "",
-                isSub: false,
-                address: "",
+                email: profile.email,
+                password: profile.password,
+                birth: profile.birth,
+                name: profile.name,
+                phoneNum: profile.phoneNum,
+                purpose: profile.purpose,
+                isSub: profile.isSub,
+                address: profile.address,
             }
         })
         return user;

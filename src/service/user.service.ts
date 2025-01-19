@@ -18,7 +18,7 @@ export const googleLoginService = async (profile: any) => {
         }
 
         // 사용자가 없다면 새롭게 생성
-        const newUser= await addUser(email, name);
+        const newUser= await addUser(profile);
         return newUser;
 
     } catch (error: any) {
@@ -36,7 +36,7 @@ export const kakaoLoginService = async (profile: any) => {
         }
 
         // 사용자 새롭게 생성
-        const newUser= await addUser("", name);
+        const newUser= await addUser(profile);
         return newUser;
 
     } catch (error: any) {
@@ -44,12 +44,12 @@ export const kakaoLoginService = async (profile: any) => {
     }
 }
 
-export const userSignUpService = async (data: any) => {
+export const userSignUpService = async (profile: any) => {
     try {
-        const user = await updateUser(data);
+        const user = await addUser(profile);
         return user;
         
     } catch (error) {
-        throw new Error("회원가입 중 에러 발생");
+        throw new Error("회원가입 중 에러 발생: " + error);
     }
 }

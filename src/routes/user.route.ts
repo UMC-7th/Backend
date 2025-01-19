@@ -3,7 +3,7 @@ import { userSignUp } from "../controller/user.controller.js";
 
 const router = express.Router();
 
-// 회원가입 시 사용자 정보를 입력하는 api
+// 이메일로 회원가입하는 api
 router.post("/signup", userSignUp);
 
 export default router;
