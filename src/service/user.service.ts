@@ -1,5 +1,5 @@
 import { APIError, InvalidInputError, NotFoundError } from "../util/error.js";
-import { getUser, addUser } from "../repository/user.repository.js";
+import { getUser, addUser, updateUser } from "../repository/user.repository.js";
 
 export const googleLoginService = async (profile: any) => {
     try {
@@ -41,5 +41,15 @@ export const kakaoLoginService = async (profile: any) => {
 
     } catch (error: any) {
         throw new Error("카카오 로그인 중 에러 발생");
+    }
+}
+
+export const userSignUpService = async (data: any) => {
+    try {
+        const user = await updateUser(data);
+        return user;
+        
+    } catch (error) {
+        throw new Error("회원가입 중 에러 발생");
     }
 }
