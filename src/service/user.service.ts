@@ -57,3 +57,21 @@ export const createUsernameService = async (profile: any) => {
         throw new Error("닉네임 저장 중 에러 발생 " + error);
     }
 }
+
+export const userLoginService = async (profile: any) => {
+    try {
+        const user = await getUserByEmail(profile.email);
+        if (user === null) {
+            throw new NotFoundError("해당 이메일을 가진 사용자를 찾지 못했습니다.", "입력 값: " + profile.email);
+        }
+
+        if (profile.password !== user.password) {
+            throw new InvalidInputError("잘못된 비밀번호를 입력하였습니다.", "입력 값: " + profile.password);
+        }
+
+        return user;
+
+    } catch (error) {
+        throw new Error("로그인 중 에러 발생 " + error);
+    }
+}

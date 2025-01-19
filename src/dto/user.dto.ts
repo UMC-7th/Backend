@@ -10,3 +10,10 @@ export const signupDTO = (body: any) => {
       address: body.address
     };
 };
+
+export const loginDTO = (body: any) => {
+  return {
+    email: body.email,
+    password: body.password
+  };
+};

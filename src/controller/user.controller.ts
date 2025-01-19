@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { userSignUpService, createUsernameService } from "../service/user.service.js";
-import { signupDTO } from "../dto/user.dto.js";
+import { userSignUpService, userLoginService, createUsernameService } from "../service/user.service.js";
+import { signupDTO, loginDTO } from "../dto/user.dto.js";
 import { StatusCodes } from "http-status-codes";
 
 
@@ -18,6 +18,16 @@ export const userSignUp = async (req: Request, res: Response, next: NextFunction
 export const createUsername = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = await createUsernameService(req.body);
+        res.status(StatusCodes.OK).send({ user });
+    } catch (error) {
+        next(error);
+    }
+}
+
+// 이메일로 로그인
+export const userLogin = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = await userLoginService(loginDTO(req.body));
         res.status(StatusCodes.OK).send({ user });
     } catch (error) {
         next(error);
