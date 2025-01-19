@@ -22,7 +22,7 @@ export const googleLoginService = async (profile: any) => {
         return newUser;
 
     } catch (error: any) {
-        console.error("구글 로그인 중 에러 발생", error);
+        throw new Error("구글 로그인 중 에러 발생");
     }
 }
 
@@ -40,6 +40,6 @@ export const kakaoLoginService = async (profile: any) => {
         return newUser;
 
     } catch (error: any) {
-        console.error("카카오 로그인 중 에러 발생", error);
+        throw new Error("카카오 로그인 중 에러 발생");
     }
 }
