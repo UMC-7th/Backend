@@ -25,7 +25,6 @@ export const getUserByName = async (name: string) => {
 export const addUser = async (type: string, profile: any) => {
     try {
         if (type === "email") { // 이메일 회원가입
-            console.log(type);
             const user = await prisma.user.create({
                 data: {
                     email: profile.email,
@@ -38,11 +37,9 @@ export const addUser = async (type: string, profile: any) => {
                     address: profile.address,
                 }
             })
-            console.log(user);
             return user;
 
         } else if (type === "google") { // 구글 로그인
-            console.log(type);
             const user = await prisma.user.create({
                 data: {
                     email: profile.emails?.[0]?.value,
@@ -55,11 +52,9 @@ export const addUser = async (type: string, profile: any) => {
                     address: "",
                 }
             })
-            console.log(user);
             return user;
 
         } else if (type === "kakao") { // 카카오 로그인
-            console.log(type);
             const user = await prisma.user.create({
                 data: {
                     email: profile._json.kakao_account.email,
@@ -72,11 +67,9 @@ export const addUser = async (type: string, profile: any) => {
                     address: "",
                 }
             })
-            console.log(user);
             return user;
 
         } else if (type === "naver") { // 네이버 로그인
-            console.log(type);
             const user = await prisma.user.create({
                 data: {
                     email: "",
@@ -89,7 +82,6 @@ export const addUser = async (type: string, profile: any) => {
                     address: "",
                 }
             })
-            console.log(user);
             return user;
         }
         

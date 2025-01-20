@@ -52,8 +52,21 @@ export const kakaoLoginService = async (profile: any) => {
 
 export const userSignUpService = async (profile: any) => {
     try {
-        const user = await addUser("email", profile);
-        return user;
+        const email = profile.email;
+
+        if (!email) {
+            throw new InvalidInputError("이메일이 존재하지 않습니다", "입력 값: " + email);
+        }
+
+        const user = await getUserByEmail(email);
+
+        // 사용자가 이미 존재하면 생성 X
+        if (user !== null) {
+            throw new AlreadyExistError("이미 가입되어 있는 이메일 입니다.", "입력 값: " + email);
+        }
+
+        const newUser = await addUser("email", profile);
+        return newUser;
         
     } catch (error: any) {
         throw new Error("회원가입 중 에러 발생 " + error);
