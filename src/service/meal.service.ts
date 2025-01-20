@@ -7,25 +7,10 @@ import {
   getMealByDate,
 } from "../repository/meal.repository.js";
 import { addMealToUser } from "../repository/meal.repository.js";
-
-//유저 더미 데이터
-const user = {
-  userId: 1,
-  email: "testuser@example.com",
-  password: "securePassword123!",
-  birth: new Date("1990-01-01"),
-  name: "홍길동",
-  phoneNum: "010-1234-5678",
-  purpose: "다이어트를 위해 식단 관리가 필요합니다.",
-  isSub: true,
-  address: "서울특별시 강남구 테헤란로 123",
-  createdAt: new Date(),
-  updatedAt: new Date(),
-};
+import { getUserById } from "../repository/user.repository.js";
 
 export const getDailyMealService = async (data: MealRequest) => {
-  // getUserById로 유저 존재 확인하는 코드 추가 필요
-  // 데이터 유효성 검사 추가로 필요
+  const user = await getUserById(data.userId);
 
   if (!user) {
     throw new NotFoundError("존재하지 않는 유저입니다", 1);
