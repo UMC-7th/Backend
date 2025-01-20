@@ -1,5 +1,5 @@
-import { APIError, InvalidInputError, NotFoundError } from "../util/error.js";
-import { getUserByEmail, addUser, updateUsername } from "../repository/user.repository.js";
+import { APIError, InvalidInputError, NotFoundError, AlreadyExistError } from "../util/error.js";
+import { getUserByEmail, getUserByName, addUser, updateUsername } from "../repository/user.repository.js";
 
 export const googleLoginService = async (profile: any) => {
     try {
@@ -28,8 +28,19 @@ export const googleLoginService = async (profile: any) => {
 
 export const kakaoLoginService = async (profile: any) => {
     try {
+        const email = profile._json.kakao_account.email;
 
-        // 카카오 로그인은 이메일을 제공 받으려면 사업자 정보가 필요해서 일단 이메일 중복 체크는 보류 -> 카카오나 구글에서 제공받는 id 값으로 중복을 체크할지에 대해 고안 필요
+        if (!email) {
+            throw new InvalidInputError("이메일이 존재하지 않습니다", "입력 값: " + email);
+        }
+
+        const user = await getUserByEmail(email);
+
+        // 사용자가 이미 존재하면 생성 X
+        if (user !== null) {
+            return user;
+        }
+
         // 사용자 새롭게 생성
         const newUser= await addUser("kakao", profile);
         return newUser;
@@ -51,8 +62,16 @@ export const userSignUpService = async (profile: any) => {
 
 export const createUsernameService = async (profile: any) => {
     try {
-        const user = await updateUsername(profile);
-        return user;
+        const name = profile.name;
+        const user = await getUserByName(name);
+
+        // 닉네임 중복 체크
+        if (user !== null) {
+            throw new AlreadyExistError("이미 사용 중인 닉네임 입니다.", "입력 값: " + name)
+        }
+
+        const newUser = await updateUsername(profile);
+        return newUser;
     } catch (error: any) {
         throw new Error("닉네임 저장 중 에러 발생 " + error);
     }

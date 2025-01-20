@@ -11,10 +11,19 @@ export const getUserByEmail = async (email: string) => {
     }
 }
 
+// 이름으로 사용자 조회
+export const getUserByName = async (name: string) => {
+    try {
+        const user = await prisma.user.findFirst({ where: { name: name }});
+        return user;
+    } catch (error) {
+        throw new DBError("사용자 조회 중 오류가 발생했습니다.", error);
+    }
+}
+
 // 사용자 추가
 export const addUser = async (type: string, profile: any) => {
     try {
-        console.log("repo: ", type, profile)
         if (type === "email") { // 이메일 회원가입
             console.log(type);
             const user = await prisma.user.create({
@@ -53,7 +62,7 @@ export const addUser = async (type: string, profile: any) => {
             console.log(type);
             const user = await prisma.user.create({
                 data: {
-                    email: "",
+                    email: profile._json.kakao_account.email,
                     password: "",
                     birth: new Date(2000, 1, 1),
                     name: "",
