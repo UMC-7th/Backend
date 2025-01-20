@@ -44,12 +44,12 @@ export const addMealToUser = async (data: MealRequest, mealId: number) => {
 };
 
 export const getMealByDate = async (userId: number, mealDate: Date) => {
-  const meal = await prisma.eatMeal.findFirst({
+  const meals = await prisma.eatMeal.findMany({
     where: {
       userId,
       eatAt: mealDate,
     },
   });
 
-  return meal;
+  return meals;
 };

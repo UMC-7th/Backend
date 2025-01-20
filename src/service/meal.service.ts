@@ -30,11 +30,12 @@ export const getDailyMealService = async (data: MealRequest) => {
   if (!user) {
     throw new NotFoundError("존재하지 않는 유저입니다", 1);
   }
-  const existingMeal = await getMealByDate(user.userId, data.mealDate);
+  const existingMeals = await getMealByDate(user.userId, data.mealDate);
 
-  if (existingMeal) {
+  if (existingMeals.length > 14) {
+    // 아침 점심 저녁 각각 5개씩 해서 15개가 되면 추가 x
     throw new AlreadyExistError(
-      "이미 해당 날짜의 식단이 존재합니다",
+      "해당 날짜에 식단을 더 이상 추가할 수 없습니다",
       data.mealDate
     );
   }
@@ -51,7 +52,7 @@ export const getDailyMealService = async (data: MealRequest) => {
     await addMealToUser(data, mealId); // 식단과 유저 매핑
   }
 
-  const apiKey = process.env.API_KEY;
+  const apiKey = process.env.OPENAI_API_KEY;
 
   const prompt: string = `${data.mealDate}의 식단 ${user.purpose}`;
 
@@ -123,7 +124,6 @@ Example output:
       }
     );
   } catch (error) {
-    console.error(error);
     throw new Error("gpt 요청 중 에러 발생!");
   }
 
