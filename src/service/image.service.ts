@@ -2,7 +2,7 @@ import axios from "axios";
 import { APIError, InvalidInputError, NotFoundError } from "../util/error.js";
 import { addImageFood, getImageFood } from "../repository/image.repository.js";
 
-// 음식 이미지 생성
+// 식재료 이미지 생성
 export const createFoodImageService = async (name: string) => {
     if (name.length === 0) {
         throw new InvalidInputError("입력 값이 비어있습니다.", "입력 값: " + name);

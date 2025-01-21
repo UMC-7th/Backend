@@ -11,12 +11,12 @@ tags:
 #api paths
 paths:
   #images 생성 api
-  /api/v1/images/:
+  /api/v1/images/material:
     get:
       tags:
         - image
       summary: Get Food Image 
-      description: 음식 이미지 조회 API
+      description: 식재료 이미지 조회 API
       parameters:
         - in: query
           name: name
