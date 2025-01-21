@@ -1,7 +1,8 @@
 import { prisma } from "../db.config.js";
+import { saveFoodImageDto } from "../dto/image.dto.js";
 import { DBError } from "../util/error.js";
 
-export const addImageFood = async (data: any) => {
+export const addImageFood = async (data: saveFoodImageDto) => {
     try{
         const imageFood = await prisma.imageFood.create({ data: data });
         return imageFood;
