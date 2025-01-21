@@ -7,7 +7,7 @@ export const createFoodImage = async(req: Request, res: Response, next: NextFunc
     const data = req.query as { name: string };
     try {
         const imageUrl = await createFoodImageService(data.name);
-        res.status(StatusCodes.OK).send({ imageUrl });
+        res.status(StatusCodes.OK).success({ imageUrl });
     } catch (error) {
         next(error);
     }
