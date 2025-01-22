@@ -50,6 +50,30 @@ export const kakaoLoginService = async (profile: any) => {
     }
 }
 
+export const naverLoginService = async (profile: any) => {
+    try {
+        const email = profile.emails?.[0]?.value;
+
+        if (!email) {
+            throw new InvalidInputError("이메일이 존재하지 않습니다", "입력 값: " + email);
+        }
+
+        const user = await getUserByEmail(email);
+
+        // 사용자가 이미 존재하면 생성 X
+        if (user !== null) {
+            return user;
+        }
+
+        // 사용자 새롭게 생성
+        const newUser= await addUser("naver", profile);
+        return newUser;
+
+    } catch (error: any) {
+        throw new Error("네이버 로그인 중 에러 발생" + error);
+    }
+}
+
 export const userSignUpService = async (profile: any) => {
     try {
         const email = profile.email;

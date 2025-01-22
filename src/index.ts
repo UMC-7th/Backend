@@ -10,12 +10,13 @@ import { fileURLToPath } from "url";
 import { errorMiddleware, successMiddleware } from "./util/middleware.js";
 import { dummyController } from "./controller/dummy.controller.js";
 import mainRouter from "./routes/index.route.js";
-import { googleStrategy, kakaoStrategy } from "./config/passport.js";
+import { googleStrategy, kakaoStrategy, naverStrategy } from "./config/passport.js";
 import { getUserByEmail } from "./repository/user.repository.js";
 dotenv.config();
 
 passport.use(googleStrategy);
 passport.use(kakaoStrategy);
+passport.use(naverStrategy);
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user: any, done) => {
   const existingUser = getUserByEmail(user.email);
@@ -67,6 +68,17 @@ app.get("/auth/kakao", passport.authenticate("kakao"));
 app.get(
   "/auth/kakao/callback",
   passport.authenticate("kakao", {
+    failureRedirect: "/api/v1/users/login",
+    failureMessage: true,
+  }),
+  (req: Request, res: Response) => res.redirect("/")
+);
+
+// Naver Passport 관련 URL
+app.get("/auth/naver", passport.authenticate("naver"));
+app.get(
+  "/auth/naver/callback",
+  passport.authenticate("naver", {
     failureRedirect: "/api/v1/users/login",
     failureMessage: true,
   }),
