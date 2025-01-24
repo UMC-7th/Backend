@@ -43,6 +43,8 @@ model DeliveryAddress {
   isDefault  Boolean @default(false) @map("is_default")
 
   user User @relation(fields: [userId], references: [userId])
+
+  @@map("delivery_address")
 }
 
 model MealUser {
@@ -107,6 +109,8 @@ model Subscribe {
 
   user    User    @relation(fields: [userId], references: [userId])
   mealSub MealSub @relation(fields: [mealSubId], references: [mealSubId])
+
+  @@map("subscribe")
 }
 
 model KartSub {
@@ -117,6 +121,8 @@ model KartSub {
 
   user    User    @relation(fields: [userId], references: [userId])
   mealSub MealSub @relation(fields: [mealSubId], references: [mealSubId])
+
+  @@map("kart_sub")
 }
 
 model MealSub {
