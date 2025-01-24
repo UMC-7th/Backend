@@ -14,49 +14,65 @@ datasource db {
 }
 
 model User {
-  userId    Int      @id @default(autoincrement()) @map("user_id")
-  email     String   @db.VarChar(100)
-  password  String   @db.VarChar(100)
-  birth     DateTime @db.DateTime(6)
-  name      String   @db.VarChar(100)
-  phoneNum  String   @map("phone_num") @db.VarChar(100)
-  purpose   String   @db.Text
-  isSub     Boolean  @map("is_sub")
-  address   String   @db.VarChar(100)
-  createdAt DateTime @default(now()) @map("created_at") @db.DateTime(6)
-  updatedAt DateTime @default(now()) @map("updated_at") @db.DateTime(6)
+  userId   Int      @id @default(autoincrement()) @map("user_id")
+  email    String   @db.VarChar(100)
+  password String   @db.VarChar(100)
+  birth    DateTime @db.DateTime(6)
+  name     String   @db.VarChar(100)
+  phoneNum String   @map("phone_num") @db.VarChar(100)
+  purpose  String   @db.Text
 
-  agreement     Agreement[]
-  reviewSubs    ReviewSub[]
-  markMaterials MarkMaterial[]
-  likeMeals     LikeMeal[]
-  eatMeals      EatMeal[]
-  markMeals     MarkMeal[]
+  agreement       Agreement[]
+  markMaterials   MarkMaterial[]
+  EatMeal         EatMeal[]
+  MealUser        MealUser[]
+  KartSub         KartSub[]
+  Subscribe       Subscribe[]
+  DeliveryAddress DeliveryAddress[]
 
   @@map("user")
 }
 
-model HotMaterial {
-  hotId    Int    @id @default(autoincrement()) @map("hot_id")
-  text     String @db.Text
-  material String @db.VarChar(100)
+model DeliveryAddress {
+  addressId  Int     @id @default(autoincrement()) @map("address_id")
+  userId     Int     @map("user_id")
+  address    String  @db.VarChar(200)
+  name       String  @db.VarChar(100)
+  phoneNum   String  @map("phone_num") @db.VarChar(100)
+  receiveLoc String  @map("receive_loc") @db.VarChar(200)
+  isDefault  Boolean @default(false) @map("is_default")
 
-  @@map("hot_material")
+  user User @relation(fields: [userId], references: [userId])
+}
+
+model MealUser {
+  mealUserId Int      @id @default(autoincrement()) @map("meal_user_id")
+  userId     Int      @map("user_id")
+  mealId     Int      @map("meal_id")
+  time       String   @db.VarChar(100)
+  mealDate   DateTime @map("meal_date") @db.DateTime(6)
+  isMark     Boolean  @default(false) @map("is_mark")
+  isLike     Boolean  @default(false) @map("is_like")
+
+  user User @relation(fields: [userId], references: [userId])
+  meal Meal @relation(fields: [mealId], references: [mealId])
+
+  @@map("meal_user")
 }
 
 model Meal {
-  mealId   Int      @id @default(autoincrement()) @map("meal_id")
-  time     String   @db.VarChar(100)
-  isEat    Boolean  @map("is_eat")
-  isLike   Boolean  @map("is_like")
-  isFix    Boolean  @map("is_fix")
-  mealDate DateTime @map("meal_date") @db.DateTime(6)
+  mealId        Int    @id @default(autoincrement()) @map("meal_id")
+  food          String @db.VarChar(200)
+  calorieTotal  Int    @map("calorie_total")
+  material      String @db.VarChar(200)
+  calorieDetail String @map("calorie_detail") @db.VarChar(200)
+  price         Int
+  difficulty    String @db.VarChar(100)
+  recipe        String @db.Text
 
-  mealSubs    MealSub[]
-  mealDetails MealDetail[]
-  markMeals   MarkMeal[]
-  likeMeals   LikeMeal[]
-  eatMeals    EatMeal[]
+  mealSubs MealSub[]
+  EatMeal  EatMeal[]
+  MealUser MealUser[]
 
   @@map("meal")
 }
@@ -82,43 +98,40 @@ model Agreement {
   @@map("agreement")
 }
 
-model ReviewSub {
-  reviewId Int    @id @default(autoincrement()) @map("review_id")
-  userId   Int    @map("user_id")
-  score    Int
-  text     String @db.Text
+model Subscribe {
+  subId     Int    @id @default(autoincrement()) @map("sub_id")
+  userId    Int    @map("user_id")
+  mealSubId Int    @map("meal_sub_id")
+  review    String @db.Text
+  score     Int
 
-  user User @relation(fields: [userId], references: [userId])
+  user    User    @relation(fields: [userId], references: [userId])
+  mealSub MealSub @relation(fields: [mealSubId], references: [mealSubId])
+}
 
-  @@map("review_sub")
+model KartSub {
+  kardId    Int @id @default(autoincrement()) @map("kard_id")
+  userId    Int @map("user_id")
+  mealSubId Int @map("meal_sub_id")
+  cnt       Int
+
+  user    User    @relation(fields: [userId], references: [userId])
+  mealSub MealSub @relation(fields: [mealSubId], references: [mealSubId])
 }
 
 model MealSub {
-  mealSubId  Int     @id @default(autoincrement()) @map("meal_sub_id")
-  mealId     Int     @map("meal_id")
-  categoryId Int     @map("category_id")
-  isCook     Boolean @map("is_cook")
+  mealSubId  Int      @id @default(autoincrement()) @map("meal_sub_id")
+  mealId     Int      @map("meal_id")
+  categoryId Int      @map("category_id")
+  time       String   @db.VarChar(100)
+  mealDate   DateTime @map("meal_date") @db.DateTime(6)
 
-  meal     Meal            @relation(fields: [mealId], references: [mealId])
-  category MealSubCategory @relation(fields: [categoryId], references: [categoryId])
+  meal      Meal            @relation(fields: [mealId], references: [mealId])
+  category  MealSubCategory @relation(fields: [categoryId], references: [categoryId])
+  KartSub   KartSub[]
+  Subscribe Subscribe[]
 
   @@map("meal_sub")
-}
-
-model MealDetail {
-  detailId      Int    @id @default(autoincrement()) @map("detail_id")
-  mealId        Int    @map("meal_id")
-  food          String @db.VarChar(100)
-  calorieTotal  Int    @map("calorie_total")
-  material      String @db.VarChar(100)
-  calorieDetail String @map("calorie_detail") @db.VarChar(100)
-  price         Int
-  difficulty    String @db.VarChar(100)
-  recipe        String @db.VarChar(100)
-
-  meal Meal @relation(fields: [mealId], references: [mealId])
-
-  @@map("meal_detail")
 }
 
 model EatMeal {
@@ -133,30 +146,6 @@ model EatMeal {
   @@map("eat_meal")
 }
 
-model MarkMeal {
-  fixId  Int      @id @default(autoincrement()) @map("mark_meal")
-  userId Int      @map("user_id")
-  mealId Int      @map("meal_id")
-  fixAt  DateTime @map("fix_at") @db.DateTime(6)
-
-  user User @relation(fields: [userId], references: [userId])
-  meal Meal @relation(fields: [mealId], references: [mealId])
-
-  @@map("mark_meal")
-}
-
-model LikeMeal {
-  likeId Int      @id @default(autoincrement()) @map("like_id")
-  userId Int      @map("user_id")
-  mealId Int      @map("meal_id")
-  likeAt DateTime @map("like_at") @db.DateTime(6)
-
-  user User @relation(fields: [userId], references: [userId])
-  meal Meal @relation(fields: [mealId], references: [mealId])
-
-  @@map("like_meal")
-}
-
 model MealSubCategory {
   categoryId Int    @id @default(autoincrement()) @map("category_id")
   name       String @db.VarChar(100)
@@ -169,8 +158,16 @@ model MealSubCategory {
 model ImageFood {
   imageId  Int      @id @default(autoincrement()) @map("image_id")
   name     String   @db.VarChar(100)
-  imageUrl String   @map("image_url") @db.VarChar(100)
+  imageUrl String   @map("image_url") @db.Text
   searchAt DateTime @default(now()) @map("search_at") @db.DateTime(6)
 
   @@map("image_food")
+}
+
+model HotMaterial {
+  hotId    Int    @id @default(autoincrement()) @map("hot_id")
+  text     String @db.Text
+  material String @db.VarChar(100)
+
+  @@map("hot_material")
 }
