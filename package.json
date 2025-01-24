@@ -13,7 +13,9 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.733.0",
     "@prisma/client": "^6.2.1",
+    "aws-sdk": "^2.1692.0",
     "axios": "^1.7.9",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
@@ -27,6 +29,7 @@
     "prisma": "^6.1.0",
     "swagger-cli": "^4.0.4",
     "swagger-ui-express": "^5.0.1",
+    "uuid": "^11.0.5",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {

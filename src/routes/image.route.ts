@@ -1,5 +1,8 @@
 import express from "express";
-import { createFoodImage, createMealImage } from "../controller/image.controller.js";
+import {
+    createFoodImage,
+    createMealImage,
+} from "../controller/image.controller.js";
 
 const router = express.Router();
 
