@@ -12,7 +12,6 @@ import { dummyController } from "./controller/dummy.controller.js";
 import mainRouter from "./routes/index.route.js";
 import { googleStrategy, kakaoStrategy, naverStrategy } from "./config/passport.js";
 import { socialAuthCallback } from "./controller/user.controller.js";
-import { jwtAuthMiddleware } from "./util/jwt.middleware.js";
 dotenv.config();
 
 passport.use(googleStrategy);
