@@ -10,20 +10,21 @@ tags:
 
 #api paths
 paths:
-  #images 생성 api
-  /api/v1/images/:
+  #==================================images 생성 api==================================#
+  #식재료 이미지 생성 api
+  /api/v1/images/material:
     get:
       tags:
         - image
-      summary: Get Food Image
-      description: 음식 이미지 조회 API
+      summary: Get Food Image 
+      description: 식재료 이미지 조회 API
       parameters:
         - in: query
           name: name
           schema:
             type: string
           required: true
-          description: 음식 이름
+          description: 식재료 이름
       responses:
         #성공 응답
         "200":
@@ -33,15 +34,66 @@ paths:
               schema:
                 type: object
                 properties:
-                  imageUrl:
+                  resultType:
                     type: string
+                    default: "SUCCESS"
+                  error:
+                    type: string
+                    default: null
+                  success:
+                    type: object
+                    properties:
+                      imageUrl:
+                        type: string
         #실패 응답
-        "500":
-          description: Invalid ID supplied
+        '500':
+          description: Fail operation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/FailResponse"
+                $ref: '#/components/schemas/FailResponse'
+  #식단 이미지 생성 api
+  /api/v1/images/meal:
+    get:
+      tags:
+        - image
+      summary: Get Food Image 
+      description: 식단 이미지 조회 API
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+          required: true
+          description: 식단 이름
+      responses:
+        #성공 응답
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    default: "SUCCESS"
+                  error:
+                    type: string
+                    default: null
+                  success:
+                    type: object
+                    properties:
+                      imageUrl:
+                        type: string
+        #실패 응답
+        '500':
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
+
 #components
 components:
   schemas:
@@ -51,6 +103,7 @@ components:
       properties:
         resultType:
           type: string
+          default: "ERROR"
         error:
           type: object
           properties:
@@ -60,6 +113,9 @@ components:
               type: string
             data:
               type: string
+        success:
+          type: string
+          default: null
   #보안 처리
   securitySchemes:
     Bearer:
