@@ -27,7 +27,7 @@ paths:
           description: 식재료 이름
       responses:
         #성공 응답
-        "200":
+        '200':
           description: Successful operation
           content:
             application/json:

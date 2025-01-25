@@ -39,7 +39,9 @@ export const addUser = async (type: string, profile: any) => {
           birth: profile.birth,
           name: profile.name,
           phoneNum: profile.phoneNum,
-          purpose: profile.purpose
+          purpose: profile.purpose,
+          isSub: profile.isSub,
+          address: profile.address,
         },
       });
       return user;
@@ -52,7 +54,9 @@ export const addUser = async (type: string, profile: any) => {
           birth: new Date(2000, 1, 1),
           name: "",
           phoneNum: "",
-          purpose: ""
+          purpose: "",
+          isSub: false,
+          address: "",
         },
       });
       return user;
@@ -65,7 +69,9 @@ export const addUser = async (type: string, profile: any) => {
           birth: new Date(2000, 1, 1),
           name: "",
           phoneNum: "",
-          purpose: ""
+          purpose: "",
+          isSub: false,
+          address: "",
         },
       });
       return user;
@@ -78,7 +84,9 @@ export const addUser = async (type: string, profile: any) => {
           birth: new Date(2000, 1, 1), // 월과 일은 제공을 받는데, 넣어주는건지 이거먹자 서비스에서 따로 입력을 받을건지에 따라 수정 필요
           name: "",
           phoneNum: "",
-          purpose: ""
+          purpose: "",
+          isSub: false,
+          address: "",
         },
       });
       return user;

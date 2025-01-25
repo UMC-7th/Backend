@@ -5,7 +5,9 @@ export const signupDTO = (body: any) => {
       birth: new Date(body.birth),
       name: body.name,
       phoneNum: body.phoneNum,
-      purpose: body.purpose
+      purpose: body.purpose,
+      isSub: body.isSub,
+      address: body.address
     };
 };
 

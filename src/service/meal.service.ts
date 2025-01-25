@@ -1,7 +1,11 @@
 import axios from "axios";
 import { MealRequest } from "../dto/meal.dto.js";
 import { AlreadyExistError, NotFoundError } from "../util/error.js";
-import { addMeal, getMealByDate } from "../repository/meal.repository.js";
+import {
+  addMeal,
+  addMealDetail,
+  getMealByDate,
+} from "../repository/meal.repository.js";
 import { addMealToUser } from "../repository/meal.repository.js";
 import { getUserById } from "../repository/user.repository.js";
 
@@ -11,8 +15,7 @@ export const getDailyMealService = async (data: MealRequest) => {
   if (!user) {
     throw new NotFoundError("존재하지 않는 유저입니다", 1);
   }
-
-  const existingMeals = await getMealByDate(data);
+  const existingMeals = await getMealByDate(user.userId, data.mealDate);
 
   if (existingMeals.length > 14) {
     // 아침 점심 저녁 각각 5개씩 해서 15개가 되면 추가 x
@@ -21,11 +24,23 @@ export const getDailyMealService = async (data: MealRequest) => {
       data.mealDate
     );
   }
+
+  const mealTimes: string[] = ["아침", "점심", "저녁"];
+
+  const mealIds: number[] = [];
+
+  for (const time of mealTimes) {
+    const mealId = await addMeal(time, data.mealDate); // 아침 점심 저녁으로 식단을 세 개 생성
+
+    mealIds.push(mealId); //생성된 식단 id를 저장
+
+    await addMealToUser(data, mealId); // 식단과 유저 매핑
+  }
+
   const apiKey = process.env.OPENAI_API_KEY;
 
-  const prompt: string = `${data.mealDate}의 식단 ${user.purpose}`; // 유저 프롬프트
+  const prompt: string = `${data.mealDate}의 식단 ${user.purpose}`;
 
-  //gpt 프롬프트
   const messages = [
     {
       role: "system",
@@ -77,10 +92,7 @@ Example output:
       content: `${prompt}`,
     },
   ];
-
-  let result; // axios 응답을 담을 변수
-  let gptResult; //gpt 응답을 담을 변수
-  const mealIds: number[] = []; //생성한 식단 id들을 담을 배열
+  let result;
   try {
     result = await axios.post(
       "https://api.openai.com/v1/chat/completions",
@@ -100,19 +112,9 @@ Example output:
     throw new Error("gpt 요청 중 에러 발생!");
   }
 
-  gptResult = JSON.parse(result.data.choices[0].message.content); //json으로 변환
-
-  //gpt 응답으로 식단 세 개 생성
+  const gptResult = JSON.parse(result.data.choices[0].message.content);
   for (let i = 0; i < 3; i++) {
-    const mealId: number = await addMeal(gptResult.meals[i]);
-
-    mealIds.push(mealId);
-  }
-
-  const mealTimes: string[] = ["아침", "점심", "저녁"];
-
-  for (let i = 0; i < 3; i++) {
-    await addMealToUser(data.userId, mealIds[i], mealTimes[i], data.mealDate); // 유저에게 식단 제공
+    await addMealDetail(gptResult.meals[i], mealIds[i]); //식단 세 개에 각각 식단 디테일 연결
   }
 
   return gptResult;
