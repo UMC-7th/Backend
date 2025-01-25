@@ -227,6 +227,10 @@ paths:
                       purpose:
                         type: string
                         example: 운동
+                  accessToken:
+                    type: string
+                  refreshToken:
+                    type: string
         "500":
           description: Fail operation
           content:

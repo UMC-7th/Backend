@@ -9,7 +9,6 @@ export const googleStrategy = new GoogleStrategy({
     clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     callbackURL: '/auth/google/callback',
     scope: ["email", "profile"],
-    state: true,
     }, async (accessToken, refreshToken, profile, done) => {
         try {
             const user = await googleLoginService(profile);

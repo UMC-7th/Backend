@@ -11,21 +11,13 @@ import { errorMiddleware, successMiddleware } from "./util/middleware.js";
 import { dummyController } from "./controller/dummy.controller.js";
 import mainRouter from "./routes/index.route.js";
 import { googleStrategy, kakaoStrategy, naverStrategy } from "./config/passport.js";
-import { getUserByEmail } from "./repository/user.repository.js";
+import { socialAuthCallback } from "./controller/user.controller.js";
+import { jwtAuthMiddleware } from "./util/jwt.middleware.js";
 dotenv.config();
 
 passport.use(googleStrategy);
 passport.use(kakaoStrategy);
 passport.use(naverStrategy);
-passport.serializeUser((user, done) => done(null, user));
-passport.deserializeUser((user: any, done) => {
-  const existingUser = getUserByEmail(user.email);
-  if (existingUser !== null) {
-    done(null, existingUser);
-  } else {
-    done(null, null);
-  }
-});
 
 const app = express();
 const port = process.env.PORT;
@@ -50,8 +42,9 @@ app.get("/auth/google/callback",
   passport.authenticate("google", {
     failureRedirect: "/api/v1/users/login",
     failureMessage: true,
+    session: false
   }),
-  (req: Request, res: Response) => res.redirect("/")
+  socialAuthCallback
 )
 
 // Kakao Passport 관련 URL
@@ -61,8 +54,9 @@ app.get(
   passport.authenticate("kakao", {
     failureRedirect: "/api/v1/users/login",
     failureMessage: true,
+    session: false
   }),
-  (req: Request, res: Response) => res.redirect("/")
+  socialAuthCallback
 );
 
 // Naver Passport 관련 URL
@@ -72,8 +66,9 @@ app.get(
   passport.authenticate("naver", {
     failureRedirect: "/api/v1/users/login",
     failureMessage: true,
+    session: false
   }),
-  (req: Request, res: Response) => res.redirect("/")
+  socialAuthCallback
 );
 
 app.get("/", (req: Request, res: Response) => {
