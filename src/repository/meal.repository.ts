@@ -10,8 +10,8 @@ export const addMealToUser = async (
 ) => {
   const meal = await prisma.mealUser.create({
     data: {
-      mealId: 1,
-      userId: 1,
+      mealId: mealId,
+      userId: userId,
       time: time,
       mealDate: mealDate,
     },
