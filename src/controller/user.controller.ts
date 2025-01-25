@@ -28,6 +28,14 @@ export const createUsername = async (req: Request, res: Response, next: NextFunc
 export const userLogin = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = await userLoginService(loginDTO(req.body));
+        if (user) {
+            req.session.userId = user.userId;
+            req.session.email = user.email;  
+            req.session.name = user.name;
+            req.session.phoneNum = user.phoneNum;
+            req.session.birth = user.birth; 
+        }
+      
         res.status(StatusCodes.OK).send({ user });
     } catch (error) {
         next(error);
