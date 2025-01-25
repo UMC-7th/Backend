@@ -22,6 +22,7 @@ export const addMealToUser = async (
 
 //gpt에게 받은 식단을 저장하는 함수
 export const addMeal = async (data: any) => {
+  console.log(data);
   const mealId = await prisma.meal.create({
     data: {
       food: data.foods.join(", "),
@@ -66,6 +67,18 @@ export const getMealById = async (mealId: number) => {
   const meal = await prisma.meal.findFirst({
     where: {
       mealId,
+    },
+  });
+
+  return meal;
+};
+
+export const deleteMealById = async (data: any) => {
+  const meal = await prisma.mealUser.deleteMany({
+    where: {
+      userId: data.userId,
+      mealId: data.mealId,
+      time: data.time,
     },
   });
 

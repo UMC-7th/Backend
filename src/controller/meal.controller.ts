@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import {
   completeMealService,
   getDailyMealService,
+  refreshMealService,
 } from "../service/meal.service.js";
 import { mealRequestDTO } from "../dto/meal.dto.js";
 
@@ -26,9 +27,10 @@ export const refreshMeal = async (
   next: NextFunction
 ) => {
   try {
-    const meals = await getDailyMealService(mealRequestDTO(req.body));
+    //req.body => userId,mealId,time(아침,점심,저녁),mealDate
+    const meal = await refreshMealService(req.body);
 
-    res.status(200).success(meals);
+    res.status(200).success(meal);
   } catch (error) {
     next(error);
   }
