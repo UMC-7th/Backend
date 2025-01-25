@@ -42,16 +42,7 @@ const swaggerSpec = YAML.load(path.join(__dirname, "../build/swagger.yaml"));
 
 app.use(successMiddleware);
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECREY_KEY!,
-    resave: false, // 매 요청마다 세션을 강제로 저장하지 않음
-    saveUninitialized: false, // 초기화되지 않은 세션 저장 안 함
-  })
-);
-
 app.use(passport.initialize());
-app.use(passport.session());
 
 // Google Passport 관련 URL
 app.get("/auth/google", passport.authenticate("google"));
