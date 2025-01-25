@@ -17,16 +17,16 @@ export const getImageFood = async (name: string) => {
             where: { name: name },
         });
 
-        if (imageFood === null) return null;
+    if (imageFood === null) return null;
 
-        // 검색 시간 업데이트
-        await prisma.imageFood.update({
-            where: { imageId: imageFood.imageId },
-            data: { searchAt: new Date() },
-        });
+    // 검색 시간 업데이트
+    await prisma.imageFood.update({
+      where: { imageId: imageFood.imageId },
+      data: { searchAt: new Date() },
+    });
 
-        return imageFood;
-    } catch (error) {
-        throw new DBError("음식 이미지 조회 중 오류가 발생했습니다.", name);
-    }
+     return imageFood;
+  } catch (error) {
+    throw new DBError("음식 이미지 조회 중 오류가 발생했습니다.", name);
+  }
 };
