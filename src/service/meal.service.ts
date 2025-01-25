@@ -1,7 +1,12 @@
 import axios from "axios";
 import { MealRequest } from "../dto/meal.dto.js";
 import { AlreadyExistError, NotFoundError } from "../util/error.js";
-import { addMeal, getMealByDate } from "../repository/meal.repository.js";
+import {
+  addCompletedMeal,
+  addMeal,
+  getMealByDate,
+  getMealById,
+} from "../repository/meal.repository.js";
 import { addMealToUser } from "../repository/meal.repository.js";
 import { getUserById } from "../repository/user.repository.js";
 
@@ -9,7 +14,7 @@ export const getDailyMealService = async (data: MealRequest) => {
   const user = await getUserById(data.userId);
 
   if (!user) {
-    throw new NotFoundError("존재하지 않는 유저입니다", 1);
+    throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
   }
 
   const existingMeals = await getMealByDate(data);
@@ -31,7 +36,7 @@ export const getDailyMealService = async (data: MealRequest) => {
       role: "system",
       content: `"Please create a daily personal diet plan with the following format:
 - "day": a string representing the date (e.g., "2025-01-15").
-- "diets": an array of meal records, where each record includes:
+- "meals": an array of meal records, where each record includes:
   - "time": a string representing the type of meal (e.g., "아침", "점심", "저녁").
   - "calorieTotal": an integer representing the total calories of the meal (e.g., 350).
   - "foods": an array of strings, each representing a food item included in the meal (e.g., ["밥", "김치", "계란찜"]).
@@ -100,7 +105,7 @@ Example output:
     throw new Error("gpt 요청 중 에러 발생!");
   }
 
-  gptResult = JSON.parse(result.data.choices[0].message.content); //json으로 변환
+  gptResult = JSON.parse(result.data.choices[0].message.content);
 
   //gpt 응답으로 식단 세 개 생성
   for (let i = 0; i < 3; i++) {
@@ -116,4 +121,24 @@ Example output:
   }
 
   return gptResult;
+};
+export const completeMealService = async (
+  data: MealRequest,
+  mealId: number
+) => {
+  const user = await getUserById(data.userId);
+
+  if (!user) {
+    throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
+  }
+
+  const meal = await getMealById(mealId);
+
+  if (!meal) {
+    throw new NotFoundError("존재하지 않는 식단입니다", mealId);
+  }
+
+  const mealComplete = await addCompletedMeal(data, mealId);
+
+  return mealComplete;
 };

@@ -47,7 +47,7 @@ export const addCompletedMeal = async (data: MealRequest, mealId: number) => {
     },
   });
 
-  return eatMeal.eatId;
+  return eatMeal;
 };
 
 //날짜로 제공한 식단 가져오는 함수
@@ -60,4 +60,14 @@ export const getMealByDate = async (data: MealRequest) => {
   });
 
   return meals;
+};
+
+export const getMealById = async (mealId: number) => {
+  const meal = await prisma.meal.findFirst({
+    where: {
+      mealId,
+    },
+  });
+
+  return meal;
 };
