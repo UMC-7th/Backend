@@ -11,10 +11,10 @@ export const getUserByEmail = async (email: string) => {
   }
 };
 
-// 이름으로 사용자 조회
-export const getUserByName = async (name: string) => {
+// 닉네임으로 사용자 조회
+export const getUserByNickName = async (nickname: string) => {
   try {
-    const user = await prisma.user.findFirst({ where: { name: name } });
+    const user = await prisma.user.findFirst({ where: { nickname: nickname } });
     return user;
   } catch (error) {
     throw new DBError("사용자 조회 중 오류가 발생했습니다.", error);
@@ -38,6 +38,7 @@ export const addUser = async (type: string, profile: any) => {
           password: profile.password,
           birth: profile.birth,
           name: profile.name,
+          nickname: profile.nickname,
           phoneNum: profile.phoneNum,
           purpose: profile.purpose
         },
@@ -50,7 +51,8 @@ export const addUser = async (type: string, profile: any) => {
           email: profile.emails?.[0]?.value,
           password: "",
           birth: new Date(2000, 1, 1),
-          name: "",
+          name: profile.displayName,
+          nickname: "",
           phoneNum: "",
           purpose: ""
         },
@@ -63,7 +65,8 @@ export const addUser = async (type: string, profile: any) => {
           email: profile._json.kakao_account.email,
           password: "",
           birth: new Date(2000, 1, 1),
-          name: "",
+          name: profile.displayName,
+          nickname: "",
           phoneNum: "",
           purpose: ""
         },
@@ -76,7 +79,8 @@ export const addUser = async (type: string, profile: any) => {
           email: profile.emails?.[0]?.value,
           password: "",
           birth: new Date(2000, 1, 1), // 월과 일은 제공을 받는데, 넣어주는건지 이거먹자 서비스에서 따로 입력을 받을건지에 따라 수정 필요
-          name: "",
+          name: profile.displayName,
+          nickname: "",
           phoneNum: "",
           purpose: ""
         },
@@ -89,12 +93,12 @@ export const addUser = async (type: string, profile: any) => {
 };
 
 // 소셜 로그인 시 닉네임을 입력 받아 저장
-export const updateUsername = async (profile: any) => {
+export const updateNickname = async (profile: any) => {
   try {
     const user = await prisma.user.update({
       where: { userId: profile.userId },
       data: {
-        name: profile.name,
+        nickname: profile.nickname,
       },
     });
 

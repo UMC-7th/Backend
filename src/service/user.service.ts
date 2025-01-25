@@ -1,9 +1,10 @@
 import { APIError, InvalidInputError, NotFoundError, AlreadyExistError } from "../util/error.js";
-import { getUserByEmail, getUserByName, addUser, updateUsername } from "../repository/user.repository.js";
+import { getUserByEmail, getUserByNickName, addUser, updateNickname } from "../repository/user.repository.js";
 
 export const googleLoginService = async (profile: any) => {
     try {
 
+        console.log(profile);
         const email = profile.emails?.[0]?.value;
         const name = profile.displayName;
 
@@ -28,6 +29,7 @@ export const googleLoginService = async (profile: any) => {
 
 export const kakaoLoginService = async (profile: any) => {
     try {
+        console.log(profile);
         const email = profile._json.kakao_account.email;
 
         if (!email) {
@@ -52,6 +54,7 @@ export const kakaoLoginService = async (profile: any) => {
 
 export const naverLoginService = async (profile: any) => {
     try {
+        console.log(profile);
         const email = profile.emails?.[0]?.value;
 
         if (!email) {
@@ -99,15 +102,15 @@ export const userSignUpService = async (profile: any) => {
 
 export const createUsernameService = async (profile: any) => {
     try {
-        const name = profile.name;
-        const user = await getUserByName(name);
+        const nickname = profile.nickname;
+        const user = await getUserByNickName(nickname);
 
         // 닉네임 중복 체크
         if (user !== null) {
-            throw new AlreadyExistError("이미 사용 중인 닉네임 입니다.", "입력 값: " + name)
+            throw new AlreadyExistError("이미 사용 중인 닉네임 입니다.", "입력 값: " + nickname)
         }
 
-        const newUser = await updateUsername(profile);
+        const newUser = await updateNickname(profile);
         return newUser;
     } catch (error: any) {
         throw new Error("닉네임 저장 중 에러 발생 " + error);
