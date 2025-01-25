@@ -1,17 +1,18 @@
 import { prisma } from "../db.config.js";
+import { saveFoodImageDto } from "../dto/image.dto.js";
 import { DBError } from "../util/error.js";
 
-export const addImageFood = async (data: any) => {
-    try{
+export const addImageFood = async (data: saveFoodImageDto) => {
+    try {
         const imageFood = await prisma.imageFood.create({ data: data });
         return imageFood;
-    }catch(error){
+    } catch (error) {
         throw new DBError("음식 이미지 추가 중 오류가 발생했습니다.", data);
     }
 };
 
 export const getImageFood = async (name: string) => {
-    try{
+    try {
         const imageFood = await prisma.imageFood.findFirst({
             where: { name: name },
         });
