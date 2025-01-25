@@ -127,7 +127,7 @@ export const userLoginService = async (profile: any) => {
 
         return user;
 
-    } catch (error) {
+    } catch (error: any) {
         throw new Error("로그인 중 에러 발생 " + error);
     }
 }
