@@ -93,6 +93,209 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FailResponse'
+  #================================== 회원가입, 로그인 api==================================#
+  # 일반 이메일 회원가입 api
+  /api/v1/users/signup:
+    post:
+      tags:
+        - User
+      summary: User Signup
+      description: 일반 이메일 회원가입 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: test@gmail.com
+                password:
+                  type: string
+                  example: password123
+                birth:
+                  type: string
+                  format: date
+                  example: 2000-01-01
+                name:
+                  type: string
+                  example: 테스트 사용자
+                phoneNum:
+                  type: string
+                  example: 010-1234-1234
+                purpose:
+                  type: string
+                  example: 운동
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      userId:
+                        type: integer
+                        example: 1
+                      email:
+                        type: string
+                        example: test@gmail.com
+                      password:
+                        type: string
+                        example: password123
+                      birth:
+                        type: string
+                        format: date-time
+                        example: 2000-01-01T00:00:00.000Z
+                      name:
+                        type: string
+                        example: 테스트 사용자
+                      phoneNum:
+                        type: string
+                        example: 010-1234-1234
+                      purpose:
+                        type: string
+                        example: 운동
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: 2025-01-18T15:26:52.817Z
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: 2025-01-18T15:26:52.817Z
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
+  # 로그인 api
+  /api/v1/users/login:
+    post:
+      tags:
+        - User
+      summary: User Login
+      description: 로그인 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: test@gmail.com
+                password:
+                  type: string
+                  example: password123
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      userId:
+                        type: integer
+                        example: 1
+                      email:
+                        type: string
+                        example: test@gmail.com
+                      password:
+                        type: string
+                        example: password123
+                      birth:
+                        type: string
+                        format: date-time
+                        example: 2000-01-01T00:00:00.000Z
+                      name:
+                        type: string
+                        example: 테스트 사용자
+                      phoneNum:
+                        type: string
+                        example: 010-1234-1234
+                      purpose:
+                        type: string
+                        example: 운동
+                  accessToken:
+                    type: string
+                  refreshToken:
+                    type: string
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
+  # 닉네임 수정 api
+  /api/v1/users/socialLogin/name:
+    post:
+      tags:
+        - User
+      summary: Update name
+      description: 닉네임 수정 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  example: 1
+                name:
+                  type: string
+                  example: 테스트 수정
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      userId:
+                        type: integer
+                        example: 1
+                      email:
+                        type: string
+                        example: test@gmail.com
+                      password:
+                        type: string
+                        example: password123
+                      birth:
+                        type: string
+                        format: date-time
+                        example: 2000-01-01T00:00:00.000Z
+                      name:
+                        type: string
+                        example: 테스트 수정
+                      phoneNum:
+                        type: string
+                        example: 010-1234-1234
+                      purpose:
+                        type: string
+                        example: 운동
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
 
 #components
 components:
