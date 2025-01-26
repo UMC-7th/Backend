@@ -35,7 +35,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: | 
-            pkill -f "npm run start" || true
+            pgrep -f "npm run start" | xargs -r kill || true
             sleep 4
             cd /home/ubuntu/Backend
             git pull origin main
