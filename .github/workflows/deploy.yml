@@ -35,10 +35,10 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: | 
+            pkill -f "npm run start" || true
+            sleep 4
             cd /home/ubuntu/Backend
             git pull origin main
             npm i --force
             npm run build
-            pkill -f "npm run start" || true
-            sleep 4
             nohup sudo npm run start &
