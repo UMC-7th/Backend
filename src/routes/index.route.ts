@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import imageRouter from "./image.route.js";
 import userRouter from "./user.route.js";
 import mealRouter from "./meal.route.js";
+import paymentRouter from "./payment.route.js";
 
 const router = express.Router();
 
@@ -17,5 +18,8 @@ router.use("/users", userRouter);
 
 //api/v1/meals 경로 요청 처리 라우터
 router.use("/meals", mealRouter);
+
+//api/v1/payment 경로 요청 처리 라우터
+router.use("/payment", paymentRouter);
 
 export default router;
