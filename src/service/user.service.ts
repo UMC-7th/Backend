@@ -3,8 +3,6 @@ import { getUserByEmail, getUserByNickName, addUser, updateNickname } from "../r
 
 export const googleLoginService = async (profile: any) => {
     try {
-
-        console.log(profile);
         const email = profile.emails?.[0]?.value;
         const name = profile.displayName;
 
@@ -29,7 +27,6 @@ export const googleLoginService = async (profile: any) => {
 
 export const kakaoLoginService = async (profile: any) => {
     try {
-        console.log(profile);
         const email = profile._json.kakao_account.email;
 
         if (!email) {
@@ -54,7 +51,6 @@ export const kakaoLoginService = async (profile: any) => {
 
 export const naverLoginService = async (profile: any) => {
     try {
-        console.log(profile);
         const email = profile.emails?.[0]?.value;
 
         if (!email) {

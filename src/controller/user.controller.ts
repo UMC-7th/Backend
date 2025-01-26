@@ -9,7 +9,7 @@ import { StatusCodes } from "http-status-codes";
 export const userSignUp = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = await userSignUpService(signupDTO(req.body));
-        res.status(StatusCodes.OK).send({ user });
+        res.status(StatusCodes.OK).success({ user });
     } catch (error) {
         next(error);
     }
@@ -19,7 +19,7 @@ export const userSignUp = async (req: Request, res: Response, next: NextFunction
 export const createUsername = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = await createUsernameService(req.body);
-        res.status(StatusCodes.OK).send({ user });
+        res.status(StatusCodes.OK).success({ user });
     } catch (error) {
         next(error);
     }
@@ -31,7 +31,7 @@ export const userLogin = async (req: Request, res: Response, next: NextFunction)
         const user = await userLoginService(loginDTO(req.body));
         const accessToken = generateAccessToken({ id: user.userId, email: user.email });
         const refreshToken = generateAccessToken({ id: user.userId, email: user.email });
-        res.status(StatusCodes.OK).send({ user, accessToken, refreshToken });
+        res.status(StatusCodes.OK).success({ user, accessToken, refreshToken });
     } catch (error) {
         next(error);
     }
@@ -43,7 +43,7 @@ export const socialAuthCallback = (req: Request, res: Response, next: NextFuncti
         const user = req.user as any; // Passport에서 전달된 사용자 객체
         const accessToken = generateAccessToken({ id: user.userId, email: user.email });
         const refreshToken = generateAccessToken({ id: user.userId, email: user.email });
-        res.status(StatusCodes.OK).send({ user, accessToken, refreshToken });
+        res.status(StatusCodes.OK).success({ user, accessToken, refreshToken });
     } catch (error) {
         next(error);
     }
