@@ -8,9 +8,8 @@ servers:
 tags:
   - name: image
     description: imageApi Tag
-  - name: user
-    description: User API
 
+#api paths
 paths:
   #==================================images 생성 api==================================#
   #식재료 이미지 생성 api
@@ -60,47 +59,6 @@ paths:
       tags:
         - image
       summary: Get Food Image 
-      description: 음식 이미지 조회 API
-      parameters:
-        - in: query
-          name: name
-          schema:
-            type: string
-          required: true
-          description: 식단 이름
-      responses:
-        #성공 응답
-        "200":
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  resultType:
-                    type: string
-                    default: "SUCCESS"
-                  error:
-                    type: string
-                    default: null
-                  success:
-                    type: object
-                    properties:
-                      imageUrl:
-                        type: string
-        #실패 응답
-        '500':
-          description: Fail operation
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailResponse'
-  #식단 이미지 생성 api
-  /api/v1/images/meal:
-    get:
-      tags:
-        - image
-      summary: Get Food Image 
       description: 식단 이미지 조회 API
       parameters:
         - in: query
@@ -110,7 +68,7 @@ paths:
           required: true
           description: 식단 이름
       responses:
-        # 성공 응답
+        #성공 응답
         '200':
           description: Successful operation
           content:

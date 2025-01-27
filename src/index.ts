@@ -5,7 +5,6 @@ import swaggerUi from "swagger-ui-express";
 import YAML from "yamljs";
 import path from "path";
 import passport from "passport";
-import session from "express-session";
 import { fileURLToPath } from "url";
 import { errorMiddleware, successMiddleware } from "./util/middleware.js";
 import { dummyController } from "./controller/dummy.controller.js";
@@ -17,7 +16,6 @@ import {
   naverStrategy,
 } from "./config/passport.js";
 import { getUserByEmail } from "./repository/user.repository.js";
-import mypageRoute from "./routes/mypage.route.js";
 import { getUser } from "./controller/mypage.controller.js";
 import { jwtAuthMiddleware } from "./util/jwt.middleware.js";
 
