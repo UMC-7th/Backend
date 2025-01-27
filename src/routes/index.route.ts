@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import imageRouter from "./image.route.js";
 import userRouter from "./user.route.js";
 import mealRouter from "./meal.route.js";
-import subscribeRouter from "./subscribe.route.js";
+import subscribeRouter from "./deliveryAddress.route.js";
 
 const router = express.Router();
 
