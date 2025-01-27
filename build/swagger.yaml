@@ -352,7 +352,67 @@ paths:
                         default: true
                       addressId:
                         type: integer
-                        default: 1
+                        default: 0
+        #실패 응답
+        '500':
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
+  #배송지 정보 조회 api
+    get:
+      tags:
+        - DeliveryAddress
+      summary: Get Delivery Address 
+      description: 배송지 정보 조회 API
+      responses:
+        #성공 응답
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    default: "SUCCESS"
+                  error:
+                    type: string
+                    default: null
+                  success:
+                    type: object
+                    properties:
+                      result:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            addressId:
+                              type: integer
+                              default: 0
+                            userId:
+                              type: integer
+                              default: 0
+                            name:
+                              type: string
+                              default: "이름"
+                            address:
+                              type: string
+                              default: "서울시 강남구 역삼동 123-4"
+                            postNum:
+                              type: integer
+                              default: 12345
+                            phoneNum:
+                              type: string
+                              default: "010-1234-1234"
+                            memo:
+                              type: string
+                              default: "문앞(8373)"
+                            isDefault:
+                              type: boolean
+                              default: false
         #실패 응답
         '500':
           description: Fail operation
