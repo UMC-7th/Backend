@@ -387,32 +387,68 @@ paths:
                       result:
                         type: array
                         items:
-                          type: object
-                          properties:
-                            addressId:
-                              type: integer
-                              default: 0
-                            userId:
-                              type: integer
-                              default: 0
-                            name:
-                              type: string
-                              default: "이름"
-                            address:
-                              type: string
-                              default: "서울시 강남구 역삼동 123-4"
-                            postNum:
-                              type: integer
-                              default: 12345
-                            phoneNum:
-                              type: string
-                              default: "010-1234-1234"
-                            memo:
-                              type: string
-                              default: "문앞(8373)"
-                            isDefault:
-                              type: boolean
-                              default: false
+                          $ref: '#/components/schemas/DeliveryAddress'
+        #실패 응답
+        '500':
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
+  #배송지 정보 수정 api
+    put:
+      tags:
+        - DeliveryAddress
+      summary: Update Delivery Address 
+      description: 배송지 정보 수정 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                addressId:
+                  type: integer
+                  example: 0
+                name:
+                  type: string
+                  example: 이름
+                address:
+                  type: string
+                  example: 서울시 강남구 역삼동 123-4
+                postNum:
+                  type: integer
+                  example: 12345
+                phoneNum:
+                  type: string
+                  example: 010-1234-1234
+                memo:
+                  type: string
+                  example: 문앞(8373)
+      responses:
+        #성공 응답
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    default: "SUCCESS"
+                  error:
+                    type: string
+                    default: null
+                  success:
+                    type: object
+                    properties:
+                      isSuccess:
+                        type: boolean
+                        default: true
+                      deliveryAddress:
+                        $ref: '#/components/schemas/DeliveryAddress'
         #실패 응답
         '500':
           description: Fail operation
@@ -443,6 +479,34 @@ components:
         success:
           type: string
           default: null
+    #DeliveryAddress Component
+    DeliveryAddress:
+      type: object
+      properties:
+        addressId:
+          type: integer
+          default: 0
+        userId:
+          type: integer
+          default: 0
+        name:
+          type: string
+          default: "이름"
+        address:
+          type: string
+          default: "서울시 강남구 역삼동 123-4"
+        postNum:
+          type: integer
+          default: 12345
+        phoneNum:
+          type: string
+          default: "010-1234-1234"
+        memo:
+          type: string
+          default: "문앞(8373)"
+        isDefault:
+          type: boolean
+          default: false
   #보안 처리
   securitySchemes:
     Bearer:

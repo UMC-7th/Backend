@@ -6,3 +6,13 @@ export interface addDeliveryAddressReq {
     phoneNum: string;
     memo: string;
 }
+
+//배송지 수정 요청 DTO
+export interface updateDeliveryAddressReq {
+    addressId: number;
+    name: string;
+    postNum: number;
+    address: string;
+    phoneNum: string;
+    memo: string;
+}
