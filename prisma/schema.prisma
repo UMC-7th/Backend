@@ -19,7 +19,7 @@ model User {
   password String   @db.VarChar(100)
   birth    DateTime @db.DateTime(6)
   name     String   @db.VarChar(100)
-  nickname String   @db.VarChar(100) @default("")
+  nickname String   @default("") @db.VarChar(100)
   phoneNum String   @map("phone_num") @db.VarChar(100)
   purpose  String   @db.Text
 
@@ -35,13 +35,14 @@ model User {
 }
 
 model DeliveryAddress {
-  addressId  Int     @id @default(autoincrement()) @map("address_id")
-  userId     Int     @map("user_id")
-  address    String  @db.VarChar(200)
-  name       String  @db.VarChar(100)
-  phoneNum   String  @map("phone_num") @db.VarChar(100)
-  receiveLoc String  @map("receive_loc") @db.VarChar(200)
-  isDefault  Boolean @default(false) @map("is_default")
+  addressId Int     @id @default(autoincrement()) @map("address_id")
+  userId    Int     @map("user_id")
+  address   String  @db.VarChar(200)
+  name      String  @db.VarChar(100)
+  phoneNum  String  @map("phone_num") @db.VarChar(100)
+  postNum   Int     @map("post_num")
+  memo      String  @db.Text
+  isDefault Boolean @default(false) @map("is_default")
 
   user User @relation(fields: [userId], references: [userId])
 

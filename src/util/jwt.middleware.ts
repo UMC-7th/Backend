@@ -11,7 +11,7 @@ export const jwtAuthMiddleware = (req: Request, res: Response, next: NextFunctio
             throw new InvalidInputError("토큰이 존재하지 않습니다", "입력 값: " + token);
         }
 
-        const decoded = verifyToken(token);
+        const decoded = verifyToken(token) as { id: number, email: string };
         req.user = decoded;
         next();
 
