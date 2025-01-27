@@ -3,6 +3,7 @@ info:
   title: EatThis Server API
   version: 1.0.11
 servers:
+  - url: http://3.38.39.238:3000
   - url: http://localhost:3000
 tags:
   - name: image
