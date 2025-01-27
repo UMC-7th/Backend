@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import imageRouter from "./image.route.js";
 import userRouter from "./user.route.js";
 import mealRouter from "./meal.route.js";
-import subscribeRouter from "./deliveryAddress.route.js";
+import deliveryAddressRouter from "./deliveryAddress.route.js";
 
 const router = express.Router();
 
@@ -20,6 +20,6 @@ router.use("/users", userRouter);
 router.use("/meals", mealRouter);
 
 //api/v1/subscribes 경로 요청 처리 라우터
-router.use("/subscribes", subscribeRouter);
+router.use("/deliveryAddress", deliveryAddressRouter);
 
 export default router;
