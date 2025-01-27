@@ -9,24 +9,17 @@ export const getUser = async (
 ) => {
   try {
     const userId = req.user?.id;
-
-    if (!userId) {
-      return res
-        .status(StatusCodes.UNAUTHORIZED)
-        .send({ message: "User not authenticated" });
-    }
     const user = await getUserProfile(userId);
 
     if (user) {
-      res.status(StatusCodes.OK).send({
-        nickname : user.nickname,
+      res.status(StatusCodes.OK).success({
+        nickname: user.nickname,
         email: user.email,
         birth: user.birth,
         name: user.name,
         phoneNum: user.phoneNum,
       });
     } else {
-      res.status(StatusCodes.NOT_FOUND).send({ message: "User not found" });
     }
   } catch (error) {
     next(error);
