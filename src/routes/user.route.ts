@@ -10,6 +10,6 @@ router.post("/signup", userSignUp);
 router.post("/login", userLogin);
 
 // 소셜 로그인 시 닉네임을 입력받는 api
-router.post("/socialLogin/name", createUsername)
+router.post("/socialLogin/nickname", createUsername)
 
 export default router;

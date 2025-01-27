@@ -19,6 +19,7 @@ model User {
   password String   @db.VarChar(100)
   birth    DateTime @db.DateTime(6)
   name     String   @db.VarChar(100)
+  nickname String   @db.VarChar(100) @default("")
   phoneNum String   @map("phone_num") @db.VarChar(100)
   purpose  String   @db.Text
 
@@ -177,4 +178,3 @@ model HotMaterial {
 
   @@map("hot_material")
 }
-

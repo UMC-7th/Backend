@@ -6,6 +6,7 @@ export const findUserProfile = async (userId: number) => {
     const user = await prisma.user.findFirst({
       where: { userId: userId },  
       select: {
+        nickname:true,
         name: true,        
         email: true,       
         birth: true,       
