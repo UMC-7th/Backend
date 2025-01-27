@@ -16,6 +16,18 @@ jobs:
         run: |
           echo "PORT=${{ secrets.PORT }}" >> .env
           echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+          echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
+          echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
+          echo "KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}" >> .env
+          echo "NAVER_LOGIN_CLIENT_ID=${{ secrets.NAVER_LOGIN_CLIENT_ID }}" >> .env
+          echo "NAVER_LOGIN_CLIENT_SECRET=${{ secrets.NAVER_LOGIN_CLIENT_SECRET }}" >> .env
+          echo "JWT_SECRET_ACCESS_KEY=${{ secrets.JWT_SECRET_ACCESS_KEY }}" >> .env
+          echo "JWT_SECRET_REFRESH_KEY=${{ secrets.JWT_SECRET_REFRESH_KEY }}" >> .env
+          echo "NAVER_CLIENT_ID=${{ secrets.NAVER_CLIENT_ID }}" >> .env
+          echo "NAVER_CLIENT_SECRET=${{ secrets.NAVER_CLIENT_SECRET }}" >> .env
+          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
+          echo "S3_ACCESS_KEY=${{ secrets.S3_ACCESS_KEY }}" >> .env
+          echo "S3_SECRET_KEY=${{ secrets.S3_SECRET_KEY }}" >> .env
 
       - name: Copy .env file to EC2
         uses: appleboy/scp-action@master
@@ -35,8 +47,6 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
           script: | 
-            pgrep -f "npm run start" | xargs -r kill || true
-            sleep 4
             cd /home/ubuntu/Backend
             git pull origin main
             npm i --force
