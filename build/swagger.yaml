@@ -11,20 +11,62 @@ tags:
     description: User API
 
 paths:
-  # images 생성 api
-  /api/v1/images/:
+  #==================================images 생성 api==================================#
+  #식재료 이미지 생성 api
+  /api/v1/images/material:
     get:
       tags:
         - image
       summary: Get Food Image 
-      description: 음식 이미지 조회 API
+      description: 식재료 이미지 조회 API
       parameters:
         - in: query
           name: name
           schema:
             type: string
           required: true
-          description: 음식 이름
+          description: 식재료 이름
+      responses:
+        #성공 응답
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    default: "SUCCESS"
+                  error:
+                    type: string
+                    default: null
+                  success:
+                    type: object
+                    properties:
+                      imageUrl:
+                        type: string
+        #실패 응답
+        '500':
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
+  #식단 이미지 생성 api
+  /api/v1/images/meal:
+    get:
+      tags:
+        - image
+      summary: Get Food Image 
+      description: 식단 이미지 조회 API
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+          required: true
+          description: 식단 이름
       responses:
         # 성공 응답
         '200':
@@ -36,83 +78,34 @@ paths:
                 properties:
                   imageUrl:
                     type: string
-        # 실패 응답
+        #실패 응답
         '500':
-          description: Invalid ID supplied
+          description: Fail operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/FailResponse'
-                
-  # user 조회 api
-  /mypage/profile/:
-    get:
-      tags:
-        - user
-      summary: Get User Profile
-      description: 로그인된 사용자의 정보 조회 api
-      security:
-        - SessionCookie: []  # 세션 쿠키 보안 설정
-      responses:
-        # 성공 응답
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  email:
-                    type: string
-                    description: User email
-                  birth:
-                    type: string
-                    format: date-time
-                    description: User birth date
-                  name:
-                    type: string
-                    description: User name
-                  phoneNum:
-                    type: string
-                    description: User phone number
-        # 401 응답 (권한 없음)
-        '401':
-          description: Unauthorized (Session is missing or expired)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailResponse'
-        # 실패 응답
-        '500':
-          description: Invalid ID supplied
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FailResponse'
-
-  components:
-    schemas:
-      # 실패 응답 Component
-      FailResponse:
-        type: object
-        properties:
-          resultType:
-            type: string
-          error:
-            type: object
-            properties:
-              errorCode:
-                type: string
-              reason:
-                type: string
-              data:
-                type: string
-
-    # 세션 인증 처리
-    securitySchemes:
-      SessionCookie:
-        type: apiKey
-        in: cookie
-        name: SESSIONID
-    
-        
+#components
+components:
+  schemas:
+    #실패 응답 Component
+    FailResponse:
+      type: object
+      properties:
+        resultType:
+          type: string
+        error:
+          type: object
+          properties:
+            errorCode:
+              type: string
+            reason:
+              type: string
+            data:
+              type: string
+  #보안 처리
+  securitySchemes:
+    Bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
