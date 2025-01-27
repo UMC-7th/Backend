@@ -51,4 +51,4 @@ jobs:
             git pull origin main
             npm i --force
             npm run build
-            nohup sudo npm run start &
+            nohup sudo npm run start > /home/ubuntu/app.log 2>&1 &
