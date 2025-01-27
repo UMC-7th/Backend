@@ -8,8 +8,8 @@ servers:
 tags:
   - name: Image
     description: imageApi Tag
-  - name: Subscribe
-    description: SubscribeApi Tag
+  - name: DeliveryAddress
+    description: DeliveryAddress Tag
 
 #api paths
 paths:
@@ -301,10 +301,10 @@ paths:
                 $ref: '#/components/schemas/FailResponse'
   #==================================배송지 관련 api==================================#
   #배송지 정보 작성 api
-  /api/v1/subscribes/addDeliveryAddress:
+  /api/v1/deliveryAddress:
     post:
       tags:
-        - Subscribe
+        - DeliveryAddress
       summary: Add Delivery Address 
       description: 배송지 정보 작성 API
       requestBody:
