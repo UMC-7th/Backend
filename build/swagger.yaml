@@ -6,8 +6,10 @@ servers:
   - url: http://3.38.39.238:3000
   - url: http://localhost:3000
 tags:
-  - name: image
+  - name: Image
     description: imageApi Tag
+  - name: DeliveryAddress
+    description: DeliveryAddress Tag
 
 #api paths
 paths:
@@ -16,7 +18,7 @@ paths:
   /api/v1/images/material:
     get:
       tags:
-        - image
+        - Image
       summary: Get Food Image 
       description: 식재료 이미지 조회 API
       parameters:
@@ -57,7 +59,7 @@ paths:
   /api/v1/images/meal:
     get:
       tags:
-        - image
+        - Image
       summary: Get Food Image 
       description: 식단 이미지 조회 API
       parameters:
@@ -367,6 +369,34 @@ components:
         success:
           type: string
           default: null
+    #DeliveryAddress Component
+    DeliveryAddress:
+      type: object
+      properties:
+        addressId:
+          type: integer
+          default: 0
+        userId:
+          type: integer
+          default: 0
+        name:
+          type: string
+          default: "이름"
+        address:
+          type: string
+          default: "서울시 강남구 역삼동 123-4"
+        postNum:
+          type: integer
+          default: 12345
+        phoneNum:
+          type: string
+          default: "010-1234-1234"
+        memo:
+          type: string
+          default: "문앞(8373)"
+        isDefault:
+          type: boolean
+          default: false
   #보안 처리
   securitySchemes:
     Bearer:
