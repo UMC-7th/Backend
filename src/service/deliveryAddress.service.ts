@@ -1,5 +1,5 @@
 import { addDeliveryAddressReq, updateDeliveryAddressReq } from "../dto/deliveryAddress.dto.js";
-import { addDeliveryAddress, getDeliveryAddress, getDeliveryAddressOne, setDefaultDeliveryAddress, updateDeliveryAddress } from "../repository/deliveryAddress.repository.js";
+import { addDeliveryAddress, getDefaultDeliveryAddress, getDeliveryAddress, getDeliveryAddressOne, setDefaultDeliveryAddress, updateDeliveryAddress } from "../repository/deliveryAddress.repository.js";
 import { InvalidInputError } from "../util/error.js";
 
 //배송지 DB에 저장
@@ -40,5 +40,11 @@ export const setDefaultDeliveryAddressService = async (
         throw new InvalidInputError("배송지 주소가 존재하지 않습니다.", `addressId: ${addressId}, userId: ${userId}`);
     }
     const deliveryAddress = await setDefaultDeliveryAddress(addressId, userId);
+    return deliveryAddress;
+};
+
+//기본 배송지 조회
+export const getDefaultDeliveryAddressService = async (userId: number) => {
+    const deliveryAddress = await getDefaultDeliveryAddress(userId);
     return deliveryAddress;
 };

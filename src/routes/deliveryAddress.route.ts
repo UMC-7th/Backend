@@ -1,6 +1,6 @@
 import express from "express";
 import { jwtAuthMiddleware } from "../util/jwt.middleware.js";
-import { addDeliveryAddress, getDeliveryAddress, setDefaultDeliveryAddress, updateDeliveryAddress } from "../controller/deliveryAddress.controller.js";
+import { addDeliveryAddress, getDefaultDeliveryAddress, getDeliveryAddress, setDefaultDeliveryAddress, updateDeliveryAddress } from "../controller/deliveryAddress.controller.js";
 
 const router = express.Router();
 
@@ -13,5 +13,7 @@ router.put("/", jwtAuthMiddleware, updateDeliveryAddress);
 
 //기본 배송지 설정 api
 router.patch("/default", jwtAuthMiddleware, setDefaultDeliveryAddress);
+//기본 배송지 조회 api
+router.get("/default", jwtAuthMiddleware, getDefaultDeliveryAddress);
 
 export default router;

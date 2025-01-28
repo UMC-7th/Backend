@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { addDeliveryAddressService, getDeliveryAddressService, setDefaultDeliveryAddressService, updateDeliveryAddressService } from "../service/deliveryAddress.service.js";
+import { addDeliveryAddressService, getDefaultDeliveryAddressService, getDeliveryAddressService, setDefaultDeliveryAddressService, updateDeliveryAddressService } from "../service/deliveryAddress.service.js";
 import { StatusCodes } from "http-status-codes";
 import { InvalidInputError } from "../util/error.js";
 
@@ -75,6 +75,25 @@ export const setDefaultDeliveryAddress = async (
         const deliveryAddress = await setDefaultDeliveryAddressService(userId, req.body.addressId);
         res.status(StatusCodes.OK).success({
             isSuccess: true,
+            deliveryAddress: deliveryAddress
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+//기본 배송지 조회
+export const getDefaultDeliveryAddress = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const userId = req.user?.id;
+    try {
+        if (!userId) 
+            throw new InvalidInputError("잘못된 토큰 값입니다.", "입력 값: " + req.headers.authorization);
+        const deliveryAddress = await getDefaultDeliveryAddressService(userId);
+        res.status(StatusCodes.OK).success({
             deliveryAddress: deliveryAddress
         });
     } catch (error) {
