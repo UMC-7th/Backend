@@ -297,6 +297,53 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FailResponse'
+            
+  paths:
+  /api/v1/users/mypage/profile:
+    get:
+      tags:
+        - User
+      summary: Get Logged in user
+      description: 로그인한 유저 정보 조회 API(JWT 필요)
+      security:
+        - Bearer: []  # 보안 토큰 요구
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      nickname:
+                        type: string
+                        example: 닉넴
+                      email:
+                        type: string
+                        example: test@gmail.com
+                      birth:
+                        type: string
+                        format: date-time
+                        example: 2000-01-01T00:00:00.000Z
+                      name:
+                        type: string
+                        example: 이름
+                      phoneNum:
+                        type: string
+                        example: 010-1234-1234
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
+ 
+
+
+
 
 #components
 components:
@@ -326,3 +373,6 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+
+
+      

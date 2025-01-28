@@ -16,8 +16,6 @@ import {
   naverStrategy,
 } from "./config/passport.js";
 import { getUserByEmail } from "./repository/user.repository.js";
-import { getUser } from "./controller/mypage.controller.js";
-import { jwtAuthMiddleware } from "./util/jwt.middleware.js";
 
 dotenv.config();
 
@@ -86,7 +84,6 @@ app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
 
-app.get("/mypage/profile",jwtAuthMiddleware, getUser);
 
 app.get("/temp", dummyController);
 
