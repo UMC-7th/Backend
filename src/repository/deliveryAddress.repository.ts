@@ -96,3 +96,16 @@ export const setDefaultDeliveryAddress = async (addressId: number, userId: numbe
         throw new DBError("기본 배송지 설정 중 오류가 발생했습니다.", `addressId: ${addressId}, userId: ${userId}`);
     }
 }
+
+//기본 배송지 조회
+export const getDefaultDeliveryAddress = async (userId: number) => {
+    try {
+        const deliveryAddress = await prisma.deliveryAddress.findFirst({
+            where: { userId: userId, isDefault: true },
+        });
+
+        return deliveryAddress;
+    } catch (error) {
+        throw new DBError("기본 배송지 조회 중 오류가 발생했습니다.", userId);
+    }
+};

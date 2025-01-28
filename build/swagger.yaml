@@ -300,8 +300,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/FailResponse'
   #==================================배송지 관련 api==================================#
-  #배송지 정보 작성 api
+  #배송지 관련 url
   /api/v1/deliveryAddress:
+  #배송지 정보 작성 api
     post:
       tags:
         - DeliveryAddress
@@ -456,8 +457,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FailResponse'
-  #기본 배송지 설정 api
+  #기본 배송지 관련 url
   /api/v1/deliveryAddress/default:
+  #기본 배송지 설정 api
     patch:
       tags:
         - DeliveryAddress
@@ -494,6 +496,39 @@ paths:
                       isSuccess:
                         type: boolean
                         default: true
+                      deliveryAddress:
+                        $ref: '#/components/schemas/DeliveryAddress'
+        #실패 응답
+        '500':
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
+  #기본 배송지 조회 api
+    get:
+      tags:
+        - DeliveryAddress
+      summary: Get Default Delivery Address 
+      description: 기본 배송지 조회 API
+      responses:
+        #성공 응답
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    default: "SUCCESS"
+                  error:
+                    type: string
+                    default: null
+                  success:
+                    type: object
+                    properties:
                       deliveryAddress:
                         $ref: '#/components/schemas/DeliveryAddress'
         #실패 응답
