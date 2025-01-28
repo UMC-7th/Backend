@@ -3,6 +3,7 @@ import {
   completeMealService,
   favoriteMealService,
   getDailyMealService,
+  preferredMealService,
   refreshMealService,
 } from "../service/meal.service.js";
 import { mealRequestDTO } from "../dto/meal.dto.js";
@@ -70,13 +71,15 @@ export const favoriteMeal = async (
   }
 };
 
-export const refreshMeal2 = async (
+export const preferredMeal = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const meals = await getDailyMealService(mealRequestDTO(req.body));
+    const { userId, mealId } = req.body;
+
+    const meals = await preferredMealService(userId, mealId);
 
     res.status(200).success(meals);
   } catch (error) {

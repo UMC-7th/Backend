@@ -73,7 +73,7 @@ export const getMealById = async (mealId: number) => {
   return meal;
 };
 
-export const deleteMealById = async (data: any) => {
+export const deleteMealByIds = async (data: any) => {
   const meal = await prisma.mealUser.deleteMany({
     where: {
       userId: data.userId,
@@ -103,6 +103,18 @@ export const addFavoriteMeal = async (mealUserId: number) => {
     },
     data: {
       isMark: true,
+    },
+  });
+
+  return mealUser;
+};
+export const addPreferreMeal = async (mealUserId: number) => {
+  const mealUser = await prisma.mealUser.update({
+    where: {
+      mealUserId,
+    },
+    data: {
+      isLike: true,
     },
   });
 
