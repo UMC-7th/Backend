@@ -77,3 +77,22 @@ export const updateDeliveryAddress = async (data: updateDeliveryAddressReq) => {
         throw new DBError("배송지 주소 수정 중 오류가 발생했습니다.", data);
     }
 };
+
+//기본 배송지 설정
+export const setDefaultDeliveryAddress = async (addressId: number, userId: number) => {
+    try {
+        await prisma.deliveryAddress.updateMany({
+            where: { userId: userId },
+            data: { isDefault: false },
+        });
+
+        const deliveryAddress = await prisma.deliveryAddress.update({
+            where: { addressId: addressId },
+            data: { isDefault: true },
+        });
+
+        return deliveryAddress;
+    } catch (error) {
+        throw new DBError("기본 배송지 설정 중 오류가 발생했습니다.", `addressId: ${addressId}, userId: ${userId}`);
+    }
+}
