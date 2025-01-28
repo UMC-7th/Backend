@@ -456,7 +456,53 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FailResponse'
-
+  #기본 배송지 설정 api
+  /api/v1/deliveryAddress/default:
+    patch:
+      tags:
+        - DeliveryAddress
+      summary: Set Default Delivery Address 
+      description: 기본 배송지 설정 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                addressId:
+                  type: integer
+                  example: 0
+      responses:
+        #성공 응답
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    default: "SUCCESS"
+                  error:
+                    type: string
+                    default: null
+                  success:
+                    type: object
+                    properties:
+                      isSuccess:
+                        type: boolean
+                        default: true
+                      deliveryAddress:
+                        $ref: '#/components/schemas/DeliveryAddress'
+        #실패 응답
+        '500':
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
 #components
 components:
   schemas:
