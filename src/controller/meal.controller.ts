@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import {
   completeMealService,
+  favoriteMealService,
   getDailyMealService,
   refreshMealService,
 } from "../service/meal.service.js";
@@ -53,13 +54,15 @@ export const completeMeal = async (
   }
 };
 
-export const refreshMeal1 = async (
+export const favoriteMeal = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const meals = await getDailyMealService(mealRequestDTO(req.body));
+    const { userId, mealId } = req.body;
+
+    const meals = await favoriteMealService(userId, mealId);
 
     res.status(200).success(meals);
   } catch (error) {

@@ -1,6 +1,7 @@
 import express from "express";
 import {
   completeMeal,
+  favoriteMeal,
   getDailyMeal,
   refreshMeal,
 } from "../controller/meal.controller.js";
@@ -13,6 +14,10 @@ router.post("/daily", getDailyMeal);
 router.post("/refresh", refreshMeal);
 //완료한 식단 api
 router.post("/complete", completeMeal);
+
+//식단 즐겨찾기
+router.post("/favorite", favoriteMeal);
+
 //선호식단에 추가하는 api
 router.post("/meals/:mealId/preference");
 

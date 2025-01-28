@@ -3,10 +3,12 @@ import { MealRequest } from "../dto/meal.dto.js";
 import { AlreadyExistError, NotFoundError } from "../util/error.js";
 import {
   addCompletedMeal,
+  addFavoriteMeal,
   addMeal,
   deleteMealById,
   getMealByDate,
   getMealById,
+  getmealUserByIds,
 } from "../repository/meal.repository.js";
 import { addMealToUser } from "../repository/meal.repository.js";
 import { getUserById } from "../repository/user.repository.js";
@@ -262,4 +264,26 @@ export const completeMealService = async (
   const mealComplete = await addCompletedMeal(data, mealId);
 
   return mealComplete;
+};
+export const favoriteMealService = async (userId: number, mealId: number) => {
+  const user = await getUserById(userId);
+
+  if (!user) {
+    throw new NotFoundError("존재하지 않는 유저입니다", userId);
+  }
+
+  const meal = await getMealById(mealId);
+
+  if (!meal) {
+    throw new NotFoundError("존재하지 않는 식단입니다", mealId);
+  }
+
+  const mealUserId = await getmealUserByIds(userId, mealId);
+
+  if (!mealUserId) {
+    throw new NotFoundError("유저에게 제공되지 않은 식단입니다", mealUserId);
+  }
+  const mealUser = await addFavoriteMeal(mealUserId);
+
+  return mealUser;
 };
