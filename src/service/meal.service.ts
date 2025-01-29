@@ -7,12 +7,15 @@ import {
   addMeal,
   addPreferreMeal,
   deleteMealByIds,
+  getEatMealById,
   getMealByDate,
   getMealById,
+  getMealsByIds,
   getmealUserByIds,
 } from "../repository/meal.repository.js";
 import { addMealToUser } from "../repository/meal.repository.js";
 import { getUserById } from "../repository/user.repository.js";
+import { Meal } from "@prisma/client";
 
 export const getDailyMealService = async (data: MealRequest) => {
   const user = await getUserById(data.userId);
@@ -130,7 +133,6 @@ Example output:
   }
   return mealArr;
 };
-
 export const refreshMealService = async (data: any) => {
   const user = await getUserById(data.userId);
 
@@ -328,4 +330,20 @@ export const addManualMealService = async (data: manualMealRequest) => {
   await addCompletedMeal(data, mealId);
 
   return await getMealById(mealId);
+};
+export const getManualMealService = async (data: manualMealRequest) => {
+  const user = await getUserById(data.userId);
+
+  if (!user) {
+    throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
+  }
+  const eatMeals = await getEatMealById(data.userId);
+
+  const mealIds = eatMeals.map((meal) => meal.mealId);
+
+  if (mealIds.length === 0) return [];
+
+  const meals = await getMealsByIds(mealIds);
+
+  return meals;
 };

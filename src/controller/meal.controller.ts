@@ -4,6 +4,7 @@ import {
   completeMealService,
   favoriteMealService,
   getDailyMealService,
+  getManualMealService,
   preferredMealService,
   refreshMealService,
 } from "../service/meal.service.js";
@@ -96,6 +97,19 @@ export const addManualMeal = async (
     const meal = await addManualMealService(req.body);
 
     res.status(200).success(meal);
+  } catch (error) {
+    next(error);
+  }
+};
+export const getManualMeal = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const meals = await getManualMealService(req.body);
+
+    res.status(200).success(meals);
   } catch (error) {
     next(error);
   }

@@ -19,7 +19,6 @@ export const addMealToUser = async (
 
   return meal.mealId;
 };
-
 //식단을 저장하는 함수
 export const addMeal = async (data: any) => {
   const mealId = await prisma.meal.create({
@@ -37,7 +36,6 @@ export const addMeal = async (data: any) => {
 
   return mealId.mealId;
 };
-
 //완료한 식사를 저장하는 함수
 export const addCompletedMeal = async (data: MealRequest, mealId: number) => {
   const eatMeal = await prisma.eatMeal.create({
@@ -50,7 +48,6 @@ export const addCompletedMeal = async (data: MealRequest, mealId: number) => {
 
   return eatMeal;
 };
-
 // 날짜로 제공한 식단 가져오는 함수
 export const getMealByDate = async (data: MealRequest) => {
   const start = new Date(data.mealDate.setHours(0, 0, 0, 0));
@@ -68,7 +65,7 @@ export const getMealByDate = async (data: MealRequest) => {
 
   return meals;
 };
-
+export const getManualMeal = async (userId: number) => {};
 export const getMealById = async (mealId: number) => {
   const meal = await prisma.meal.findFirst({
     where: {
@@ -78,7 +75,25 @@ export const getMealById = async (mealId: number) => {
 
   return meal;
 };
+export const getMealsByIds = async (mealIds: number[]) => {
+  const meals = await prisma.meal.findMany({
+    where: {
+      mealId: { in: mealIds },
+      addedByUser: true,
+    },
+  });
 
+  return meals;
+};
+export const getEatMealById = async (userId: number) => {
+  const eatMeal = await prisma.eatMeal.findMany({
+    where: {
+      userId,
+    },
+  });
+
+  return eatMeal;
+};
 export const deleteMealByIds = async (data: any) => {
   const meal = await prisma.mealUser.deleteMany({
     where: {
@@ -90,7 +105,6 @@ export const deleteMealByIds = async (data: any) => {
 
   return meal;
 };
-
 export const getmealUserByIds = async (userId: number, mealId: number) => {
   const mealUser = await prisma.mealUser.findFirst({
     where: {
@@ -101,7 +115,6 @@ export const getmealUserByIds = async (userId: number, mealId: number) => {
 
   return mealUser?.mealUserId || null;
 };
-
 export const addFavoriteMeal = async (mealUserId: number) => {
   const mealUser = await prisma.mealUser.update({
     where: {
