@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import {
+  addManualMealService,
   completeMealService,
   favoriteMealService,
   getDailyMealService,
@@ -82,6 +83,19 @@ export const preferredMeal = async (
     const meals = await preferredMealService(userId, mealId);
 
     res.status(200).success(meals);
+  } catch (error) {
+    next(error);
+  }
+};
+export const addManualMeal = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const meal = await addManualMealService(req.body);
+
+    res.status(200).success(meal);
   } catch (error) {
     next(error);
   }

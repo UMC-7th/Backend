@@ -20,17 +20,16 @@ export const addMealToUser = async (
   return meal.mealId;
 };
 
-//gpt에게 받은 식단을 저장하는 함수
+//식단을 저장하는 함수
 export const addMeal = async (data: any) => {
-  console.log(data);
   const mealId = await prisma.meal.create({
     data: {
       food: data.foods.join(", "),
       calorieTotal: data.calorieTotal,
       calorieDetail: "",
-      price: data.price,
+      price: data.price || 0,
       material: "",
-      difficulty: data.difficulty,
+      difficulty: data.difficulty || "",
       recipe: "",
     },
   });

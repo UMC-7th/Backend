@@ -1,5 +1,5 @@
 import axios from "axios";
-import { MealRequest } from "../dto/meal.dto.js";
+import { manualMealRequest, MealRequest } from "../dto/meal.dto.js";
 import { AlreadyExistError, NotFoundError } from "../util/error.js";
 import {
   addCompletedMeal,
@@ -90,6 +90,7 @@ Example output:
   let result; // axios 응답을 담을 변수
   let gptResult; //gpt 응답을 담을 변수
   const mealIds: number[] = []; //생성한 식단 id들을 담을 배열
+  const mealArr: any[] = [];
   try {
     result = await axios.post(
       "https://api.openai.com/v1/chat/completions",
@@ -124,8 +125,10 @@ Example output:
   }
 
   const meals = await getMealByDate(data);
-
-  return meals;
+  for (let i = 0; i < meals.length; i++) {
+    mealArr.push(await getMealById(meals[i].mealId));
+  }
+  return mealArr;
 };
 
 export const refreshMealService = async (data: any) => {
@@ -311,4 +314,18 @@ export const preferredMealService = async (userId: number, mealId: number) => {
   const mealUser = await addPreferreMeal(mealUserId);
 
   return mealUser;
+};
+export const addManualMealService = async (data: manualMealRequest) => {
+  const user = await getUserById(data.userId);
+
+  if (!user) {
+    throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
+  }
+  const mealId: number = await addMeal(data);
+
+  await addMealToUser(data.userId, mealId, data.time, data.mealDate);
+
+  await addCompletedMeal(data, mealId);
+
+  return await getMealById(mealId);
 };
