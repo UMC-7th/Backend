@@ -1,8 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import {
+  addManualMealService,
   completeMealService,
   favoriteMealService,
   getDailyMealService,
+  getManualMealService,
   preferredMealService,
   refreshMealService,
 } from "../service/meal.service.js";
@@ -80,6 +82,32 @@ export const preferredMeal = async (
     const { userId, mealId } = req.body;
 
     const meals = await preferredMealService(userId, mealId);
+
+    res.status(200).success(meals);
+  } catch (error) {
+    next(error);
+  }
+};
+export const addManualMeal = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const meal = await addManualMealService(req.body);
+
+    res.status(200).success(meal);
+  } catch (error) {
+    next(error);
+  }
+};
+export const getManualMeal = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const meals = await getManualMealService(req.body);
 
     res.status(200).success(meals);
   } catch (error) {

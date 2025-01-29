@@ -1,8 +1,10 @@
 import express from "express";
 import {
+  addManualMeal,
   completeMeal,
   favoriteMeal,
   getDailyMeal,
+  getManualMeal,
   preferredMeal,
   refreshMeal,
 } from "../controller/meal.controller.js";
@@ -23,5 +25,11 @@ router.post("/favorite", favoriteMeal);
 
 //선호식단 추가 api
 router.post("/preference", preferredMeal);
+
+//식단 수동 추가
+router.post("/manual", addManualMeal);
+
+//수동으로 추가한 식단 조회
+router.get("/manual", getManualMeal);
 
 export default router;
