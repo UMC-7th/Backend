@@ -22,6 +22,7 @@ export const addMealToUser = async (
 
 //gpt에게 받은 식단을 저장하는 함수
 export const addMeal = async (data: any) => {
+  console.log(data);
   const mealId = await prisma.meal.create({
     data: {
       food: data.foods.join(", "),
@@ -47,7 +48,7 @@ export const addCompletedMeal = async (data: MealRequest, mealId: number) => {
     },
   });
 
-  return eatMeal.eatId;
+  return eatMeal;
 };
 
 //날짜로 제공한 식단 가져오는 함수
@@ -60,4 +61,62 @@ export const getMealByDate = async (data: MealRequest) => {
   });
 
   return meals;
+};
+
+export const getMealById = async (mealId: number) => {
+  const meal = await prisma.meal.findFirst({
+    where: {
+      mealId,
+    },
+  });
+
+  return meal;
+};
+
+export const deleteMealByIds = async (data: any) => {
+  const meal = await prisma.mealUser.deleteMany({
+    where: {
+      userId: data.userId,
+      mealId: data.mealId,
+      time: data.time,
+    },
+  });
+
+  return meal;
+};
+
+export const getmealUserByIds = async (userId: number, mealId: number) => {
+  const mealUser = await prisma.mealUser.findFirst({
+    where: {
+      userId: userId,
+      mealId: mealId,
+    },
+  });
+
+  return mealUser?.mealUserId || null;
+};
+
+export const addFavoriteMeal = async (mealUserId: number) => {
+  const mealUser = await prisma.mealUser.update({
+    where: {
+      mealUserId,
+    },
+    data: {
+      isMark: true,
+    },
+  });
+
+  return mealUser;
+};
+export const addPreferreMeal = async (mealUserId: number) => {
+  const mealUser = await prisma.mealUser.update({
+    where: {
+      mealUserId,
+    },
+    data: {
+      isLike: true,
+    },
+  });
+
+  return mealUser;
 };
