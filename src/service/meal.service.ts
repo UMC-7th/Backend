@@ -95,7 +95,7 @@ Example output:
       "https://api.openai.com/v1/chat/completions",
       {
         model: "gpt-3.5-turbo", //gpt 모델 설정
-        temperature: 1, //대답 창의성 (0~1)
+        temperature: 0.4,
         messages: messages,
       },
       {
@@ -123,8 +123,11 @@ Example output:
     await addMealToUser(data.userId, mealIds[i], mealTimes[i], data.mealDate); // 유저에게 식단 제공
   }
 
-  return gptResult;
+  const meals = await getMealByDate(data);
+
+  return meals;
 };
+
 export const refreshMealService = async (data: any) => {
   const user = await getUserById(data.userId);
 
