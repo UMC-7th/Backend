@@ -31,6 +31,7 @@ export const addMeal = async (data: any) => {
       material: "",
       difficulty: data.difficulty || "",
       recipe: "",
+      addedByUser: true,
     },
   });
 
