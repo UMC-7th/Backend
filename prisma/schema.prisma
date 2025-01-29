@@ -73,6 +73,7 @@ model Meal {
   price         Int
   difficulty    String @db.VarChar(100)
   recipe        String @db.Text
+  addedByUser     Boolean  @default(false) @map("added_by_user")
 
   mealSubs MealSub[]
   EatMeal  EatMeal[]
