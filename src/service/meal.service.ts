@@ -332,13 +332,13 @@ export const addManualMealService = async (data: manualMealRequest) => {
 
   return await getMealById(mealId);
 };
-export const getManualMealService = async (data: manualMealRequest) => {
-  const user = await getUserById(data.userId);
+export const getManualMealService = async (userId: number) => {
+  const user = await getUserById(userId);
 
   if (!user) {
-    throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
+    throw new NotFoundError("존재하지 않는 유저입니다", userId);
   }
-  const eatMeals = await getEatMealById(data.userId);
+  const eatMeals = await getEatMealById(userId);
 
   const mealIds = eatMeals.map((meal) => meal.mealId);
 
