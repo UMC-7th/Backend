@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { addCartService, deleteCartService } from "../service/subscribe.service.js";
+import { addCartService, deleteCartService, getSubListCalendarService } from "../service/subscribe.service.js";
 import { addCartDTO, deleteCartDTO } from "../dto/subscribe.dto.js";
 import { StatusCodes } from "http-status-codes";
 import { InvalidInputError } from "../util/error.js";
@@ -31,10 +31,10 @@ export const deleteCart = async (req: Request, res: Response, next: NextFunction
 
         const kartSub = await deleteCartService(userId, cartId);
         res.status(StatusCodes.OK).success({ kartSub });
-=======
-import { StatusCodes } from "http-status-codes";
-import { getSubListCalendarService } from "../service/subscribe.service.js";
-import { InvalidInputError } from "../util/error.js";
+    } catch (error) {
+        next(error);
+    }
+}
 
 export const getSubListCalendar = async (
     req: Request,
