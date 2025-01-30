@@ -7,3 +7,9 @@ export const mypageDTO = (body: any) => {
     phoneNum: body.phoneNum,
     };
 };
+
+export const deleteUserDTO = (body : any) => {
+    return {
+        id : body.id
+    }
+}

@@ -302,16 +302,15 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/FailResponse"
-
+                $ref: '#/components/schemas/FailResponse'
+            
+  #로그인 한 유저 데이터 조회 api
   /api/v1/users/mypage/profile:
     get:
       tags:
         - User
       summary: Get Logged in user
       description: 로그인한 유저 정보 조회 API(JWT 필요)
-      security:
-        - Bearer: [] # 보안 토큰 요구
       responses:
         "200":
           description: Successful operation
@@ -339,6 +338,56 @@ paths:
                       phoneNum:
                         type: string
                         example: 010-1234-1234
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
+ 
+  #유저 회원 탈퇴 api
+  /api/v1/users/mypage/delete:
+    delete:
+      tags:
+        - User
+      summary: Delete User
+      description: 로그인한 유저 회원 정보 삭제 API(JWT 필요)
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  deleteuser:
+                    type: object
+                    properties:
+                      userId:
+                        type: integer
+                        example: 1
+                      email:
+                        type: string
+                        example: test@gmail.com
+                      password:
+                        type: string
+                        example: test123
+                      birth:
+                        type: string
+                        format: date-time
+                        example: 2000-01-01T00:00:00.000Z
+                      name:
+                        type: string
+                        example: 홍길동
+                      nickname:
+                        type: string
+                        example: 닉넴  
+                      phoneNum:
+                        type: string
+                        example: 010-1234-1234
+                      purpose:
+                        type: string
+                        example: 운동
         "500":
           description: Fail operation
           content:

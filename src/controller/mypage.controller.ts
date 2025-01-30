@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { getUserProfile } from "../service/mypage.service.js";
+import { getUserProfile, delUserProfile } from "../service/mypage.service.js";
 import { StatusCodes } from "http-status-codes";
 
 export const getUser = async (
@@ -20,6 +20,23 @@ export const getUser = async (
         phoneNum: user.phoneNum,
       });
     } else {
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = req.user?.id;
+    const deleteuser = await delUserProfile(userId);
+
+    if(deleteuser) {
+      return res.status(StatusCodes.OK).success({deleteuser})
     }
   } catch (error) {
     next(error);
