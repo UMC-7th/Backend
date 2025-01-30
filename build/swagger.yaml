@@ -508,7 +508,7 @@ paths:
                 $ref: "#/components/schemas/FailResponse"
   # 즐겨찾기 추가
   /api/v1/meals/favorite:
-    post:
+    patch:
       tags:
         - Meal
       summary: Add to favorite
@@ -618,7 +618,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/FailResponse"
   # 수동 추가한 식단 조회
-  /api/v1/meals/manual1:
+  /api/v1/meals/manual/list:
     get:
       tags:
         - Meal
@@ -764,7 +764,7 @@ paths:
                 $ref: "#/components/schemas/FailResponse"
   # 선호 식단 추가
   /api/v1/meals/preference:
-    post:
+    patch:
       tags:
         - Meal
       summary: Add to preference
