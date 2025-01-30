@@ -63,30 +63,3 @@ export const kakaoPaymentSuccessService = async (data: any) => {
         throw new Error("카카오 페이 결제 승인 중 에러 발생" + error);
     }
 }
-
-export const naverPaymentService = async (data: any) => {
-    try {
-        const { productId, amount, buyerName, buyerEmail } = data;
-
-        const response = await axios.post(
-            "https://dev.apis.naver.com/naverpay-partner/v1/payments",
-            {
-              productId,
-              amount,
-              buyerName,
-              buyerEmail,
-            },
-            {
-              headers: {
-                'X-Naver-Client-Id': process.env.NAVER_CLIENT_ID,
-                'X-Naver-Client-Secret': process.env.NAVER_CLIENT_SECRET,
-              },
-            }
-        );
-
-        return response.data;
-
-    } catch (error: any) {
-        throw new Error("네이버 로그인 중 에러 발생" + error);
-    }
-}

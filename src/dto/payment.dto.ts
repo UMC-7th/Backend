@@ -8,12 +8,3 @@ export const kakaoPaymentDTO = (body: any) => {
       total_amount: body.totalAmount,
     };
 };
-
-export const naverPaymentDTO = (body: any) => {
-  return {
-    productId: body.productId,
-    amount: body.amount,
-    buyerName: body.buyerName,
-    buyerEmail: body.buyerEmail
-  };
-};

@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { kakaoPaymentDTO, naverPaymentDTO } from "../dto/payment.dto.js";
-import { kakaoPaymentService, kakaoPaymentSuccessService, naverPaymentService } from "../service/payment.service.js";
+import { kakaoPaymentDTO } from "../dto/payment.dto.js";
+import { kakaoPaymentService, kakaoPaymentSuccessService } from "../service/payment.service.js";
 import { StatusCodes } from "http-status-codes";
-import redis from "redis"
+import redis from "redis";
 
 const redisClient = redis.createClient({
     url: `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_HOST}:${process.env.REDIS_PORT}/0`,
@@ -57,14 +57,4 @@ export const kakaoCancel = async (req: Request, res: Response, next: NextFunctio
 
 export const kakaoFail = async (req: Request, res: Response, next: NextFunction) => {
     throw Error("카카오 페이 결제 실패");
-}
-
-// 네이버 페이 결제
-export const naverPayment = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-        const data = await naverPaymentService(naverPaymentDTO(req.body));
-        res.status(StatusCodes.OK).success({ data });
-    } catch (error) {
-        next(error);
-    }
 }
