@@ -30,6 +30,6 @@ router.patch("/preference", preferredMeal);
 router.post("/manual", addManualMeal);
 
 //수동으로 추가한 식단 조회
-router.get("/manual", getManualMeal);
+router.get("/manual/list", getManualMeal);
 
 export default router;
