@@ -10,6 +10,8 @@ tags:
     description: imageApi Tag
   - name: DeliveryAddress
     description: DeliveryAddress Tag
+  - name: Subscribe
+    description: Subscribe Tag
 
 #api paths
 paths:
@@ -531,6 +533,48 @@ paths:
                     properties:
                       deliveryAddress:
                         $ref: '#/components/schemas/DeliveryAddress'
+        #실패 응답
+        '500':
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
+  #==================================구독 관련 api==================================#
+  #구독 캘린더형 조회 api
+  /api/v1/subscribes/calendar:
+    get:
+      tags:
+        - Subscribe
+      summary: Get Subscribe List Calendar 
+      description: 구독 캘린더형 조회 API
+      responses:
+        #성공 응답
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    default: "SUCCESS"
+                  error:
+                    type: string
+                    default: null
+                  success:
+                    type: object
+                    properties:
+                      subList:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            mealDate:
+                              type: string
+                              format: date
+                              example: 2025-01-01
         #실패 응답
         '500':
           description: Fail operation

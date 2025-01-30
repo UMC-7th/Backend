@@ -3,6 +3,7 @@ import imageRouter from "./image.route.js";
 import userRouter from "./user.route.js";
 import mealRouter from "./meal.route.js";
 import deliveryAddressRouter from "./deliveryAddress.route.js";
+import subscribeRouter from "./subscribe.route.js";
 
 const router = express.Router();
 
@@ -21,5 +22,8 @@ router.use("/meals", mealRouter);
 
 //api/v1/subscribes 경로 요청 처리 라우터
 router.use("/deliveryAddress", deliveryAddressRouter);
+
+//api/v1/subscribes 경로 요청 처리 라우터
+router.use("/subscribes", subscribeRouter);
 
 export default router;
