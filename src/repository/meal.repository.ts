@@ -25,11 +25,11 @@ export const addMeal = async (data: any) => {
     data: {
       food: data.foods.join(", "),
       calorieTotal: data.calorieTotal,
-      calorieDetail: "",
+      calorieDetail: data.calorieDetail || "제공되지 않았습니다",
       price: data.price || 0,
-      material: "",
-      difficulty: data.difficulty || "",
-      recipe: "",
+      material: data.material || "제공되지 않았습니다",
+      difficulty: data.difficulty || "제공되지 않았습니다",
+      recipe: data.recipe || "제공되지 않았습니다",
       addedByUser: data.addedByUser || false,
     },
   });
