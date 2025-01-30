@@ -566,15 +566,11 @@ paths:
                   success:
                     type: object
                     properties:
-                      subList:
+                      subDateList:
                         type: array
                         items:
-                          type: object
-                          properties:
-                            mealDate:
-                              type: string
-                              format: date
-                              example: 2025-01-01
+                          type: string
+                          default: "2025-01-01"
         #실패 응답
         '500':
           description: Fail operation

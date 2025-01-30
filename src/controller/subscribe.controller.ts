@@ -14,8 +14,8 @@ export const getSubListCalendar = async (
         if (!userId) 
             throw new InvalidInputError("잘못된 토큰 값입니다.", "입력 값: " + req.headers.authorization);
         
-        const subList = await getSubListCalendarService(userId);
-        res.status(StatusCodes.OK).success({ subList: subList });
+        const subDateList = await getSubListCalendarService(userId);
+        res.status(StatusCodes.OK).success({ subDateList: subDateList });
     } catch (error) {
         next(error);
     }

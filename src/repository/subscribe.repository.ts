@@ -15,6 +15,11 @@ export const getSubListCalendar = async (userId: number) => {
                     },
                 },
             },
+            orderBy: {
+                mealSub: {
+                    mealDate: "asc",
+                },
+            },
         });
 
         return subList;
