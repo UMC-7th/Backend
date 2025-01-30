@@ -6,7 +6,7 @@ import {
   addFavoriteMeal,
   addMeal,
   addPreferreMeal,
-  deleteMealByIds,
+  deleteUserMealByIds,
   getEatMealById,
   getMealByDate,
   getMealById,
@@ -15,7 +15,6 @@ import {
 } from "../repository/meal.repository.js";
 import { addMealToUser } from "../repository/meal.repository.js";
 import { getUserById } from "../repository/user.repository.js";
-import { Meal } from "@prisma/client";
 
 export const getDailyMealService = async (data: MealRequest) => {
   const user = await getUserById(data.userId);
@@ -147,7 +146,7 @@ export const refreshMealService = async (data: any) => {
   }
 
   //식단 삭제
-  await deleteMealByIds(data);
+  await deleteUserMealByIds(data);
 
   const apiKey = process.env.OPENAI_API_KEY;
 
@@ -250,6 +249,8 @@ Example output when '저녁' is included:
   gptResult = JSON.parse(result.data.choices[0].message.content);
 
   const mealId: number = await addMeal(gptResult.meals[0]);
+
+  await addMealToUser(data.userId, mealId, data.time, data.mealDate); // 유저에게 식단 제공
 
   return await getMealById(mealId);
 };

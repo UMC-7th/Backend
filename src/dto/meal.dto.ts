@@ -20,6 +20,7 @@ export interface manualMealRequest {
   meals: Meal[];
   time: string;
   calorieTotal: number;
+  addedByUser: true;
 }
 
 export const mealRequestDTO = (body: any): MealRequest => {
