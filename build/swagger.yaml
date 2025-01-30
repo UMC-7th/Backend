@@ -10,6 +10,8 @@ tags:
     description: imageApi Tag
   - name: DeliveryAddress
     description: DeliveryAddress Tag
+  - name: Meal
+    description: Meal API Tag
 
 #api paths
 paths:
@@ -19,7 +21,7 @@ paths:
     get:
       tags:
         - Image
-      summary: Get Food Image 
+      summary: Get Food Image
       description: 식재료 이미지 조회 API
       parameters:
         - in: query
@@ -49,18 +51,18 @@ paths:
                       imageUrl:
                         type: string
         #실패 응답
-        '500':
+        "500":
           description: Fail operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FailResponse'
+                $ref: "#/components/schemas/FailResponse"
   #식단 이미지 생성 api
   /api/v1/images/meal:
     get:
       tags:
         - Image
-      summary: Get Food Image 
+      summary: Get Food Image
       description: 식단 이미지 조회 API
       parameters:
         - in: query
@@ -71,7 +73,7 @@ paths:
           description: 식단 이름
       responses:
         #성공 응답
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -90,12 +92,12 @@ paths:
                       imageUrl:
                         type: string
         #실패 응답
-        '500':
+        "500":
           description: Fail operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FailResponse'
+                $ref: "#/components/schemas/FailResponse"
   #================================== 회원가입, 로그인 api==================================#
   # 일반 이메일 회원가입 api
   /api/v1/users/signup:
@@ -176,7 +178,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FailResponse'
+                $ref: "#/components/schemas/FailResponse"
   # 로그인 api
   /api/v1/users/login:
     post:
@@ -239,7 +241,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FailResponse'
+                $ref: "#/components/schemas/FailResponse"
   # 닉네임 수정 api
   /api/v1/users/socialLogin/name:
     post:
@@ -298,9 +300,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FailResponse'
-            
-  paths:
+                $ref: "#/components/schemas/FailResponse"
+
   /api/v1/users/mypage/profile:
     get:
       tags:
@@ -308,7 +309,7 @@ paths:
       summary: Get Logged in user
       description: 로그인한 유저 정보 조회 API(JWT 필요)
       security:
-        - Bearer: []  # 보안 토큰 요구
+        - Bearer: [] # 보안 토큰 요구
       responses:
         "200":
           description: Successful operation
@@ -341,12 +342,492 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FailResponse'
- 
+                $ref: "#/components/schemas/FailResponse"
+    # =============================== 식단 관련 API =============================== #
 
-
-
-
+  #================================== 식단 api==================================#
+  # 하루 식단 조회
+  /api/v1/meals/daily:
+    post:
+      tags:
+        - Meal
+      summary: Get daily meal
+      description: 하루 식단을 조회,생성하는 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  example: 1
+                mealDate:
+                  type: string
+                  format: date-time
+                  example: "2025-01-32T12:34:56.789Z"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        mealId:
+                          type: integer
+                          example: 16
+                        food:
+                          type: string
+                          example: "잡곡밥, 계란후라이, 시금치 나물, 김치"
+                        calorieTotal:
+                          type: integer
+                          example: 400
+                        material:
+                          type: string
+                          example: ""
+                        calorieDetail:
+                          type: string
+                          example: ""
+                        price:
+                          type: integer
+                          example: 5000
+                        difficulty:
+                          type: string
+                          example: "쉬움"
+                        recipe:
+                          type: string
+                          example: ""
+                        addedByUser:
+                          type: boolean
+                          example: false
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
+  # 식단 수동 추가
+  /api/v1/meals/manual:
+    post:
+      tags:
+        - Meal
+      summary: Add manual meal
+      description: 사용자가 직접 식단을 추가하는 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  example: 1
+                mealDate:
+                  type: string
+                  format: date-time
+                  example: "2025-02-02T00:00:00.000Z"
+                time:
+                  type: string
+                  example: "아침"
+                foods:
+                  type: array
+                  items:
+                    type: string
+                  example: ["계란", "토스트", "우유"]
+                calorieTotal:
+                  type: integer
+                  example: 500
+                addedByUser:
+                  type: boolean
+                  example: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      mealId:
+                        type: integer
+                        example: 28
+                      food:
+                        type: string
+                        example: "계란, 토스트, 우유"
+                      calorieTotal:
+                        type: integer
+                        example: 500
+                      material:
+                        type: string
+                        example: ""
+                      calorieDetail:
+                        type: string
+                        example: ""
+                      price:
+                        type: integer
+                        example: 0
+                      difficulty:
+                        type: string
+                        example: ""
+                      recipe:
+                        type: string
+                        example: ""
+                      addedByUser:
+                        type: boolean
+                        example: true
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
+  # 즐겨찾기 추가
+  /api/v1/meals/favorite:
+    post:
+      tags:
+        - Meal
+      summary: Add to favorite
+      description: 특정 식단을 즐겨찾기하는 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  example: 1
+                mealId:
+                  type: integer
+                  example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      mealUserId:
+                        type: integer
+                        example: 16
+                      userId:
+                        type: integer
+                        example: 1
+                      mealId:
+                        type: integer
+                        example: 16
+                      time:
+                        type: string
+                        example: "아침"
+                      mealDate:
+                        type: string
+                        format: date-time
+                        example: "2015-01-22T14:59:59.999Z"
+                      isMark:
+                        type: boolean
+                        example: true
+                      isLike:
+                        type: boolean
+                        example: false
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
+  # 식단 완료 처리
+  /api/v1/meals/complete:
+    post:
+      tags:
+        - Meal
+      summary: Complete meal
+      description: 식단을 완료 처리하는 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  example: 1
+                mealId:
+                  type: integer
+                  example: 16
+                mealDate:
+                  type: string
+                  format: date-time
+                  example: "2025-01-22T12:34:56.789Z"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
+  # 수동 추가한 식단 조회
+  /api/v1/meals/manual1:
+    get:
+      tags:
+        - Meal
+      summary: Get manual meals
+      description: 사용자가 수동으로 추가한 식단을 조회하는 API
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 1
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        mealId:
+                          type: integer
+                          example: 29
+                        food:
+                          type: string
+                          example: "계란, 토스트, 우유"
+                        calorieTotal:
+                          type: integer
+                          example: 500
+                        material:
+                          type: string
+                          example: ""
+                        calorieDetail:
+                          type: string
+                          example: ""
+                        price:
+                          type: integer
+                          example: 0
+                        difficulty:
+                          type: string
+                          example: ""
+                        recipe:
+                          type: string
+                          example: ""
+                        addedByUser:
+                          type: boolean
+                          example: true
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
+  # 식단 재생성 (새로 고침)
+  /api/v1/meals/refresh:
+    post:
+      tags:
+        - Meal
+      summary: Refresh meal
+      description: 기존 식단을 재생성하는 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  example: 1
+                mealId:
+                  type: integer
+                  example: 24
+                mealDate:
+                  type: string
+                  format: date-time
+                  example: "2025-01-22T12:34:56.789Z"
+                time:
+                  type: string
+                  example: "저녁"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      mealId:
+                        type: integer
+                        example: 33
+                      food:
+                        type: string
+                        example: "흰쌀밥, 닭가슴살구이, 콩나물무침, 된장국, 깍두기"
+                      calorieTotal:
+                        type: integer
+                        example: 500
+                      material:
+                        type: string
+                        example: ""
+                      calorieDetail:
+                        type: string
+                        example: ""
+                      price:
+                        type: integer
+                        example: 7000
+                      difficulty:
+                        type: string
+                        example: "보통"
+                      recipe:
+                        type: string
+                        example: ""
+                      addedByUser:
+                        type: boolean
+                        example: false
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
+  # 선호 식단 추가
+  /api/v1/meals/preference:
+    post:
+      tags:
+        - Meal
+      summary: Add to preference
+      description: 사용자가 선호하는 식단을 추가하는 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: integer
+                  example: 1
+                mealId:
+                  type: integer
+                  example: 25
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      mealUserId:
+                        type: integer
+                        example: 25
+                      userId:
+                        type: integer
+                        example: 1
+                      mealId:
+                        type: integer
+                        example: 25
+                      time:
+                        type: string
+                        example: "아침"
+                      mealDate:
+                        type: string
+                        format: date-time
+                        example: "2025-01-30T14:59:59.999Z"
+                      isMark:
+                        type: boolean
+                        example: false
+                      isLike:
+                        type: boolean
+                        example: true
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
 #components
 components:
   schemas:
@@ -403,6 +884,3 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-
-
-      

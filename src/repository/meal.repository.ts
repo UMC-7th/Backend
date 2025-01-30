@@ -30,7 +30,7 @@ export const addMeal = async (data: any) => {
       material: "",
       difficulty: data.difficulty || "",
       recipe: "",
-      addedByUser: true,
+      addedByUser: data.addedByUser || false,
     },
   });
 
@@ -82,7 +82,6 @@ export const getMealsByIds = async (mealIds: number[]) => {
       addedByUser: true,
     },
   });
-
   return meals;
 };
 export const getEatMealById = async (userId: number) => {
@@ -94,12 +93,11 @@ export const getEatMealById = async (userId: number) => {
 
   return eatMeal;
 };
-export const deleteMealByIds = async (data: any) => {
+export const deleteUserMealByIds = async (data: any) => {
   const meal = await prisma.mealUser.deleteMany({
     where: {
       userId: data.userId,
       mealId: data.mealId,
-      time: data.time,
     },
   });
 

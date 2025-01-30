@@ -12,7 +12,7 @@ import {
 const router = express.Router();
 
 //하루 식단을 조회 및 생성
-router.get("/daily", getDailyMeal);
+router.post("/daily", getDailyMeal);
 
 //식단 재생성(새로고침) api
 router.post("/refresh", refreshMeal);
