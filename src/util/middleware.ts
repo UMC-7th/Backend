@@ -45,7 +45,7 @@ export const successMiddleware = (
 
   next();
 };
-// 실패 응답을 처리 미들웨어
+
 export const errorMiddleware = (
   err: any,
   req: Request,
@@ -56,9 +56,34 @@ export const errorMiddleware = (
     return next(err);
   }
 
-  res.status(err.statusCode || 500).error({
-    errorCode: err.errorCode || "unknown",
-    reason: err.reason || err.message || null,
-    data: err.data || null,
+  const statusCode = err.statusCode || 500;
+  const errorCode = err.errorCode || "unknown";
+  const reason = err.reason || err.message || "Internal Server Error";
+  const data = err.data || null;
+
+  let fileName: string | undefined;
+  let lineNumber: number | undefined;
+
+  if (err.stack) {
+    const stackLines = err.stack.split("\n");
+    if (stackLines[1]) {
+      const match = stackLines[1].match(/\((.*):(\d+):\d+\)/);
+      if (match) {
+        fileName = match[1];
+        lineNumber = parseInt(match[2], 10);
+      }
+    }
+  }
+
+  res.status(statusCode).json({
+    resultType: "ERROR",
+    error: {
+      errorCode,
+      reason,
+      data,
+      fileName,
+      lineNumber,
+    },
+    success: null,
   });
 };

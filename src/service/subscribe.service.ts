@@ -1,5 +1,5 @@
 import { APIError, InvalidInputError, NotFoundError, AlreadyExistError } from "../util/error.js";
-import { getMealSubById, getKartSubById, addToCart, deleteKartSub } from "../repository/subscribe.repository.js";
+import { getMealSubById, getKartSubById, addToCart, deleteKartSub, getSubListCalendar } from "../repository/subscribe.repository.js";
 
 export const addCartService = async (userId: number, data: any) => {
     try {
@@ -31,3 +31,16 @@ export const deleteCartService = async (userId: number, cartId: number) => {
         throw new Error("식단 장바구니 제거 중 에러 발생 " + error);
     }
 }
+
+//구독 내역 캘린더형 조회
+export const getSubListCalendarService = async (userId: number) => {
+    const subList = await getSubListCalendar(userId);
+
+    const result = new Set<string>();
+
+    for (let i = 0; i < subList.length; i++) {
+        result.add(subList[i].mealSub.mealDate.toISOString().slice(0, 10));
+    }
+
+    return Array.from(result);
+};

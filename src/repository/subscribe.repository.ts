@@ -46,3 +46,30 @@ export const deleteKartSub = async (userId: number, cartId: number) => {
         throw new DBError("식단 장바구니 제거 중 오류가 발생했습니다.", error);
     }
 };
+
+//구독 내역 캘린더형 조회
+export const getSubListCalendar = async (userId: number) => {
+    try {
+        const subList = await prisma.subscribe.findMany({
+            where: {
+                userId: userId,
+            },
+            select: {
+                mealSub: {
+                    select: {
+                        mealDate: true,
+                    },
+                },
+            },
+            orderBy: {
+                mealSub: {
+                    mealDate: "asc",
+                },
+            },
+        });
+
+        return subList;
+    } catch (error) {
+        throw new DBError("구독 내역 조회 중 오류가 발생했습니다.", userId);
+    }
+};

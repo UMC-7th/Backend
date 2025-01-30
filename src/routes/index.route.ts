@@ -24,7 +24,7 @@ router.use("/meals", mealRouter);
 //api/v1/subscribes 경로 요청 처리 라우터
 router.use("/deliveryAddress", deliveryAddressRouter);
 
-//api/v1/subscribes 경로 요청 처리 라우터 - 구독 관련
-router.use("/subscribes", subscribeRouter)
+//api/v1/subscribes 경로 요청 처리 라우터
+router.use("/subscribes", subscribeRouter);
 
 export default router;
