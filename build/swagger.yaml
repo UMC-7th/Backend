@@ -10,6 +10,8 @@ tags:
     description: imageApi Tag
   - name: DeliveryAddress
     description: DeliveryAddress Tag
+  - name: Subscribe
+    description: Subscribe Tag
   - name: Meal
     description: Meal API Tag
 
@@ -828,6 +830,283 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
+  #==================================배송지 관련 api==================================#
+  #배송지 관련 url
+  /api/v1/deliveryAddress:
+  #배송지 정보 작성 api
+    post:
+      tags:
+        - DeliveryAddress
+      summary: Add Delivery Address 
+      description: 배송지 정보 작성 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: 이름
+                address:
+                  type: string
+                  example: 서울시 강남구 역삼동 123-4
+                postNum:
+                  type: integer
+                  example: 12345
+                phoneNum:
+                  type: string
+                  example: 010-1234-1234
+                memo:
+                  type: string
+                  example: 문앞(8373)
+      responses:
+        #성공 응답
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    default: "SUCCESS"
+                  error:
+                    type: string
+                    default: null
+                  success:
+                    type: object
+                    properties:
+                      isSuccess:
+                        type: boolean
+                        default: true
+                      addressId:
+                        type: integer
+                        default: 0
+        #실패 응답
+        '500':
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
+  #배송지 정보 조회 api
+    get:
+      tags:
+        - DeliveryAddress
+      summary: Get Delivery Address 
+      description: 배송지 정보 조회 API
+      responses:
+        #성공 응답
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    default: "SUCCESS"
+                  error:
+                    type: string
+                    default: null
+                  success:
+                    type: object
+                    properties:
+                      result:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/DeliveryAddress'
+        #실패 응답
+        '500':
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
+  #배송지 정보 수정 api
+    put:
+      tags:
+        - DeliveryAddress
+      summary: Update Delivery Address 
+      description: 배송지 정보 수정 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                addressId:
+                  type: integer
+                  example: 0
+                name:
+                  type: string
+                  example: 이름
+                address:
+                  type: string
+                  example: 서울시 강남구 역삼동 123-4
+                postNum:
+                  type: integer
+                  example: 12345
+                phoneNum:
+                  type: string
+                  example: 010-1234-1234
+                memo:
+                  type: string
+                  example: 문앞(8373)
+      responses:
+        #성공 응답
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    default: "SUCCESS"
+                  error:
+                    type: string
+                    default: null
+                  success:
+                    type: object
+                    properties:
+                      isSuccess:
+                        type: boolean
+                        default: true
+                      deliveryAddress:
+                        $ref: '#/components/schemas/DeliveryAddress'
+        #실패 응답
+        '500':
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
+  #기본 배송지 관련 url
+  /api/v1/deliveryAddress/default:
+  #기본 배송지 설정 api
+    patch:
+      tags:
+        - DeliveryAddress
+      summary: Set Default Delivery Address 
+      description: 기본 배송지 설정 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                addressId:
+                  type: integer
+                  example: 0
+      responses:
+        #성공 응답
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    default: "SUCCESS"
+                  error:
+                    type: string
+                    default: null
+                  success:
+                    type: object
+                    properties:
+                      isSuccess:
+                        type: boolean
+                        default: true
+                      deliveryAddress:
+                        $ref: '#/components/schemas/DeliveryAddress'
+        #실패 응답
+        '500':
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
+  #기본 배송지 조회 api
+    get:
+      tags:
+        - DeliveryAddress
+      summary: Get Default Delivery Address 
+      description: 기본 배송지 조회 API
+      responses:
+        #성공 응답
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    default: "SUCCESS"
+                  error:
+                    type: string
+                    default: null
+                  success:
+                    type: object
+                    properties:
+                      deliveryAddress:
+                        $ref: '#/components/schemas/DeliveryAddress'
+        #실패 응답
+        '500':
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
+  #==================================구독 관련 api==================================#
+  #구독 캘린더형 조회 api
+  /api/v1/subscribes/calendar:
+    get:
+      tags:
+        - Subscribe
+      summary: Get Subscribe List Calendar 
+      description: 구독 캘린더형 조회 API
+      responses:
+        #성공 응답
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    default: "SUCCESS"
+                  error:
+                    type: string
+                    default: null
+                  success:
+                    type: object
+                    properties:
+                      subDateList:
+                        type: array
+                        items:
+                          type: string
+                          default: "2025-01-01"
+        #실패 응답
+        '500':
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
 #components
 components:
   schemas:
@@ -884,3 +1163,7 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
+
+#보안 적용
+security:
+  - Bearer: []
