@@ -1107,6 +1107,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FailResponse'
+  #구독 식단 리스트형 조회 api
+  /api/v1/subscribes/list:
+    get:
+      tags:
+        - Subscribe
+      summary: Get Subscribe List 
+      description: 구독 식단 리스트형 조회 API
+      responses:
+        #성공 응답
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    default: "SUCCESS"
+                  error:
+                    type: string
+                    default: null
+                  success:
+                    type: array
+                    items:
+                      type: string
+                      default: "노션 페이지 내 응답 예시를 참고해주세요"              
+        #실패 응답
+        '500':
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
 #components
 components:
   schemas:
