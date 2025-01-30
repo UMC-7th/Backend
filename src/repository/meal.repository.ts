@@ -25,12 +25,12 @@ export const addMeal = async (data: any) => {
     data: {
       food: data.foods.join(", "),
       calorieTotal: data.calorieTotal,
-      calorieDetail: "",
+      calorieDetail: data.calorieDetail || "제공되지 않았습니다",
       price: data.price || 0,
-      material: "",
-      difficulty: data.difficulty || "",
-      recipe: "",
-      addedByUser: true,
+      material: data.material || "제공되지 않았습니다",
+      difficulty: data.difficulty || "제공되지 않았습니다",
+      recipe: data.recipe || "제공되지 않았습니다",
+      addedByUser: data.addedByUser || false,
     },
   });
 
@@ -82,7 +82,6 @@ export const getMealsByIds = async (mealIds: number[]) => {
       addedByUser: true,
     },
   });
-
   return meals;
 };
 export const getEatMealById = async (userId: number) => {
@@ -94,12 +93,11 @@ export const getEatMealById = async (userId: number) => {
 
   return eatMeal;
 };
-export const deleteMealByIds = async (data: any) => {
+export const deleteUserMealByIds = async (data: any) => {
   const meal = await prisma.mealUser.deleteMany({
     where: {
       userId: data.userId,
       mealId: data.mealId,
-      time: data.time,
     },
   });
 

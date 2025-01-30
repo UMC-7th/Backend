@@ -107,7 +107,9 @@ export const getManualMeal = async (
   next: NextFunction
 ) => {
   try {
-    const meals = await getManualMealService(req.body);
+    const userId = Number(req.query.userId);
+
+    const meals = await getManualMealService(userId);
 
     res.status(200).success(meals);
   } catch (error) {
