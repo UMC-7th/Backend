@@ -14,6 +14,14 @@ export interface DailyMeal {
   mealDate: string;
   meals: Meal[];
 }
+export interface manualMealRequest {
+  userId: number;
+  mealDate: Date;
+  meals: Meal[];
+  time: string;
+  calorieTotal: number;
+  addedByUser: true;
+}
 
 export const mealRequestDTO = (body: any): MealRequest => {
   return {

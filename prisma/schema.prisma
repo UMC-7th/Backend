@@ -19,11 +19,11 @@ model User {
   password String   @db.VarChar(100)
   birth    DateTime @db.DateTime(6)
   name     String   @db.VarChar(100)
-  nickname String   @db.VarChar(100) @default("")
+  nickname String   @default("") @db.VarChar(100)
   phoneNum String   @map("phone_num") @db.VarChar(100)
   purpose  String   @db.Text
 
-  agreement       Agreement[]
+  agreement       Agreement[] 
   markMaterials   MarkMaterial[]
   EatMeal         EatMeal[]
   MealUser        MealUser[]
@@ -35,15 +35,16 @@ model User {
 }
 
 model DeliveryAddress {
-  addressId  Int     @id @default(autoincrement()) @map("address_id")
-  userId     Int     @map("user_id")
-  address    String  @db.VarChar(200)
-  name       String  @db.VarChar(100)
-  phoneNum   String  @map("phone_num") @db.VarChar(100)
-  receiveLoc String  @map("receive_loc") @db.VarChar(200)
-  isDefault  Boolean @default(false) @map("is_default")
+  addressId Int     @id @default(autoincrement()) @map("address_id")
+  userId    Int     @map("user_id")
+  address   String  @db.VarChar(200)
+  name      String  @db.VarChar(100)
+  phoneNum  String  @map("phone_num") @db.VarChar(100)
+  postNum   Int     @map("post_num")
+  memo      String  @db.Text
+  isDefault Boolean @default(false) @map("is_default")
 
-  user User @relation(fields: [userId], references: [userId])
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
   @@map("delivery_address")
 }
@@ -57,21 +58,22 @@ model MealUser {
   isMark     Boolean  @default(false) @map("is_mark")
   isLike     Boolean  @default(false) @map("is_like")
 
-  user User @relation(fields: [userId], references: [userId])
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
   meal Meal @relation(fields: [mealId], references: [mealId])
 
   @@map("meal_user")
 }
 
 model Meal {
-  mealId        Int    @id @default(autoincrement()) @map("meal_id")
-  food          String @db.VarChar(200)
-  calorieTotal  Int    @map("calorie_total")
-  material      String @db.VarChar(200)
-  calorieDetail String @map("calorie_detail") @db.VarChar(200)
+  mealId        Int     @id @default(autoincrement()) @map("meal_id")
+  food          String  @db.VarChar(200)
+  calorieTotal  Int     @map("calorie_total")
+  material      String  @db.VarChar(200)
+  calorieDetail String  @map("calorie_detail") @db.VarChar(200)
   price         Int
-  difficulty    String @db.VarChar(100)
-  recipe        String @db.Text
+  difficulty    String  @db.VarChar(100)
+  recipe        String  @db.Text
+  addedByUser   Boolean @default(false) @map("added_by_user")
 
   mealSubs MealSub[]
   EatMeal  EatMeal[]
@@ -85,7 +87,7 @@ model MarkMaterial {
   userId   Int    @map("user_id")
   material String @db.VarChar(100)
 
-  user User @relation(fields: [userId], references: [userId])
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
   @@map("mark_material")
 }
@@ -96,19 +98,20 @@ model Agreement {
   agreeMarketing Boolean @map("agree_marketing")
   agreePInfo     Boolean @map("agree_p_info")
 
-  user User @relation(fields: [userId], references: [userId])
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
   @@map("agreement")
 }
 
 model Subscribe {
-  subId     Int    @id @default(autoincrement()) @map("sub_id")
-  userId    Int    @map("user_id")
-  mealSubId Int    @map("meal_sub_id")
-  review    String @db.Text
+  subId     Int      @id @default(autoincrement()) @map("sub_id")
+  userId    Int      @map("user_id")
+  mealSubId Int      @map("meal_sub_id")
+  review    String   @db.Text
   score     Int
+  orderAt   DateTime @default(now()) @map("order_at") @db.DateTime(6)
 
-  user    User    @relation(fields: [userId], references: [userId])
+  user    User    @relation(fields: [userId], references: [userId], onDelete: Cascade)
   mealSub MealSub @relation(fields: [mealSubId], references: [mealSubId])
 
   @@map("subscribe")
@@ -120,7 +123,7 @@ model KartSub {
   mealSubId Int @map("meal_sub_id")
   cnt       Int
 
-  user    User    @relation(fields: [userId], references: [userId])
+  user    User    @relation(fields: [userId], references: [userId], onDelete: Cascade)
   mealSub MealSub @relation(fields: [mealSubId], references: [mealSubId])
 
   @@map("kart_sub")
@@ -133,8 +136,8 @@ model MealSub {
   time       String   @db.VarChar(100)
   mealDate   DateTime @map("meal_date") @db.DateTime(6)
 
-  meal      Meal            @relation(fields: [mealId], references: [mealId])
-  category  MealSubCategory @relation(fields: [categoryId], references: [categoryId])
+  meal      Meal            @relation(fields: [mealId], references: [mealId], onDelete: Cascade)
+  category  MealSubCategory @relation(fields: [categoryId], references: [categoryId], onDelete: Cascade)
   KartSub   KartSub[]
   Subscribe Subscribe[]
 
@@ -147,7 +150,7 @@ model EatMeal {
   mealId Int      @map("meal_id")
   eatAt  DateTime @map("eat_at") @db.DateTime(6)
 
-  user User @relation(fields: [userId], references: [userId])
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
   meal Meal @relation(fields: [mealId], references: [mealId])
 
   @@map("eat_meal")
