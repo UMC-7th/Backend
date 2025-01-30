@@ -18,18 +18,18 @@ router.post("/daily", getDailyMeal);
 router.post("/refresh", refreshMeal);
 
 //완료한 식단 api
-router.post("/complete", completeMeal);
+router.patch("/complete", completeMeal);
 
 //식단 즐겨찾기 api
-router.post("/favorite", favoriteMeal);
+router.patch("/favorite", favoriteMeal);
 
 //선호식단 추가 api
-router.post("/preference", preferredMeal);
+router.patch("/preference", preferredMeal);
 
 //식단 수동 추가
 router.post("/manual", addManualMeal);
 
 //수동으로 추가한 식단 조회
-router.get("/manual", getManualMeal);
+router.get("/manual/list", getManualMeal);
 
 export default router;
