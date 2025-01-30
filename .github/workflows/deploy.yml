@@ -28,6 +28,10 @@ jobs:
           echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
           echo "S3_ACCESS_KEY=${{ secrets.S3_ACCESS_KEY }}" >> .env
           echo "S3_SECRET_KEY=${{ secrets.S3_SECRET_KEY }}" >> .env
+          echo "REDIS_USERNAME=${{ secrets.REDIS_USERNAME }}" >> .env
+          echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
+          echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
+          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
 
       - name: Copy .env file to EC2
         uses: appleboy/scp-action@master
@@ -38,8 +42,8 @@ jobs:
           port: 22
           source: ".env"
           target: "/home/ubuntu/Backend"
-
-      - name: excuting remote ssh commands
+      
+      - name: install code and install dependencies
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -50,5 +54,17 @@ jobs:
             cd /home/ubuntu/Backend
             git pull origin main
             npm i --force
+            npm exec prisma generate
+            npm exec prisma migrate deploy
+
+      - name: excuting code
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          script: | 
+            cd /home/ubuntu/Backend
             npm run build
             nohup sudo npm run start > /home/ubuntu/app.log 2>&1 &
