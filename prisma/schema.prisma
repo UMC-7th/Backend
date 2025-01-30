@@ -65,15 +65,15 @@ model MealUser {
 }
 
 model Meal {
-  mealId        Int    @id @default(autoincrement()) @map("meal_id")
-  food          String @db.VarChar(200)
-  calorieTotal  Int    @map("calorie_total")
-  material      String @db.VarChar(200)
-  calorieDetail String @map("calorie_detail") @db.VarChar(200)
+  mealId        Int     @id @default(autoincrement()) @map("meal_id")
+  food          String  @db.VarChar(200)
+  calorieTotal  Int     @map("calorie_total")
+  material      String  @db.VarChar(200)
+  calorieDetail String  @map("calorie_detail") @db.VarChar(200)
   price         Int
-  difficulty    String @db.VarChar(100)
-  recipe        String @db.Text
-  addedByUser     Boolean  @default(false) @map("added_by_user")
+  difficulty    String  @db.VarChar(100)
+  recipe        String  @db.Text
+  addedByUser   Boolean @default(false) @map("added_by_user")
 
   mealSubs MealSub[]
   EatMeal  EatMeal[]
@@ -104,11 +104,12 @@ model Agreement {
 }
 
 model Subscribe {
-  subId     Int    @id @default(autoincrement()) @map("sub_id")
-  userId    Int    @map("user_id")
-  mealSubId Int    @map("meal_sub_id")
-  review    String @db.Text
+  subId     Int      @id @default(autoincrement()) @map("sub_id")
+  userId    Int      @map("user_id")
+  mealSubId Int      @map("meal_sub_id")
+  review    String   @db.Text
   score     Int
+  orderAt   DateTime @default(now()) @map("order_at") @db.DateTime(6)
 
   user    User    @relation(fields: [userId], references: [userId])
   mealSub MealSub @relation(fields: [mealSubId], references: [mealSubId])
