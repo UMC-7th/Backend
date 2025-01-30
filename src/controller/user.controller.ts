@@ -37,7 +37,6 @@ export const userLogin = async (req: Request, res: Response, next: NextFunction)
     }
 }
 
-// 소셜 로그인 시 토큰 전달
 export const socialAuthCallback = (req: Request, res: Response, next: NextFunction) => {
     try {
         const user = req.user as any; // Passport에서 전달된 사용자 객체

@@ -11,7 +11,7 @@ export const getImageFoodService = async (name: string) => {
             "입력 값이 비어있습니다.",
             "입력 값: " + name
         );
-    }
+    }   
 
     const imageFood = await getImageFood(name);
     return imageFood;
