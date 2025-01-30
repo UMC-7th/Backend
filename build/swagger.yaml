@@ -299,7 +299,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FailResponse'
-            
   paths:
   /api/v1/users/mypage/profile:
     get:
@@ -336,6 +335,89 @@ paths:
                       phoneNum:
                         type: string
                         example: 010-1234-1234
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
+  #================================== 구독 관련 api==================================#
+  # 식단 장바구니 추가 api
+  /api/v1/subscribes/meals/cart:
+    post:
+      tags:
+        - Subscribe
+      summary: Add Cart
+      description: 식단 장바구니 추가 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mealSubId:
+                  type: integer
+                count:
+                  type: integer
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  kartSub:
+                    type: object
+                    properties:
+                      kartId:
+                        type: integer
+                      userId:
+                        type: integer
+                      mealSubId:
+                        type: integer
+                      cnt:
+                        type: integer
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
+  # 식단 장바구니 제거 api
+  /api/v1/subscribes/meals/cart/{cart_id}:
+    post:
+      tags:
+        - Subscribe
+      summary: Delete Cart
+      description: 식단 장바구니 제거 API
+      parameters:
+      - in: path
+        name: cart_id
+        schema:
+          type: integer
+        required: true
+        description: 삭제할 장바구니 ID
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  kartSub:
+                    type: object
+                    properties:
+                      kartId:
+                        type: integer
+                      userId:
+                        type: integer
+                      mealSubId:
+                        type: integer
+                      cnt:
+                        type: integer
         "500":
           description: Fail operation
           content:
