@@ -5,6 +5,7 @@ import mealRouter from "./meal.route.js";
 import mypageRouter from "./mypage.route.js";
 import deliveryAddressRouter from "./deliveryAddress.route.js";
 import subscribeRouter from "./subscribe.route.js";
+import paymentRouter from "./payment.route.js";
 
 const router = express.Router();
 
@@ -26,5 +27,8 @@ router.use("/deliveryAddress", deliveryAddressRouter);
 
 //api/v1/subscribes 경로 요청 처리 라우터
 router.use("/subscribes", subscribeRouter);
+
+//api/v1/payment 경로 요청 처리 라우터
+router.use("/payment", paymentRouter);
 
 export default router;
