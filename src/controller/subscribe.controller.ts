@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { addCartService, deleteCartService, getSubListCalendarService, getSubListService } from "../service/subscribe.service.js";
+import { addCartService, deleteCartService, getSubListCalendarService, getSubListService, searchSubListService } from "../service/subscribe.service.js";
 import { addCartDTO, deleteCartDTO } from "../dto/subscribe.dto.js";
 import { StatusCodes } from "http-status-codes";
 import { InvalidInputError } from "../util/error.js";
@@ -67,6 +67,26 @@ export const getSubList = async (
             throw new InvalidInputError("잘못된 토큰 값입니다.", "입력 값: " + req.headers.authorization);
         
         const subList = await getSubListService(userId);
+        res.status(StatusCodes.OK).success({ subList: subList });
+    } catch (error) {
+        next(error);
+    }
+}
+
+//구독 내역 검색
+export const searchSubList = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    const userId = req.user?.id;
+    const date = req.query.date as string;
+
+    try {
+        if (!userId) 
+            throw new InvalidInputError("잘못된 토큰 값입니다.", "입력 값: " + req.headers.authorization);
+        
+        const subList = await searchSubListService(userId, date);
         res.status(StatusCodes.OK).success({ subList: subList });
     } catch (error) {
         next(error);
