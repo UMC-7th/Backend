@@ -87,7 +87,42 @@ export const getSubList = async (userId: number) => {
                     select: {
                         mealDate: true,
                         time: true,
-                        meal: {select: {food: true, calorieTotal: true}},
+                        meal: {select: {mealId: true, food: true, calorieTotal: true}},
+                        category: {select: {name: true}},
+                    },
+                },
+            },
+            orderBy: {
+                mealSub: {
+                    mealDate: "asc",
+                },
+            },
+        });
+
+        return subList;
+    } catch (error) {
+        throw new DBError("구독 내역 조회 중 오류가 발생했습니다.", userId);
+    }
+};
+
+//구독 내역 검색(날짜)
+export const searchSubList = async (userId: number, date: Date) => {
+    try {
+        const subList = await prisma.subscribe.findMany({
+            where: {
+                userId: userId,
+                orderAt: {
+                    gte: new Date(date.setHours(0, 0, 0, 0)),
+                    lt: new Date(date.setHours(23, 59, 59, 999))
+                }
+            },
+            select: {
+                orderAt: true,
+                mealSub: {
+                    select: {
+                        mealDate: true,
+                        time: true,
+                        meal: {select: {mealId: true, food: true, calorieTotal: true}},
                         category: {select: {name: true}},
                     },
                 },
