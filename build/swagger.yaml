@@ -6,15 +6,18 @@ servers:
   - url: http://3.38.39.238:3000
   - url: http://localhost:3000
 tags:
+  - name: User
+    description: User API Tag
   - name: Image
-    description: imageApi Tag
+    description: image Api Tag
   - name: DeliveryAddress
     description: DeliveryAddress Tag
   - name: Subscribe
     description: Subscribe Tag
   - name: Meal
     description: Meal API Tag
-
+  - name: Material
+    description: Material API Tag
 #api paths
 paths:
   #==================================images 생성 api==================================#
@@ -1238,7 +1241,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FailResponse'
-  #구독 식단 리스트형 조회 api
+  #구독 리스트형 조회 api
   /api/v1/subscribes/list:
     get:
       tags:
@@ -1272,6 +1275,204 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FailResponse'
+  #구독 내역 검색 api
+  /api/v1/subscribes/search:
+    get:
+      tags:
+        - Subscribe
+      summary: Search Subscribe 
+      description: 구독 식단 내역 검색 API
+      parameters:
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            example: "2025-01-01"
+      responses:
+        #성공 응답
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    default: "SUCCESS"
+                  error:
+                    type: string
+                    default: null
+                  success:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        orderAt:
+                          type: string
+                          example: "2025-01-01T00:00:00.000Z"
+                        mealSub:
+                          type: object
+                          properties:
+                            mealDate:
+                              type: string
+                              example: "2025-01-01T00:00:00.000Z"
+                            time:
+                              type: string
+                              example: "아침"
+                            meal:
+                              type: object
+                              properties:
+                                mealId:
+                                  type: integer
+                                  example: 0
+                                food:
+                                  type: string
+                                  example: "잡곡밥, 계란후라이, 시금치 나물, 김치"
+                                calorieTotal:
+                                  type: integer
+                                  example: 400  
+                            category:
+                              type: object
+                              properties:
+                                name:
+                                  type: string
+                                  example: "다이어트"          
+        #실패 응답
+        '500':
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'
+  #==================================재료 관련 api==================================#
+  #식재료 즐겨찾기 관련 api
+  /api/v1/materials/mark:
+  #식재료 즐겨찾기 추가 api
+    post:
+      tags:
+        - Material
+      summary: mark Material
+      description: 사용자가 즐겨찾기한 식재료를 추가하는 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                material:
+                  type: string
+                  example: "사과"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      isSucess:
+                        type: boolean
+                        example: true
+                      material:
+                        $ref: '#/components/schemas/Material'
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
+  #식재료 즐겨찾기 조회 api
+    get:
+      tags:
+        - Material
+      summary: Get Marked Material
+      description: 사용자가 즐겨찾기한 식재료를 조회하는 API
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      markList:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Material'
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
+  #식재료 즐겨찾기 삭제 api
+    delete:
+      tags:
+        - Material
+      summary: Delete Marked Material
+      description: 사용자가 즐겨찾기한 식재료를 삭제하는 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                material:
+                  type: string
+                  example: "사과"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      isSucess:
+                        type: boolean
+                        example: true
+                      material:
+                        $ref: '#/components/schemas/Material'
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
 #components
 components:
   schemas:
@@ -1322,6 +1523,19 @@ components:
         isDefault:
           type: boolean
           default: false
+    #Material Component
+    Material:
+      type: object
+      properties:
+        materialId:
+          type: integer
+          default: 0
+        userId:
+          type: integer
+          default: 0
+        material:
+          type: string
+          default: "사과"
   #보안 처리
   securitySchemes:
     Bearer:

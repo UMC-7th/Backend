@@ -1,5 +1,5 @@
 import { APIError, InvalidInputError, NotFoundError, AlreadyExistError } from "../util/error.js";
-import { getMealSubById, getKartSubById, addToCart, deleteKartSub, getSubListCalendar, getSubList } from "../repository/subscribe.repository.js";
+import { getMealSubById, getKartSubById, addToCart, deleteKartSub, getSubListCalendar, getSubList, searchSubList } from "../repository/subscribe.repository.js";
 
 export const addCartService = async (userId: number, data: any) => {
     try {
@@ -64,3 +64,11 @@ export const getSubListService = async (userId: number) => {
 
     return Array.from(result);
 };
+
+//구독 내역 검색
+export const searchSubListService = async (userId: number, date_s: string) => {
+    const date = new Date(date_s);
+    const subList = await searchSubList(userId, date);
+
+    return subList;
+}

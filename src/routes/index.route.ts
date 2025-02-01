@@ -6,6 +6,7 @@ import mypageRouter from "./mypage.route.js";
 import deliveryAddressRouter from "./deliveryAddress.route.js";
 import subscribeRouter from "./subscribe.route.js";
 import paymentRouter from "./payment.route.js";
+import materialRouter from "./material.route.js";
 
 const router = express.Router();
 
@@ -30,5 +31,8 @@ router.use("/subscribes", subscribeRouter);
 
 //api/v1/payment 경로 요청 처리 라우터
 router.use("/payment", paymentRouter);
+
+//api/v1/materials 경로 요청 처리 라우터
+router.use("/materials", materialRouter);
 
 export default router;
