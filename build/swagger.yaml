@@ -1428,6 +1428,51 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
+  #식재료 즐겨찾기 삭제 api
+    delete:
+      tags:
+        - Material
+      summary: Delete Marked Material
+      description: 사용자가 즐겨찾기한 식재료를 삭제하는 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                material:
+                  type: string
+                  example: "사과"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      isSucess:
+                        type: boolean
+                        example: true
+                      material:
+                        $ref: '#/components/schemas/Material'
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
 #components
 components:
   schemas:

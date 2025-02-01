@@ -44,3 +44,17 @@ export const getMarkMaterialList = async (userId: number) => {
         throw new DBError("식재료 북마크 조회 중 오류가 발생했습니다.", error);
     }
 };
+
+//식재료 북마크 삭제
+export const deleteMarkMaterial = async (markId: number) => {
+    try {
+        const deleteMark = await prisma.markMaterial.delete({
+            where: {
+                markId: markId
+            }
+        });
+        return deleteMark;
+    } catch (error) {
+        throw new DBError("식재료 북마크 삭제 중 오류가 발생했습니다.", error);
+    }
+};
