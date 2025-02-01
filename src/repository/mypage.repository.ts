@@ -30,3 +30,15 @@ export const deleteUserProfile = async (userId: number) => {
     throw new DBError("사용자 조회 중 오류가 발생했습니다.", error);
   }
 };
+
+export const updateUserProfile = async (userId: number, updateData: any) => {
+  try {
+    const updateUser = await prisma.user.update({
+      where: { userId: userId },
+      data: updateData,
+    });
+    return updateUser;
+  } catch (error) {
+    throw new DBError("사용자 조회 중 오류가 발생했습니다", error);
+  }
+};
