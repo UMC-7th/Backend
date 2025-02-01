@@ -30,3 +30,17 @@ export const markMaterial = async (userId: number, material: string) => {
         throw new DBError("식재료 북마크 추가 중 오류가 발생했습니다.", error);
     }
 };
+
+//식재료 북마크 조회(리스트)
+export const getMarkMaterialList = async (userId: number) => {
+    try {
+        const markList = await prisma.markMaterial.findMany({
+            where: {
+                userId: userId
+            }
+        });
+        return markList;
+    } catch (error) {
+        throw new DBError("식재료 북마크 조회 중 오류가 발생했습니다.", error);
+    }
+};
