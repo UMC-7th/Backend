@@ -1347,8 +1347,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/FailResponse'
   #==================================재료 관련 api==================================#
-  #식재료 즐겨찾기 추가 api
+  #식재료 즐겨찾기 관련 api
   /api/v1/materials/mark:
+  #식재료 즐겨찾기 추가 api
     post:
       tags:
         - Material
@@ -1387,6 +1388,40 @@ paths:
                         example: true
                       material:
                         $ref: '#/components/schemas/Material'
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
+  #식재료 즐겨찾기 조회 api
+    get:
+      tags:
+        - Material
+      summary: Get Marked Material
+      description: 사용자가 즐겨찾기한 식재료를 조회하는 API
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      markList:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Material'
         "500":
           description: Fail operation
           content:
