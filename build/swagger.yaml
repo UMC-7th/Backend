@@ -6,15 +6,18 @@ servers:
   - url: http://3.38.39.238:3000
   - url: http://localhost:3000
 tags:
+  - name: User
+    description: User API Tag
   - name: Image
-    description: imageApi Tag
+    description: image Api Tag
   - name: DeliveryAddress
     description: DeliveryAddress Tag
   - name: Subscribe
     description: Subscribe Tag
   - name: Meal
     description: Meal API Tag
-
+  - name: Material
+    description: Material API Tag
 #api paths
 paths:
   #==================================images 생성 api==================================#
@@ -1343,6 +1346,53 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FailResponse'
+  #==================================재료 관련 api==================================#
+  #식재료 즐겨찾기 추가 api
+  /api/v1/materials/mark:
+    post:
+      tags:
+        - Material
+      summary: mark Material
+      description: 사용자가 즐겨찾기한 식재료를 추가하는 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                material:
+                  type: string
+                  example: "사과"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      isSucess:
+                        type: boolean
+                        example: true
+                      material:
+                        $ref: '#/components/schemas/Material'
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
 #components
 components:
   schemas:
@@ -1393,6 +1443,19 @@ components:
         isDefault:
           type: boolean
           default: false
+    #Material Component
+    Material:
+      type: object
+      properties:
+        materialId:
+          type: integer
+          default: 0
+        userId:
+          type: integer
+          default: 0
+        material:
+          type: string
+          default: "사과"
   #보안 처리
   securitySchemes:
     Bearer:
