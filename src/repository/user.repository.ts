@@ -40,7 +40,8 @@ export const addUser = async (type: string, profile: any) => {
           name: profile.name,
           nickname: profile.nickname,
           phoneNum: profile.phoneNum,
-          purpose: profile.purpose
+          purpose: profile.purpose,
+          loginMethod: "email"
         },
       });
       return user;
@@ -54,7 +55,8 @@ export const addUser = async (type: string, profile: any) => {
           name: profile.displayName,
           nickname: "",
           phoneNum: "",
-          purpose: ""
+          purpose: "",
+          loginMethod : type
         },
       });
       return user;
@@ -68,7 +70,9 @@ export const addUser = async (type: string, profile: any) => {
           name: profile.displayName,
           nickname: "",
           phoneNum: "",
-          purpose: ""
+          purpose: "",
+          loginMethod : type
+        
         },
       });
       return user;
@@ -82,7 +86,9 @@ export const addUser = async (type: string, profile: any) => {
           name: profile.displayName,
           nickname: "",
           phoneNum: "",
-          purpose: ""
+          purpose: "",
+          loginMethod : type
+        
         },
       });
       return user;

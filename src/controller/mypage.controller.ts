@@ -1,6 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import { getUserProfile, delUserProfile } from "../service/mypage.service.js";
+import {
+  getUserProfile,
+  delUserProfile,
+  upUserProfile,
+} from "../service/mypage.service.js";
 import { StatusCodes } from "http-status-codes";
+import { updateUserDTO } from "../dto/mypage.dto.js";
 
 export const getUser = async (
   req: Request,
@@ -35,10 +40,34 @@ export const deleteUser = async (
     const userId = req.user?.id;
     const deleteuser = await delUserProfile(userId);
 
-    if(deleteuser) {
-      return res.status(StatusCodes.OK).success({deleteuser})
+    if (deleteuser) {
+      return res.status(StatusCodes.OK).success({ deleteuser });
     }
   } catch (error) {
     next(error);
   }
 };
+
+export const updateUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = req.user?.id;
+    const loginMethod = req.user?.loginMethod;
+
+    const isSocialLogin = loginMethod !== "email";
+
+    const updateData = updateUserDTO(req.body, isSocialLogin);
+
+    const updatedUser = await upUserProfile(userId, updateData);
+
+    if (updatedUser) {
+      return res.status(StatusCodes.OK).json({ updatedUser });
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+ 

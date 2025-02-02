@@ -1,5 +1,5 @@
 import express from "express";
-import { addCart, deleteCart, getSubList, getSubListCalendar } from "../controller/subscribe.controller.js";
+import { addCart, deleteCart, getSubList, getSubListCalendar, searchSubList } from "../controller/subscribe.controller.js";
 import { jwtAuthMiddleware } from "../util/jwt.middleware.js";
 
 const router = express.Router();
@@ -14,5 +14,7 @@ router.delete("/meals/cart/:cart_id", jwtAuthMiddleware, deleteCart);
 router.get("/calendar", jwtAuthMiddleware, getSubListCalendar);
 //구독 목록 리스트형 조회
 router.get("/list", jwtAuthMiddleware, getSubList);
+//구독 목록 검색
+router.get("/search", jwtAuthMiddleware, searchSubList);
 
 export default router;
