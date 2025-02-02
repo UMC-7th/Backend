@@ -28,7 +28,7 @@ export const addMeal = async (data: any) => {
       calorieDetail: data.calorieDetail || "제공되지 않았습니다",
       price: data.price || 0,
       material: data.material || "제공되지 않았습니다",
-      difficulty: data.difficulty || "제공되지 않았습니다",
+      difficulty: data.difficulty || 0,
       recipe: data.recipe || "제공되지 않았습니다",
       addedByUser: data.addedByUser || false,
     },

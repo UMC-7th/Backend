@@ -7,7 +7,7 @@ export interface Meal {
   calorieTotal: number;
   foods: string[];
   price: string;
-  difficulty: string;
+  difficulty: number;
 }
 
 export interface DailyMeal {

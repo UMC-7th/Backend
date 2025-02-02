@@ -305,8 +305,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FailResponse'
-            
+                $ref: "#/components/schemas/FailResponse"
+
   #로그인 한 유저 데이터 조회 api
   /api/v1/users/mypage/profile:
     get:
@@ -346,8 +346,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FailResponse'
- 
+                $ref: "#/components/schemas/FailResponse"
+
   #유저 회원 탈퇴 api
   /api/v1/users/mypage/delete:
     delete:
@@ -384,7 +384,7 @@ paths:
                         example: 홍길동
                       nickname:
                         type: string
-                        example: 닉넴  
+                        example: 닉넴
                       phoneNum:
                         type: string
                         example: 010-1234-1234
@@ -396,7 +396,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FailResponse'
+                $ref: "#/components/schemas/FailResponse"
 
   #로그인 한 유저 데이터 수정 api
   /api/v1/users/mypage/update:
@@ -460,7 +460,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FailResponse'              
+                $ref: "#/components/schemas/FailResponse"
   #================================== 구독 관련 api==================================#
   # 식단 장바구니 추가 api
   /api/v1/subscribes/meals/cart:
@@ -504,7 +504,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FailResponse'
+                $ref: "#/components/schemas/FailResponse"
   # 식단 장바구니 제거 api
   /api/v1/subscribes/meals/cart/{cart_id}:
     post:
@@ -513,12 +513,12 @@ paths:
       summary: Delete Cart
       description: 식단 장바구니 제거 API
       parameters:
-      - in: path
-        name: cart_id
-        schema:
-          type: integer
-        required: true
-        description: 삭제할 장바구니 ID
+        - in: path
+          name: cart_id
+          schema:
+            type: integer
+          required: true
+          description: 삭제할 장바구니 ID
       responses:
         "200":
           description: Successful operation
@@ -543,7 +543,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FailResponse'
+                $ref: "#/components/schemas/FailResponse"
 
   #================================== 식단 api==================================#
   # 하루 식단 조회
@@ -606,8 +606,8 @@ paths:
                           type: integer
                           example: 5000
                         difficulty:
-                          type: string
-                          example: "쉬움"
+                          type: integet
+                          example: 1
                         recipe:
                           type: string
                           example: ""
@@ -692,8 +692,8 @@ paths:
                         type: integer
                         example: 0
                       difficulty:
-                        type: string
-                        example: ""
+                        type: integer
+                        example: 3
                       recipe:
                         type: string
                         example: ""
@@ -870,8 +870,8 @@ paths:
                           type: integer
                           example: 0
                         difficulty:
-                          type: string
-                          example: ""
+                          type: integer
+                          example: 3
                         recipe:
                           type: string
                           example: ""
@@ -948,8 +948,8 @@ paths:
                         type: integer
                         example: 7000
                       difficulty:
-                        type: string
-                        example: "보통"
+                        type: integer
+                        example: 3
                       recipe:
                         type: string
                         example: ""
@@ -1031,11 +1031,11 @@ paths:
   #==================================배송지 관련 api==================================#
   #배송지 관련 url
   /api/v1/deliveryAddress:
-  #배송지 정보 작성 api
+    #배송지 정보 작성 api
     post:
       tags:
         - DeliveryAddress
-      summary: Add Delivery Address 
+      summary: Add Delivery Address
       description: 배송지 정보 작성 API
       requestBody:
         required: true
@@ -1084,21 +1084,21 @@ paths:
                         type: integer
                         default: 0
         #실패 응답
-        '500':
+        "500":
           description: Fail operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FailResponse'
-  #배송지 정보 조회 api
+                $ref: "#/components/schemas/FailResponse"
+    #배송지 정보 조회 api
     get:
       tags:
         - DeliveryAddress
-      summary: Get Delivery Address 
+      summary: Get Delivery Address
       description: 배송지 정보 조회 API
       responses:
         #성공 응답
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -1117,19 +1117,19 @@ paths:
                       result:
                         type: array
                         items:
-                          $ref: '#/components/schemas/DeliveryAddress'
+                          $ref: "#/components/schemas/DeliveryAddress"
         #실패 응답
-        '500':
+        "500":
           description: Fail operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FailResponse'
-  #배송지 정보 수정 api
+                $ref: "#/components/schemas/FailResponse"
+    #배송지 정보 수정 api
     put:
       tags:
         - DeliveryAddress
-      summary: Update Delivery Address 
+      summary: Update Delivery Address
       description: 배송지 정보 수정 API
       requestBody:
         required: true
@@ -1158,7 +1158,7 @@ paths:
                   example: 문앞(8373)
       responses:
         #성공 응답
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -1178,21 +1178,21 @@ paths:
                         type: boolean
                         default: true
                       deliveryAddress:
-                        $ref: '#/components/schemas/DeliveryAddress'
+                        $ref: "#/components/schemas/DeliveryAddress"
         #실패 응답
-        '500':
+        "500":
           description: Fail operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FailResponse'
+                $ref: "#/components/schemas/FailResponse"
   #기본 배송지 관련 url
   /api/v1/deliveryAddress/default:
-  #기본 배송지 설정 api
+    #기본 배송지 설정 api
     patch:
       tags:
         - DeliveryAddress
-      summary: Set Default Delivery Address 
+      summary: Set Default Delivery Address
       description: 기본 배송지 설정 API
       requestBody:
         required: true
@@ -1206,7 +1206,7 @@ paths:
                   example: 0
       responses:
         #성공 응답
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -1226,23 +1226,23 @@ paths:
                         type: boolean
                         default: true
                       deliveryAddress:
-                        $ref: '#/components/schemas/DeliveryAddress'
+                        $ref: "#/components/schemas/DeliveryAddress"
         #실패 응답
-        '500':
+        "500":
           description: Fail operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FailResponse'
-  #기본 배송지 조회 api
+                $ref: "#/components/schemas/FailResponse"
+    #기본 배송지 조회 api
     get:
       tags:
         - DeliveryAddress
-      summary: Get Default Delivery Address 
+      summary: Get Default Delivery Address
       description: 기본 배송지 조회 API
       responses:
         #성공 응답
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -1259,25 +1259,25 @@ paths:
                     type: object
                     properties:
                       deliveryAddress:
-                        $ref: '#/components/schemas/DeliveryAddress'
+                        $ref: "#/components/schemas/DeliveryAddress"
         #실패 응답
-        '500':
+        "500":
           description: Fail operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FailResponse'
+                $ref: "#/components/schemas/FailResponse"
   #==================================구독 관련 api==================================#
   #구독 캘린더형 조회 api
   /api/v1/subscribes/calendar:
     get:
       tags:
         - Subscribe
-      summary: Get Subscribe List Calendar 
+      summary: Get Subscribe List Calendar
       description: 구독 캘린더형 조회 API
       responses:
         #성공 응답
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -1299,22 +1299,22 @@ paths:
                           type: string
                           default: "2025-01-01"
         #실패 응답
-        '500':
+        "500":
           description: Fail operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FailResponse'
+                $ref: "#/components/schemas/FailResponse"
   #구독 리스트형 조회 api
   /api/v1/subscribes/list:
     get:
       tags:
         - Subscribe
-      summary: Get Subscribe List 
+      summary: Get Subscribe List
       description: 구독 식단 리스트형 조회 API
       responses:
         #성공 응답
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -1331,20 +1331,20 @@ paths:
                     type: array
                     items:
                       type: string
-                      default: "노션 페이지 내 응답 예시를 참고해주세요"              
+                      default: "노션 페이지 내 응답 예시를 참고해주세요"
         #실패 응답
-        '500':
+        "500":
           description: Fail operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FailResponse'
+                $ref: "#/components/schemas/FailResponse"
   #구독 내역 검색 api
   /api/v1/subscribes/search:
     get:
       tags:
         - Subscribe
-      summary: Search Subscribe 
+      summary: Search Subscribe
       description: 구독 식단 내역 검색 API
       parameters:
         - name: date
@@ -1355,7 +1355,7 @@ paths:
             example: "2025-01-01"
       responses:
         #성공 응답
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -1396,24 +1396,24 @@ paths:
                                   example: "잡곡밥, 계란후라이, 시금치 나물, 김치"
                                 calorieTotal:
                                   type: integer
-                                  example: 400  
+                                  example: 400
                             category:
                               type: object
                               properties:
                                 name:
                                   type: string
-                                  example: "다이어트"          
+                                  example: "다이어트"
         #실패 응답
-        '500':
+        "500":
           description: Fail operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FailResponse'
+                $ref: "#/components/schemas/FailResponse"
   #==================================재료 관련 api==================================#
   #식재료 즐겨찾기 관련 api
   /api/v1/materials/mark:
-  #식재료 즐겨찾기 추가 api
+    #식재료 즐겨찾기 추가 api
     post:
       tags:
         - Material
@@ -1451,14 +1451,14 @@ paths:
                         type: boolean
                         example: true
                       material:
-                        $ref: '#/components/schemas/Material'
+                        $ref: "#/components/schemas/Material"
         "500":
           description: Fail operation
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
-  #식재료 즐겨찾기 조회 api
+    #식재료 즐겨찾기 조회 api
     get:
       tags:
         - Material
@@ -1485,14 +1485,14 @@ paths:
                       markList:
                         type: array
                         items:
-                          $ref: '#/components/schemas/Material'
+                          $ref: "#/components/schemas/Material"
         "500":
           description: Fail operation
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
-  #식재료 즐겨찾기 삭제 api
+    #식재료 즐겨찾기 삭제 api
     delete:
       tags:
         - Material
@@ -1530,7 +1530,7 @@ paths:
                         type: boolean
                         example: true
                       material:
-                        $ref: '#/components/schemas/Material'
+                        $ref: "#/components/schemas/Material"
         "500":
           description: Fail operation
           content:
