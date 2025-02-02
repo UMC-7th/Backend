@@ -40,7 +40,12 @@ export const getDailyMealService = async (data: MealRequest) => {
   const messages = [
     {
       role: "system",
-      content: `"Please generate a daily personal diet plan with the following format:
+      content: `
+      "response must be strictly in JSON format, without any additional text"
+      "Please generate a daily personal diet plan with the following format:
+      "Ensure that the response is always a valid JSON. Do not include extra messages."
+       "Each meal should be different, and no meal should repeat within the same response."
+      "Ensure variety in food items, calorie content, and preparation difficulty."
 - "day": a string representing the date (e.g., "2025-01-15").
 - "meals": an array of meal records, where each record includes:
   - "time": a string representing the type of meal (e.g., "아침", "점심", "저녁").
@@ -48,7 +53,7 @@ export const getDailyMealService = async (data: MealRequest) => {
   - "calorieDetail": a string listing each food item and its approximate calorie content in the format "food: calorie" (e.g., "밥: 300, 된장찌개: 150, 삼겹살: 400").
   - "foods": an array of strings representing the food items included in the meal. "밥" should always be included as a staple food, without variations (e.g., ["밥", "된장찌개", "삼겹살", "김치"]).
   - "price": an integer representing the approximate cost of the meal (default: 0, e.g., 4000).
-  - "difficulty": a string indicating the preparation difficulty (default: "", e.g., "쉬움", "보통", "어려움").
+   - "difficulty": an integer indicating the preparation difficulty (default: 1, range: 1 to 5, where 1 is easiest and 5 is hardest).
   - "material": a string listing the key ingredients used in the meal (e.g., "쌀, 된장, 두부, 삼겹살, 마늘, 고춧가루").
   - "recipe": a string providing a simple step-by-step cooking guide for dishes that require actual preparation. Very simple foods like 김치 or 계란프라이 should not have a recipe.
 
@@ -70,7 +75,7 @@ Example output:
       "calorieDetail": "밥: 300, 계란프라이: 80, 김치: 20",
       "foods": ["밥", "계란프라이", "김치"],
       "price": 4500,
-      "difficulty": "쉬움",
+      "difficulty": 1,
       "material": "쌀, 계란, 참기름, 김치",
       "recipe": "",
       "addedByUser": false
@@ -81,7 +86,7 @@ Example output:
       "calorieDetail": "밥: 300, 된장찌개: 150, 삼겹살: 400, 김치: 20",
       "foods": ["밥", "된장찌개", "삼겹살", "김치"],
       "price": 8000,
-      "difficulty": "보통",
+      "difficulty": 3,
       "material": "쌀, 된장, 두부, 애호박, 삼겹살, 마늘, 고춧가루",
       "recipe": "된장찌개: 냄비에 물을 넣고 된장을 풀고, 두부와 애호박을 넣어 끓인다. 삼겹살: 프라이팬에서 노릇하게 굽는다.",
       "addedByUser": false
@@ -92,7 +97,7 @@ Example output:
       "calorieDetail": "밥: 300, 갈비찜: 600, 콩나물무침: 50, 무생채: 30",
       "foods": ["밥", "갈비찜", "콩나물무침", "무생채"],
       "price": 9500,
-      "difficulty": "어려움",
+      "difficulty": 5,
       "material": "쌀, 소갈비, 간장, 설탕, 마늘, 콩나물, 무, 고춧가루",
       "recipe": "갈비찜: 소갈비를 양념(간장, 설탕, 마늘)에 재운 후 찜기에 넣고 푹 익힌다. 콩나물무침: 콩나물을 데친 후 소금과 참기름으로 무친다.",
       "addedByUser": false
@@ -175,6 +180,11 @@ export const refreshMealService = async (data: any) => {
     {
       role: "system",
       content: `"Please generate a daily personal diet plan with the following format:
+      "response must be strictly in JSON format, without any additional text"
+      "Please generate a daily personal diet plan with the following format:
+      "Ensure that the response is always a valid JSON. Do not include extra messages."
+       "Each meal should be different, and no meal should repeat within the same response."
+      "Ensure variety in food items, calorie content, and preparation difficulty."
 - "day": a string representing the date (e.g., "2025-01-15").
 - "meals": an array of meal records, where each record includes:
   - "time": a string representing the type of meal (e.g., "아침", "점심", "저녁").
@@ -182,7 +192,7 @@ export const refreshMealService = async (data: any) => {
   - "calorieDetail": a string listing each food item and its approximate calorie content in the format "food: calorie" (e.g., "밥: 300, 된장찌개: 150, 삼겹살: 400").
   - "foods": an array of strings representing the food items included in the meal. "밥" should always be included as a staple food, without variations (e.g., ["밥", "된장찌개", "삼겹살", "김치"]).
   - "price": an integer representing the approximate cost of the meal (default: 0, e.g., 4000).
-  - "difficulty": a string indicating the preparation difficulty (default: "", e.g., "쉬움", "보통", "어려움").
+  - "difficulty": an integer indicating the preparation difficulty (default: 1, range: 1 to 5, where 1 is easiest and 5 is hardest).
   - "material": a string listing the key ingredients used in the meal (e.g., "쌀, 된장, 두부, 삼겹살, 마늘, 고춧가루").
   - "recipe": a string providing a simple step-by-step cooking guide for dishes that require actual preparation. Very simple foods like 김치 or 계란프라이 should not have a recipe.
 
@@ -209,7 +219,7 @@ Example output when '아침' is included:
       "material": "쌀, 계란, 소금, 김치",
       "calorieDetail": "밥: 300, 계란찜: 150, 김치: 20",
       "price": 4500, 
-      "difficulty": "쉬움",
+      "difficulty": 1,
       "recipe": "계란찜: 계란을 풀고 소금을 조금 넣어 찜통에서 찌면 완성.",
       "addedByUser": false
     }
@@ -223,7 +233,7 @@ Example output when '점심' is included:
       "calorieDetail": "밥: 300, 된장찌개: 150, 삼겹살: 400, 김치: 20",
       "foods": ["밥", "된장찌개", "삼겹살", "김치"],
       "price": 8000,
-      "difficulty": "보통",
+       "difficulty": 3,
       "material": "쌀, 된장, 두부, 애호박, 삼겹살, 마늘, 고춧가루",
       "recipe": "된장찌개: 냄비에 물을 넣고 된장을 풀고, 두부와 애호박을 넣어 끓인다. 삼겹살: 프라이팬에서 노릇하게 굽는다.",
       "addedByUser": false
@@ -239,7 +249,7 @@ Example output when '저녁' is included:
       "calorieDetail": "밥: 300, 갈비찜: 600, 콩나물무침: 50, 무생채: 30",
       "foods": ["밥", "갈비찜", "콩나물무침", "무생채"],
       "price": 9500,
-      "difficulty": "어려움",
+       "difficulty": 5,
       "material": "쌀, 소갈비, 간장, 설탕, 마늘, 콩나물, 무, 고춧가루",
       "recipe": "갈비찜: 소갈비를 양념(간장, 설탕, 마늘)에 재운 후 찜기에 넣고 푹 익힌다. 콩나물무침: 콩나물을 데친 후 소금과 참기름으로 무친다.",
       "addedByUser": false
