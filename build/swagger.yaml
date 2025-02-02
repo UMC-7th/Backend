@@ -397,6 +397,70 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FailResponse'
+
+  #로그인 한 유저 데이터 수정 api
+  /api/v1/users/mypage/update:
+    put:
+      tags:
+        - User
+      summary: Update user
+      description: 로그인한 유저 정보 수정 API(JWT 필요)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: test@gmail.com
+                nickname:
+                  type: string
+                  example: 알티
+                birth:
+                  type: string
+                  format: date
+                  example: 2000-01-01
+                name:
+                  type: string
+                  example: 테스트 사용자
+                phoneNum:
+                  type: string
+                  example: 010-1234-1234
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      nickname:
+                        type: string
+                        example: 닉넴
+                      email:
+                        type: string
+                        example: test@gmail.com
+                      birth:
+                        type: string
+                        format: date
+                        example: 2000-01-01
+                      name:
+                        type: string
+                        example: 이름
+                      phoneNum:
+                        type: string
+                        example: 010-1234-1234
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FailResponse'              
   #================================== 구독 관련 api==================================#
   # 식단 장바구니 추가 api
   /api/v1/subscribes/meals/cart:
