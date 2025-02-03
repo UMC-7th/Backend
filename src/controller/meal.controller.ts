@@ -9,6 +9,7 @@ import {
   refreshMealService,
 } from "../service/meal.service.js";
 import { mealRequestDTO } from "../dto/meal.dto.js";
+import { InvalidInputError } from "../util/error.js";
 
 //하루 식단을 생성하는 api 컨트롤러
 export const getDailyMeal = async (
@@ -16,8 +17,19 @@ export const getDailyMeal = async (
   res: Response,
   next: NextFunction
 ) => {
+  const userId = req.user?.id;
+  const mealDate = req.body.mealDate;
   try {
-    const meals = await getDailyMealService(mealRequestDTO(req.body));
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
+
+    const meals = await getDailyMealService(
+      mealRequestDTO({ userId, mealDate })
+    );
 
     res.status(200).success(meals);
   } catch (error) {
@@ -30,9 +42,16 @@ export const refreshMeal = async (
   res: Response,
   next: NextFunction
 ) => {
+  const userId = req.user?.id;
+  const { mealDate, mealId, time } = req.body;
   try {
-    //req.body => userId,mealId,time(아침,점심,저녁),mealDate
-    const meal = await refreshMealService(req.body);
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
+    const meal = await refreshMealService({ userId, mealDate, mealId, time });
 
     res.status(200).success(meal);
   } catch (error) {
@@ -45,10 +64,20 @@ export const completeMeal = async (
   res: Response,
   next: NextFunction
 ) => {
+  const userId = req.user?.id;
+  const { mealDate, mealId } = req.body;
+
   try {
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
+
     const meal = await completeMealService(
-      mealRequestDTO(req.body),
-      req.body.mealId
+      mealRequestDTO({ userId, mealDate }),
+      mealId
     );
 
     res.status(200).success(meal);
@@ -62,8 +91,16 @@ export const favoriteMeal = async (
   res: Response,
   next: NextFunction
 ) => {
+  const userId = req.user?.id;
+  const mealId = req.body.mealId;
+
   try {
-    const { userId, mealId } = req.body;
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
 
     const meals = await favoriteMealService(userId, mealId);
 
@@ -78,8 +115,16 @@ export const preferredMeal = async (
   res: Response,
   next: NextFunction
 ) => {
+  const userId = req.user?.id;
+  const mealId = req.body.mealId;
+
   try {
-    const { userId, mealId } = req.body;
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
 
     const meals = await preferredMealService(userId, mealId);
 
@@ -88,26 +133,52 @@ export const preferredMeal = async (
     next(error);
   }
 };
+
 export const addManualMeal = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
+  const userId = req.user?.id;
+  const { mealDate, time, foods, calorieTotal } = req.body;
+
   try {
-    const meal = await addManualMealService(req.body);
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
+
+    const meal = await addManualMealService({
+      userId,
+      mealDate,
+      time,
+      foods,
+      calorieTotal,
+      addedByUser: true,
+    });
 
     res.status(200).success(meal);
   } catch (error) {
     next(error);
   }
 };
+
 export const getManualMeal = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
+  const userId = req.user?.id;
+
   try {
-    const userId = Number(req.query.userId);
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
 
     const meals = await getManualMealService(userId);
 
