@@ -72,7 +72,7 @@ model Meal {
   material      String  @db.VarChar(200)
   calorieDetail String  @map("calorie_detail") @db.VarChar(200)
   price         Int
-  difficulty    String  @db.VarChar(100)
+  difficulty    Int   
   recipe        String  @db.Text
   addedByUser   Boolean @default(false) @map("added_by_user")
 
