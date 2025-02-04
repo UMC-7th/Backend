@@ -9,7 +9,7 @@ router.post("/signup", userSignUp);
 // 이메일 로그인 api
 router.post("/login", userLogin);
 
-// 소셜 로그인 시 닉네임을 입력받는 api
-router.post("/socialLogin/nickname", createUsername)
+// 로그인 시 닉네임을 입력받는 api
+router.post("/login/nickname", createUsername)
 
 export default router;
