@@ -8,28 +8,29 @@ import {
   preferredMeal,
   refreshMeal,
 } from "../controller/meal.controller.js";
+import { jwtAuthMiddleware } from "../util/jwt.middleware.js";
 
 const router = express.Router();
 
 //하루 식단을 조회 및 생성
-router.post("/daily", getDailyMeal);
+router.post("/daily", jwtAuthMiddleware, getDailyMeal);
 
 //식단 재생성(새로고침) api
-router.post("/refresh", refreshMeal);
+router.post("/refresh", jwtAuthMiddleware, refreshMeal);
 
 //완료한 식단 api
-router.patch("/complete", completeMeal);
+router.patch("/complete", jwtAuthMiddleware, completeMeal);
 
 //식단 즐겨찾기 api
-router.patch("/favorite", favoriteMeal);
+router.patch("/favorite", jwtAuthMiddleware, favoriteMeal);
 
 //선호식단 추가 api
-router.patch("/preference", preferredMeal);
+router.patch("/preference", jwtAuthMiddleware, preferredMeal);
 
 //식단 수동 추가
-router.post("/manual", addManualMeal);
+router.post("/manual", jwtAuthMiddleware, addManualMeal);
 
 //수동으로 추가한 식단 조회
-router.get("/manual/list", getManualMeal);
+router.get("/manual/list", jwtAuthMiddleware, getManualMeal);
 
 export default router;
