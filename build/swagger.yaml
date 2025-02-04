@@ -676,7 +676,7 @@ paths:
                         example: 땅콩
                       healthCondition:
                         type: string
-                        example: 있음음
+                        example: 있음
                       healthConditionDetails:
                         type: string
                         example: 고혈압
@@ -715,6 +715,33 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"              
+  #유저 설정 식단 조회 api
+  /api/v1/users/mypage/goal:
+    get:
+      tags:
+        - User
+      summary: Get user setting
+      description: 유저가 설정한 목표 조회 API(JWT 필요)
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      goal:
+                        type: string
+                        example: 목표
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
   #================================== 구독 관련 api==================================#
   # 식단 장바구니 추가 api
   /api/v1/subscribes/meals/cart:

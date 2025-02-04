@@ -42,3 +42,18 @@ export const updateUserProfile = async (userId: number, updateData: any) => {
     throw new DBError("사용자 조회 중 오류가 발생했습니다", error);
   }
 };
+
+export const findGoalProfile = async (userId: number) => {
+  try {
+    const goal = await prisma.survey.findFirst({
+      where: { userId: userId },
+      select: {
+        goal: true,
+      },
+    });
+
+    return goal;
+  } catch (error) {
+    throw new DBError("사용자 조회 중 오류가 발생했습니다.", error);
+  }
+};

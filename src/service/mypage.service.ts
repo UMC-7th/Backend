@@ -2,6 +2,7 @@ import {
   findUserProfile,
   deleteUserProfile,
   updateUserProfile,
+  findGoalProfile,
 } from "../repository/mypage.repository.js";
 import { getUserById } from "../repository/user.repository.js";
 import { NotFoundError } from "../util/error.js";
@@ -55,4 +56,14 @@ export const upUserProfile = async (userId: number, updateData: any) => {
   }
 
   return updatedUser;
+};
+
+export const getGoalProfile = async (userId: number) => {
+  const goal = await findGoalProfile(userId);
+
+  if (!goal) {
+    throw new NotFoundError("존재하지 않는 유저", "입력 값: " + goal);
+  }
+
+  return goal;
 };

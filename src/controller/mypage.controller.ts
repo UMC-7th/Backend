@@ -3,6 +3,7 @@ import {
   getUserProfile,
   delUserProfile,
   upUserProfile,
+  getGoalProfile,
 } from "../service/mypage.service.js";
 import { StatusCodes } from "http-status-codes";
 import { updateUserDTO } from "../dto/mypage.dto.js";
@@ -70,4 +71,18 @@ export const updateUser = async (
     next(error);
   }
 };
- 
+
+export const getGoal = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = req.user?.id;
+    const goal = await getGoalProfile(userId);
+
+    res.status(StatusCodes.OK).success({ goal });
+  } catch (error) {
+    next(error);
+  }
+};
