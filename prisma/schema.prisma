@@ -190,12 +190,15 @@ model Survey {
   meals           String   @db.VarChar(200)      
   allergy         String   @db.VarChar(100)      
   allergyDetails  String?  @db.VarChar(200)  
-  healthCondition String   @db.VarChar(100)      
+  healthCondition String   @db.VarChar(100)   
+  healthConditionDetails String?   @db.VarChar(200)   
   gender          String   @db.VarChar(10)       
   birthYear       Int      @map("birth_year")    
   height          Int      @db.Int              
   currentWeight   Int      @map("current_weight")
   targetWeight    Int      @map("target_weight") 
+  skeletalMuscleMass Float? @map("skeletal_Mucle_Mass")
+  bodyFatPercentage Float? @map("body_fat_percentage")
   exerciseFrequency Int    @map("exercise_frequency") 
   job             String   @db.VarChar(100)      
 
