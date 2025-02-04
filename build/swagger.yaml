@@ -546,13 +546,13 @@ paths:
                 $ref: "#/components/schemas/FailResponse"
 
   #================================== 식단 api==================================#
-  # 하루 식단 조회
+  # 하루 식단 생성
   /api/v1/meals/daily:
     post:
       tags:
         - Meal
       summary: Get daily meal
-      description: 하루 식단을 조회,생성하는 API
+      description: 하루 식단을 조회, 생성하는 API
       requestBody:
         required: true
         content:
@@ -560,13 +560,10 @@ paths:
             schema:
               type: object
               properties:
-                userId:
-                  type: integer
-                  example: 1
                 mealDate:
                   type: string
                   format: date-time
-                  example: "2025-01-32T12:34:56.789Z"
+                  example: "2025-02-04T12:34:56.789Z"
       responses:
         "200":
           description: Successful operation
@@ -589,28 +586,28 @@ paths:
                       properties:
                         mealId:
                           type: integer
-                          example: 16
+                          example: 73
                         food:
                           type: string
-                          example: "잡곡밥, 계란후라이, 시금치 나물, 김치"
+                          example: "밥, 김치, 계란찜"
                         calorieTotal:
                           type: integer
-                          example: 400
+                          example: 350
                         material:
                           type: string
-                          example: ""
+                          example: "쌀, 김치, 계란, 소금"
                         calorieDetail:
                           type: string
-                          example: ""
+                          example: "밥: 300, 김치: 20, 계란찜: 30"
                         price:
                           type: integer
-                          example: 5000
+                          example: 3500
                         difficulty:
-                          type: integet
+                          type: integer
                           example: 1
                         recipe:
                           type: string
-                          example: ""
+                          example: "계란찜: 계란을 풀고 소금을 조금 넣은 후 찜기에서 찐다."
                         addedByUser:
                           type: boolean
                           example: false
@@ -634,13 +631,10 @@ paths:
             schema:
               type: object
               properties:
-                userId:
-                  type: integer
-                  example: 1
                 mealDate:
                   type: string
                   format: date-time
-                  example: "2025-02-02T00:00:00.000Z"
+                  example: "2025-02-05T00:00:00.000Z"
                 time:
                   type: string
                   example: "아침"
@@ -675,7 +669,7 @@ paths:
                     properties:
                       mealId:
                         type: integer
-                        example: 28
+                        example: 76
                       food:
                         type: string
                         example: "계란, 토스트, 우유"
@@ -684,19 +678,19 @@ paths:
                         example: 500
                       material:
                         type: string
-                        example: ""
+                        example: "제공되지 않았습니다"
                       calorieDetail:
                         type: string
-                        example: ""
+                        example: "제공되지 않았습니다"
                       price:
                         type: integer
                         example: 0
                       difficulty:
                         type: integer
-                        example: 3
+                        example: 0
                       recipe:
                         type: string
-                        example: ""
+                        example: "제공되지 않았습니다"
                       addedByUser:
                         type: boolean
                         example: true
@@ -720,12 +714,9 @@ paths:
             schema:
               type: object
               properties:
-                userId:
-                  type: integer
-                  example: 1
                 mealId:
                   type: integer
-                  example: 16
+                  example: 75
       responses:
         "200":
           description: Successful operation
@@ -746,20 +737,20 @@ paths:
                     properties:
                       mealUserId:
                         type: integer
-                        example: 16
+                        example: 58
                       userId:
                         type: integer
-                        example: 1
+                        example: 999
                       mealId:
                         type: integer
-                        example: 16
+                        example: 75
                       time:
                         type: string
-                        example: "아침"
+                        example: "저녁"
                       mealDate:
                         type: string
                         format: date-time
-                        example: "2015-01-22T14:59:59.999Z"
+                        example: "2025-02-04T14:59:59.999Z"
                       isMark:
                         type: boolean
                         example: true
@@ -786,12 +777,9 @@ paths:
             schema:
               type: object
               properties:
-                userId:
-                  type: integer
-                  example: 1
                 mealId:
                   type: integer
-                  example: 16
+                  example: 40
                 mealDate:
                   type: string
                   format: date-time
@@ -811,6 +799,22 @@ paths:
                     type: string
                     nullable: true
                     example: null
+                  success:
+                    type: object
+                    properties:
+                      eatId:
+                        type: integer
+                        example: 13
+                      userId:
+                        type: integer
+                        example: 999
+                      mealId:
+                        type: integer
+                        example: 75
+                      eatAt:
+                        type: string
+                        format: date-time
+                        example: "2025-02-04T12:34:56.789Z"
         "500":
           description: Fail operation
           content:
@@ -824,13 +828,6 @@ paths:
         - Meal
       summary: Get manual meals
       description: 사용자가 수동으로 추가한 식단을 조회하는 API
-      parameters:
-        - name: userId
-          in: query
-          required: true
-          schema:
-            type: integer
-            example: 1
       responses:
         "200":
           description: Successful operation
@@ -884,6 +881,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
+
   # 식단 재생성 (새로 고침)
   /api/v1/meals/refresh:
     post:
@@ -898,9 +896,6 @@ paths:
             schema:
               type: object
               properties:
-                userId:
-                  type: integer
-                  example: 1
                 mealId:
                   type: integer
                   example: 24
@@ -962,6 +957,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
+
   # 선호 식단 추가
   /api/v1/meals/preference:
     patch:
@@ -1028,6 +1024,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
+
   #==================================배송지 관련 api==================================#
   #배송지 관련 url
   /api/v1/deliveryAddress:
