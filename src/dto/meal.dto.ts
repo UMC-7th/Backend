@@ -17,13 +17,13 @@ export interface DailyMeal {
 export interface manualMealRequest {
   userId: number;
   mealDate: Date;
-  meals: Meal[];
+  foods: Meal[];
   time: string;
   calorieTotal: number;
   addedByUser: true;
 }
 
-export const mealRequestDTO = (body: any): MealRequest => {
+export const mealRequestDTO = (body: MealRequest): MealRequest => {
   return {
     userId: body.userId,
     mealDate: new Date(body.mealDate),

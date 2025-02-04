@@ -31,7 +31,7 @@ model User {
   KartSub         KartSub[]
   Subscribe       Subscribe[]
   DeliveryAddress DeliveryAddress[]
-
+  Survey          Survey[]
   @@map("user")
 }
 
@@ -181,4 +181,28 @@ model HotMaterial {
   material String @db.VarChar(100)
 
   @@map("hot_material")
+}
+
+model Survey {
+  surveyId        Int      @id @default(autoincrement()) @map("survey_id")
+  userId          Int      @map("user_id")
+  goal            String   @db.VarChar(100)      
+  meals           String   @db.VarChar(200)      
+  allergy         String   @db.VarChar(100)      
+  allergyDetails  String?  @db.VarChar(200)  
+  healthCondition String   @db.VarChar(100)   
+  healthConditionDetails String?   @db.VarChar(200)   
+  gender          String   @db.VarChar(10)       
+  birthYear       Int      @map("birth_year")    
+  height          Int      @db.Int              
+  currentWeight   Int      @map("current_weight")
+  targetWeight    Int      @map("target_weight") 
+  skeletalMuscleMass Float? @map("skeletal_Mucle_Mass")
+  bodyFatPercentage Float? @map("body_fat_percentage")
+  exerciseFrequency Int    @map("exercise_frequency") 
+  job             String   @db.VarChar(100)      
+
+  user            User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@map("survey")
 }
