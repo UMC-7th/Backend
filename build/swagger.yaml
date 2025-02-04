@@ -676,7 +676,7 @@ paths:
                         example: 땅콩
                       healthCondition:
                         type: string
-                        example: 있음음
+                        example: 있음
                       healthConditionDetails:
                         type: string
                         example: 고혈압
