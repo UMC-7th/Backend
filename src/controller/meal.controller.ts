@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import {
+  addDailyMealService,
   addManualMealService,
   completeMealService,
   favoriteMealService,
@@ -18,8 +19,10 @@ export const getDailyMeal = async (
   next: NextFunction
 ) => {
   const userId = req.user?.id;
-  const mealDate = req.body.mealDate;
+
   try {
+    const mealRequest = mealRequestDTO(req.body);
+
     if (!userId) {
       throw new InvalidInputError(
         "잘못된 토큰 값입니다.",
@@ -27,11 +30,17 @@ export const getDailyMeal = async (
       );
     }
 
-    const meals = await getDailyMealService(
-      mealRequestDTO({ userId, mealDate })
-    );
+    const existingMeals = await getDailyMealService(mealRequest);
 
-    res.status(200).success(meals);
+    let meals;
+    if (!existingMeals) {
+      meals = await addDailyMealService(mealRequest);
+
+      res.status(200).success(meals);
+
+      return;
+    }
+    res.status(200).success(existingMeals);
   } catch (error) {
     next(error);
   }
