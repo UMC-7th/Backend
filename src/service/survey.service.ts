@@ -1,4 +1,7 @@
-import { surveyRepository } from "../repository/survey.repository.js";
+import {
+  surveyRepository,
+  updateRepository,
+} from "../repository/survey.repository.js";
 import { getUserById } from "../repository/user.repository.js";
 import { NotFoundError } from "../util/error.js";
 
@@ -17,4 +20,17 @@ export const surveyService = async (surveyData: any) => {
   }
 
   return newSurvey;
+};
+
+export const updateService = async (userId: number, surveyData: any) => {
+  try {
+    const updatedSurvey = await updateRepository(userId, surveyData);
+
+    return updatedSurvey;
+  } catch (error) {
+    throw new NotFoundError(
+      "존재하지 않는 유저",
+      "입력 값: " + surveyData.userId
+    );
+  }
 };
