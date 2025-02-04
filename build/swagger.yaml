@@ -590,7 +590,133 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
-
+    put:
+      tags:
+        - User
+      summary: put survey
+      description: 유저 사용 목적 수정 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                goal:
+                  type: string
+                  example: 목적
+                meals:
+                  type: array
+                  items:
+                    type: string
+                  example: ["아침", "점심", "저녁"]
+                allergy:
+                  type: string
+                  example: 유무
+                allergyDetails:
+                  type: string
+                  example: 땅콩
+                healthCondition:
+                  type: string
+                  example: 유무
+                healthConditionDetails:
+                  type: string
+                  example: 고혈압
+                gender:
+                  type: string
+                  example: 남성
+                birthYear:
+                  type: integer
+                  example: 2000
+                height:
+                  type: integer
+                  example: 165
+                currentWeight:
+                  type: integer
+                  example: 55
+                targetWeight:
+                  type: integer
+                  example: 50
+                skeletalMuscleMass:
+                  type: number
+                  format: float
+                  example: 35.5
+                bodyFatPercentage:
+                  type: number
+                  format: float
+                  example: 15.2
+                exerciseFrequency:
+                  type: integer
+                  example: 4
+                job:
+                  type: string
+                  example: 프리랜서
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  survey:
+                    type: object
+                    properties:
+                      goal:
+                        type: string
+                        example: 다이어트
+                      meals:
+                        type: array
+                        items:
+                          type: string
+                        example: ["아침", "점심"]
+                      allergy:
+                        type: string
+                        example: 있음
+                      allergyDetails:
+                        type: string
+                        example: 땅콩
+                      healthCondition:
+                        type: string
+                        example: 있음음
+                      healthConditionDetails:
+                        type: string
+                        example: 고혈압
+                      gender:
+                        type: string
+                        example: 여성
+                      birthYear:
+                        type: integer
+                        example: 1900
+                      height:
+                        type: integer
+                        example: 130
+                      currentWeight:
+                        type: integer
+                        example: 50
+                      targetWeight:
+                        type: integer
+                        example: 40
+                      skeletalMuscleMass:
+                        type: number
+                        format: float
+                        example: 10.5
+                      bodyFatPercentage:
+                        type: number
+                        format: float
+                        example: 11.2
+                      exerciseFrequency:
+                        type: integer
+                        example: 2
+                      job:
+                        type: string
+                        example: 학생
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"              
   #================================== 구독 관련 api==================================#
   # 식단 장바구니 추가 api
   /api/v1/subscribes/meals/cart:
