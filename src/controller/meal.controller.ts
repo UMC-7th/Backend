@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import {
+  addDailyMealService,
   addManualMealService,
   completeMealService,
   favoriteMealService,
@@ -17,9 +18,18 @@ export const getDailyMeal = async (
   next: NextFunction
 ) => {
   try {
-    const meals = await getDailyMealService(mealRequestDTO(req.body));
+    const mealRequest = mealRequestDTO(req.body);
 
-    res.status(200).success(meals);
+    const existingMeals = await getDailyMealService(mealRequest);
+    let meals;
+    if (!existingMeals) {
+      meals = await addDailyMealService(mealRequest);
+
+      res.status(200).success(meals);
+
+      return;
+    }
+    res.status(200).success(existingMeals);
   } catch (error) {
     next(error);
   }
