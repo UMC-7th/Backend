@@ -248,7 +248,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/FailResponse"
   # 닉네임 수정 api
-  /api/v1/users/socialLogin/name:
+  /api/v1/users/login/nickname:
     post:
       tags:
         - User
@@ -263,10 +263,8 @@ paths:
               properties:
                 userId:
                   type: integer
-                  example: 1
                 name:
                   type: string
-                  example: 테스트 수정
       responses:
         "200":
           description: Successful operation
@@ -1658,6 +1656,83 @@ paths:
                         example: true
                       material:
                         $ref: "#/components/schemas/Material"
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
+                
+  #================================== 결제 api==================================#
+  # 카카오 페이 결제 요청
+  /api/v1/payment/kakao:
+    post:
+      tags:
+        - Payment
+      summary: Request Kakao Pay
+      description: 카카오 페이 결제 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cid:
+                  type: string
+                  example: "TC0ONETIME"
+                orderId:
+                  type: string
+                  example: "orderId"
+                userId:
+                  type: string
+                  example: "4"
+                itemName:
+                  type: string
+                  example: "결제 상품"
+                quantity:
+                  type: integer
+                  example: 10
+                totalAmount:
+                  type: integer
+                  example: 12000
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        tid:
+                          type: string
+                        tms_result:
+                          type: string
+                        next_redirect_app_url:
+                          type: string
+                        next_redirect_mobile_url:
+                          type: string
+                        next_redirect_pc_url:
+                          type: string
+                        android_app_scheme:
+                          type: string
+                        ios_app_scheme:
+                          type: string
+                        created_at:
+                          type: string
+                          format: date-time
         "500":
           description: Fail operation
           content:
