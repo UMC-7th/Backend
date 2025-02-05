@@ -20,21 +20,20 @@ export const getDailyMeal = async (
   next: NextFunction
 ) => {
   const userId = req.user?.id;
-
+  const mealDate = req.body.mealDate;
   try {
-    const mealRequest = mealRequestDTO(req.body);
-
     if (!userId) {
       throw new InvalidInputError(
         "잘못된 토큰 값입니다.",
         "입력 값: " + req.headers.authorization
       );
     }
+    const mealRequest = mealRequestDTO({ userId, mealDate });
 
     const existingMeals = await getDailyMealService(mealRequest);
 
     let meals;
-    if (!existingMeals) {
+    if (existingMeals.length == 0) {
       meals = await addDailyMealService(mealRequest);
 
       res.status(200).success(meals);
@@ -46,7 +45,6 @@ export const getDailyMeal = async (
     next(error);
   }
 };
-
 export const refreshMeal = async (
   req: Request,
   res: Response,
