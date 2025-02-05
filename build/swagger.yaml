@@ -769,6 +769,38 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"              
+  #유저 진단 결과 조회 api
+  /api/v1/users/mypage/result:
+    get:
+      tags:
+        - User
+      summary: Get user diagnosis result
+      description: 유저의 진단 결과 조회 API(JWT 필요)
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: object
+                    properties:
+                      diagnosis:
+                        type: string
+                        example: [근육량 증가 필요,체지방률 확인 필요, 단백질 섭취량 조절 필요]
+                      advice:
+                        type: string
+                        example: [근육을 늘리기 위해 단백질 섭취 필요,
+                                  체지방률을 체크하고 조절,
+                                  근육 증가를 위해 꾸준한 운동이 필요]
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
   #================================== 구독 관련 api==================================#
   # 식단 장바구니 추가 api
   /api/v1/subscribes/meals/cart:

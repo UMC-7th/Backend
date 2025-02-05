@@ -4,7 +4,8 @@ import {
   delUserProfile,
   upUserProfile,
   getGoalProfile,
-  getHealthScoreProfile
+  getHealthScoreProfile,
+  getResultProfile
 } from "../service/mypage.service.js";
 import { StatusCodes } from "http-status-codes";
 import { updateUserDTO } from "../dto/mypage.dto.js";
@@ -99,6 +100,21 @@ export const getHealthScore = async (
     const healthscore = await getHealthScoreProfile(userId);
 
     res.status(StatusCodes.OK).success({ healthscore });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getResult = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = req.user?.id;
+    const result = await getResultProfile(userId);
+
+    res.status(StatusCodes.OK).success({ result });
   } catch (error) {
     next(error);
   }

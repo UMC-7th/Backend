@@ -69,3 +69,15 @@ export const findhealthscoreProfile = async (userId: number) => {
     throw new DBError("사용자 조회 중 오류가 발생했습니다.", error);
   }
 };
+
+export const findResultProfile = async (userId: number) => {
+  try {
+    const result = await prisma.survey.findFirst({
+      where: { userId: userId },
+    });
+
+    return result;
+  } catch (error) {
+    throw new DBError("사용자 조회 중 오류가 발생했습니다.", error);
+  }
+};
