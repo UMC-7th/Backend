@@ -2,6 +2,7 @@ import express from "express";
 import {
   addManualMeal,
   completeMeal,
+  deleteManualMeal,
   favoriteMeal,
   getDailyMeal,
   getManualMeal,
@@ -32,5 +33,8 @@ router.post("/manual", jwtAuthMiddleware, addManualMeal);
 
 //수동으로 추가한 식단 조회
 router.get("/manual/list", jwtAuthMiddleware, getManualMeal);
+
+//수동으로 추가한 식단 삭제
+router.delete("/manual/delete", jwtAuthMiddleware, deleteManualMeal);
 
 export default router;

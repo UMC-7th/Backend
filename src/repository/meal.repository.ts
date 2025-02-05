@@ -100,6 +100,25 @@ export const deleteUserMealByIds = async (data: any) => {
     },
   });
 
+  return meal.count;
+};
+export const deleteEatMealByIds = async (data: any) => {
+  const eatMeal = await prisma.eatMeal.deleteMany({
+    where: {
+      userId: data.userId,
+      mealId: data.mealId,
+    },
+  });
+
+  return eatMeal.count;
+};
+export const deleteMealById = async (mealId: number) => {
+  const meal = await prisma.meal.delete({
+    where: {
+      mealId: mealId,
+    },
+  });
+
   return meal;
 };
 export const getmealUserByIds = async (userId: number, mealId: number) => {
