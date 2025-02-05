@@ -100,7 +100,7 @@ export const deleteUserMealByIds = async (data: any) => {
     },
   });
 
-  return meal;
+  return meal.count;
 };
 export const deleteEatMealByIds = async (data: any) => {
   const eatMeal = await prisma.eatMeal.deleteMany({
@@ -110,7 +110,7 @@ export const deleteEatMealByIds = async (data: any) => {
     },
   });
 
-  return eatMeal;
+  return eatMeal.count;
 };
 export const deleteMealById = async (mealId: number) => {
   const meal = await prisma.meal.delete({

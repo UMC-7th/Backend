@@ -1,6 +1,10 @@
 import axios from "axios";
 import { manualMealRequest, MealRequest } from "../dto/meal.dto.js";
-import { AlreadyExistError, NotFoundError } from "../util/error.js";
+import {
+  AlreadyExistError,
+  InvalidInputError,
+  NotFoundError,
+} from "../util/error.js";
 import {
   addCompletedMeal,
   addFavoriteMeal,
@@ -412,9 +416,12 @@ export const deleteManualMealService = async (data: any) => {
     throw new NotFoundError("존재하지 않는 식단입니다", data.mealId);
   }
 
-  await deleteUserMealByIds(data);
+  const userMealCount = await deleteUserMealByIds(data);
+  const eatMealCount = await deleteEatMealByIds(data);
 
-  await deleteEatMealByIds(data);
+  if (userMealCount == 0 || eatMealCount == 0) {
+    throw new InvalidInputError("해당 유저에게 할당된 식단이 아닙니다", data);
+  }
 
   const deletedMeal = await deleteMealById(data.mealId);
 
