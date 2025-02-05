@@ -742,6 +742,33 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
+  #유저 건강 점수 조회 api
+  /api/v1/users/mypage/healthscore:
+    get:
+      tags:
+        - User
+      summary: Get user health score
+      description: 유저의 건강 점수 조회 API(JWT 필요)
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: object
+                    properties:
+                      healthscore:
+                        type: string
+                        example: 0~100점
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"              
   #================================== 구독 관련 api==================================#
   # 식단 장바구니 추가 api
   /api/v1/subscribes/meals/cart:
