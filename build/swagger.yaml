@@ -714,7 +714,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/FailResponse"              
+                $ref: "#/components/schemas/FailResponse"
   #유저 설정 식단 조회 api
   /api/v1/users/mypage/goal:
     get:
@@ -768,7 +768,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/FailResponse"              
+                $ref: "#/components/schemas/FailResponse"
   #유저 진단 결과 조회 api
   /api/v1/users/mypage/result:
     get:
@@ -789,12 +789,20 @@ paths:
                     properties:
                       diagnosis:
                         type: string
-                        example: [근육량 증가 필요,체지방률 확인 필요, 단백질 섭취량 조절 필요]
+                        example:
+                          [
+                            근육량 증가 필요,
+                            체지방률 확인 필요,
+                            단백질 섭취량 조절 필요,
+                          ]
                       advice:
                         type: string
-                        example: [근육을 늘리기 위해 단백질 섭취 필요,
-                                  체지방률을 체크하고 조절,
-                                  근육 증가를 위해 꾸준한 운동이 필요]
+                        example:
+                          [
+                            근육을 늘리기 위해 단백질 섭취 필요,
+                            체지방률을 체크하고 조절,
+                            근육 증가를 위해 꾸준한 운동이 필요,
+                          ]
         "500":
           description: Fail operation
           content:
@@ -1221,7 +1229,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
-
   # 식단 재생성 (새로 고침)
   /api/v1/meals/refresh:
     post:
@@ -1297,7 +1304,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
-
   # 선호 식단 추가
   /api/v1/meals/preference:
     patch:
@@ -1356,6 +1362,74 @@ paths:
                         type: boolean
                         example: false
                       isLike:
+                        type: boolean
+                        example: true
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
+  # 수동 추가한 식단 삭제
+  /api/v1/meals/manual/delete:
+    delete:
+      tags:
+        - Meal
+      summary: delete manual meal
+      description: 수동 추가한 식단을 삭제하는 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mealId:
+                  type: integer
+                  example: 84
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      mealId:
+                        type: integer
+                        example: 84
+                      food:
+                        type: string
+                        example: "계란, 토스트, 우유"
+                      calorieTotal:
+                        type: integer
+                        example: 500
+                      material:
+                        type: string
+                        example: "제공되지 않았습니다"
+                      calorieDetail:
+                        type: string
+                        example: "제공되지 않았습니다"
+                      price:
+                        type: integer
+                        example: 0
+                      difficulty:
+                        type: integer
+                        example: 0
+                      recipe:
+                        type: string
+                        example: "제공되지 않았습니다"
+                      addedByUser:
                         type: boolean
                         example: true
         "500":
@@ -1874,7 +1948,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
-                
+
   #================================== 결제 api==================================#
   # 카카오 페이 결제 요청
   /api/v1/payment/kakao:

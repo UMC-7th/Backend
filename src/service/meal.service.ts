@@ -412,11 +412,11 @@ export const deleteManualMealService = async (data: any) => {
     throw new NotFoundError("존재하지 않는 식단입니다", data.mealId);
   }
 
-  const deletedMeal = await deleteMealById(data.mealId);
-
   await deleteUserMealByIds(data);
 
   await deleteEatMealByIds(data);
+
+  const deletedMeal = await deleteMealById(data.mealId);
 
   return deletedMeal;
 };
