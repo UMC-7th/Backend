@@ -26,9 +26,6 @@ passport.use(naverStrategy);
 const app = express();
 const port = process.env.PORT;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 app.use(
   cors({
     origin: "http://localhost:3000", // Swagger UI가 실행 중인 URL
@@ -38,7 +35,7 @@ app.use(
 app.use(express.json()); // request의 본문을 json으로 해석할 수 있도록 함 (JSON 형태의 요청 body를 파싱하기 위함)
 app.use(express.urlencoded({ extended: false })); // 단순 객체 문자열 형태로 본문 데이터 해석
 
-const swaggerSpec = YAML.load(path.join(__dirname, "../build/swagger.yaml"));
+const swaggerSpec = YAML.load(path.join("./build/swagger.yaml"));
 
 app.use(successMiddleware);
 
