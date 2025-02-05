@@ -6,6 +6,8 @@ import {
   addFavoriteMeal,
   addMeal,
   addPreferreMeal,
+  deleteEatMealByIds,
+  deleteMealById,
   deleteUserMealByIds,
   getEatMealById,
   getMealByDate,
@@ -396,4 +398,25 @@ export const getManualMealService = async (userId: number) => {
   const meals = await getMealsByIds(mealIds);
 
   return meals;
+};
+export const deleteManualMealService = async (data: any) => {
+  const user = await getUserById(data.userId);
+
+  if (!user) {
+    throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
+  }
+
+  const meal = await getMealById(data.mealId);
+
+  if (!meal) {
+    throw new NotFoundError("존재하지 않는 식단입니다", data.mealId);
+  }
+
+  const deletedMeal = await deleteMealById(data.mealId);
+
+  await deleteUserMealByIds(data);
+
+  await deleteEatMealByIds(data);
+
+  return deletedMeal;
 };
