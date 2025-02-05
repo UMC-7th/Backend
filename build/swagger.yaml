@@ -248,7 +248,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/FailResponse"
   # 닉네임 수정 api
-  /api/v1/users/socialLogin/name:
+  /api/v1/users/login/nickname:
     post:
       tags:
         - User
@@ -263,10 +263,8 @@ paths:
               properties:
                 userId:
                   type: integer
-                  example: 1
                 name:
                   type: string
-                  example: 테스트 수정
       responses:
         "200":
           description: Successful operation
@@ -461,6 +459,348 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
+  # 유저 사용 목적 api
+  /api/v1/users/survey:
+    post:
+      tags:
+        - User
+      summary: post survey
+      description: 유저 사용 목적 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                goal:
+                  type: string
+                  example: 목적
+                meals:
+                  type: array
+                  items:
+                    type: string
+                  example: ["아침", "점심", "저녁"]
+                allergy:
+                  type: string
+                  example: 유무
+                allergyDetails:
+                  type: string
+                  example: 땅콩
+                healthCondition:
+                  type: string
+                  example: 유무
+                healthConditionDetails:
+                  type: string
+                  example: 고혈압
+                gender:
+                  type: string
+                  example: 남성
+                birthYear:
+                  type: integer
+                  example: 2000
+                height:
+                  type: integer
+                  example: 165
+                currentWeight:
+                  type: integer
+                  example: 55
+                targetWeight:
+                  type: integer
+                  example: 50
+                skeletalMuscleMass:
+                  type: number
+                  format: float
+                  example: 35.5
+                bodyFatPercentage:
+                  type: number
+                  format: float
+                  example: 15.2
+                exerciseFrequency:
+                  type: integer
+                  example: 4
+                job:
+                  type: string
+                  example: 프리랜서
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  survey:
+                    type: object
+                    properties:
+                      goal:
+                        type: string
+                        example: 목적
+                      meals:
+                        type: array
+                        items:
+                          type: string
+                        example: ["아침", "점심", "저녁"]
+                      allergy:
+                        type: string
+                        example: 유무
+                      allergyDetails:
+                        type: string
+                        example: 땅콩
+                      healthCondition:
+                        type: string
+                        example: 유무
+                      healthConditionDetails:
+                        type: string
+                        example: 고혈압
+                      gender:
+                        type: string
+                        example: 남성
+                      birthYear:
+                        type: integer
+                        example: 2000
+                      height:
+                        type: integer
+                        example: 165
+                      currentWeight:
+                        type: integer
+                        example: 55
+                      targetWeight:
+                        type: integer
+                        example: 50
+                      skeletalMuscleMass:
+                        type: number
+                        format: float
+                        example: 35.5
+                      bodyFatPercentage:
+                        type: number
+                        format: float
+                        example: 15.2
+                      exerciseFrequency:
+                        type: integer
+                        example: 4
+                      job:
+                        type: string
+                        example: 프리랜서
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
+    put:
+      tags:
+        - User
+      summary: put survey
+      description: 유저 사용 목적 수정 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                goal:
+                  type: string
+                  example: 목적
+                meals:
+                  type: array
+                  items:
+                    type: string
+                  example: ["아침", "점심", "저녁"]
+                allergy:
+                  type: string
+                  example: 유무
+                allergyDetails:
+                  type: string
+                  example: 땅콩
+                healthCondition:
+                  type: string
+                  example: 유무
+                healthConditionDetails:
+                  type: string
+                  example: 고혈압
+                gender:
+                  type: string
+                  example: 남성
+                birthYear:
+                  type: integer
+                  example: 2000
+                height:
+                  type: integer
+                  example: 165
+                currentWeight:
+                  type: integer
+                  example: 55
+                targetWeight:
+                  type: integer
+                  example: 50
+                skeletalMuscleMass:
+                  type: number
+                  format: float
+                  example: 35.5
+                bodyFatPercentage:
+                  type: number
+                  format: float
+                  example: 15.2
+                exerciseFrequency:
+                  type: integer
+                  example: 4
+                job:
+                  type: string
+                  example: 프리랜서
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  survey:
+                    type: object
+                    properties:
+                      goal:
+                        type: string
+                        example: 다이어트
+                      meals:
+                        type: array
+                        items:
+                          type: string
+                        example: ["아침", "점심"]
+                      allergy:
+                        type: string
+                        example: 있음
+                      allergyDetails:
+                        type: string
+                        example: 땅콩
+                      healthCondition:
+                        type: string
+                        example: 있음
+                      healthConditionDetails:
+                        type: string
+                        example: 고혈압
+                      gender:
+                        type: string
+                        example: 여성
+                      birthYear:
+                        type: integer
+                        example: 1900
+                      height:
+                        type: integer
+                        example: 130
+                      currentWeight:
+                        type: integer
+                        example: 50
+                      targetWeight:
+                        type: integer
+                        example: 40
+                      skeletalMuscleMass:
+                        type: number
+                        format: float
+                        example: 10.5
+                      bodyFatPercentage:
+                        type: number
+                        format: float
+                        example: 11.2
+                      exerciseFrequency:
+                        type: integer
+                        example: 2
+                      job:
+                        type: string
+                        example: 학생
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"              
+  #유저 설정 식단 조회 api
+  /api/v1/users/mypage/goal:
+    get:
+      tags:
+        - User
+      summary: Get user setting
+      description: 유저가 설정한 목표 조회 API(JWT 필요)
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      goal:
+                        type: string
+                        example: 목표
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
+  #유저 건강 점수 조회 api
+  /api/v1/users/mypage/healthscore:
+    get:
+      tags:
+        - User
+      summary: Get user health score
+      description: 유저의 건강 점수 조회 API(JWT 필요)
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: object
+                    properties:
+                      healthscore:
+                        type: string
+                        example: 0~100점
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"              
+  #유저 진단 결과 조회 api
+  /api/v1/users/mypage/result:
+    get:
+      tags:
+        - User
+      summary: Get user diagnosis result
+      description: 유저의 진단 결과 조회 API(JWT 필요)
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: object
+                    properties:
+                      diagnosis:
+                        type: string
+                        example: [근육량 증가 필요,체지방률 확인 필요, 단백질 섭취량 조절 필요]
+                      advice:
+                        type: string
+                        example: [근육을 늘리기 위해 단백질 섭취 필요,
+                                  체지방률을 체크하고 조절,
+                                  근육 증가를 위해 꾸준한 운동이 필요]
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
   #================================== 구독 관련 api==================================#
   # 식단 장바구니 추가 api
   /api/v1/subscribes/meals/cart:
@@ -546,13 +886,13 @@ paths:
                 $ref: "#/components/schemas/FailResponse"
 
   #================================== 식단 api==================================#
-  # 하루 식단 조회
+  # 하루 식단 생성
   /api/v1/meals/daily:
     post:
       tags:
         - Meal
       summary: Get daily meal
-      description: 하루 식단을 조회,생성하는 API
+      description: 하루 식단을 조회, 생성하는 API
       requestBody:
         required: true
         content:
@@ -560,13 +900,10 @@ paths:
             schema:
               type: object
               properties:
-                userId:
-                  type: integer
-                  example: 1
                 mealDate:
                   type: string
                   format: date-time
-                  example: "2025-01-32T12:34:56.789Z"
+                  example: "2025-02-04T12:34:56.789Z"
       responses:
         "200":
           description: Successful operation
@@ -589,28 +926,28 @@ paths:
                       properties:
                         mealId:
                           type: integer
-                          example: 16
+                          example: 73
                         food:
                           type: string
-                          example: "잡곡밥, 계란후라이, 시금치 나물, 김치"
+                          example: "밥, 김치, 계란찜"
                         calorieTotal:
                           type: integer
-                          example: 400
+                          example: 350
                         material:
                           type: string
-                          example: ""
+                          example: "쌀, 김치, 계란, 소금"
                         calorieDetail:
                           type: string
-                          example: ""
+                          example: "밥: 300, 김치: 20, 계란찜: 30"
                         price:
                           type: integer
-                          example: 5000
+                          example: 3500
                         difficulty:
-                          type: integet
+                          type: integer
                           example: 1
                         recipe:
                           type: string
-                          example: ""
+                          example: "계란찜: 계란을 풀고 소금을 조금 넣은 후 찜기에서 찐다."
                         addedByUser:
                           type: boolean
                           example: false
@@ -634,13 +971,10 @@ paths:
             schema:
               type: object
               properties:
-                userId:
-                  type: integer
-                  example: 1
                 mealDate:
                   type: string
                   format: date-time
-                  example: "2025-02-02T00:00:00.000Z"
+                  example: "2025-02-05T00:00:00.000Z"
                 time:
                   type: string
                   example: "아침"
@@ -675,7 +1009,7 @@ paths:
                     properties:
                       mealId:
                         type: integer
-                        example: 28
+                        example: 76
                       food:
                         type: string
                         example: "계란, 토스트, 우유"
@@ -684,19 +1018,19 @@ paths:
                         example: 500
                       material:
                         type: string
-                        example: ""
+                        example: "제공되지 않았습니다"
                       calorieDetail:
                         type: string
-                        example: ""
+                        example: "제공되지 않았습니다"
                       price:
                         type: integer
                         example: 0
                       difficulty:
                         type: integer
-                        example: 3
+                        example: 0
                       recipe:
                         type: string
-                        example: ""
+                        example: "제공되지 않았습니다"
                       addedByUser:
                         type: boolean
                         example: true
@@ -720,12 +1054,9 @@ paths:
             schema:
               type: object
               properties:
-                userId:
-                  type: integer
-                  example: 1
                 mealId:
                   type: integer
-                  example: 16
+                  example: 75
       responses:
         "200":
           description: Successful operation
@@ -746,20 +1077,20 @@ paths:
                     properties:
                       mealUserId:
                         type: integer
-                        example: 16
+                        example: 58
                       userId:
                         type: integer
-                        example: 1
+                        example: 999
                       mealId:
                         type: integer
-                        example: 16
+                        example: 75
                       time:
                         type: string
-                        example: "아침"
+                        example: "저녁"
                       mealDate:
                         type: string
                         format: date-time
-                        example: "2015-01-22T14:59:59.999Z"
+                        example: "2025-02-04T14:59:59.999Z"
                       isMark:
                         type: boolean
                         example: true
@@ -786,12 +1117,9 @@ paths:
             schema:
               type: object
               properties:
-                userId:
-                  type: integer
-                  example: 1
                 mealId:
                   type: integer
-                  example: 16
+                  example: 40
                 mealDate:
                   type: string
                   format: date-time
@@ -811,6 +1139,22 @@ paths:
                     type: string
                     nullable: true
                     example: null
+                  success:
+                    type: object
+                    properties:
+                      eatId:
+                        type: integer
+                        example: 13
+                      userId:
+                        type: integer
+                        example: 999
+                      mealId:
+                        type: integer
+                        example: 75
+                      eatAt:
+                        type: string
+                        format: date-time
+                        example: "2025-02-04T12:34:56.789Z"
         "500":
           description: Fail operation
           content:
@@ -824,13 +1168,6 @@ paths:
         - Meal
       summary: Get manual meals
       description: 사용자가 수동으로 추가한 식단을 조회하는 API
-      parameters:
-        - name: userId
-          in: query
-          required: true
-          schema:
-            type: integer
-            example: 1
       responses:
         "200":
           description: Successful operation
@@ -884,6 +1221,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
+
   # 식단 재생성 (새로 고침)
   /api/v1/meals/refresh:
     post:
@@ -898,9 +1236,6 @@ paths:
             schema:
               type: object
               properties:
-                userId:
-                  type: integer
-                  example: 1
                 mealId:
                   type: integer
                   example: 24
@@ -962,6 +1297,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
+
   # 선호 식단 추가
   /api/v1/meals/preference:
     patch:
@@ -1028,6 +1364,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
+
   #==================================배송지 관련 api==================================#
   #배송지 관련 url
   /api/v1/deliveryAddress:
@@ -1531,6 +1868,83 @@ paths:
                         example: true
                       material:
                         $ref: "#/components/schemas/Material"
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
+                
+  #================================== 결제 api==================================#
+  # 카카오 페이 결제 요청
+  /api/v1/payment/kakao:
+    post:
+      tags:
+        - Payment
+      summary: Request Kakao Pay
+      description: 카카오 페이 결제 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cid:
+                  type: string
+                  example: "TC0ONETIME"
+                orderId:
+                  type: string
+                  example: "orderId"
+                userId:
+                  type: string
+                  example: "4"
+                itemName:
+                  type: string
+                  example: "결제 상품"
+                quantity:
+                  type: integer
+                  example: 10
+                totalAmount:
+                  type: integer
+                  example: 12000
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        tid:
+                          type: string
+                        tms_result:
+                          type: string
+                        next_redirect_app_url:
+                          type: string
+                        next_redirect_mobile_url:
+                          type: string
+                        next_redirect_pc_url:
+                          type: string
+                        android_app_scheme:
+                          type: string
+                        ios_app_scheme:
+                          type: string
+                        created_at:
+                          type: string
+                          format: date-time
         "500":
           description: Fail operation
           content:

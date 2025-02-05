@@ -15,7 +15,6 @@ import {
   kakaoStrategy,
   naverStrategy,
 } from "./config/passport.js";
-import { getUserByEmail } from "./repository/user.repository.js";
 
 dotenv.config();
 
@@ -32,6 +31,7 @@ app.use(
     credentials: true, // 세션 쿠키 전송 허용
   })
 );
+
 app.use(express.json()); // request의 본문을 json으로 해석할 수 있도록 함 (JSON 형태의 요청 body를 파싱하기 위함)
 app.use(express.urlencoded({ extended: false })); // 단순 객체 문자열 형태로 본문 데이터 해석
 
@@ -48,10 +48,10 @@ app.get(
   passport.authenticate("google", {
     failureRedirect: "/api/v1/users/login",
     failureMessage: true,
-    session: false
+    session: false,
   }),
   socialAuthCallback
-)
+);
 
 // Kakao Passport 관련 URL
 app.get("/auth/kakao", passport.authenticate("kakao"));
@@ -60,7 +60,7 @@ app.get(
   passport.authenticate("kakao", {
     failureRedirect: "/api/v1/users/login",
     failureMessage: true,
-    session: false
+    session: false,
   }),
   socialAuthCallback
 );
@@ -72,7 +72,7 @@ app.get(
   passport.authenticate("naver", {
     failureRedirect: "/api/v1/users/login",
     failureMessage: true,
-    session: false
+    session: false,
   }),
   socialAuthCallback
 );
@@ -80,7 +80,6 @@ app.get(
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
-
 
 app.get("/temp", dummyController);
 

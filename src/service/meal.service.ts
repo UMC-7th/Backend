@@ -16,9 +16,8 @@ import {
 import { addMealToUser } from "../repository/meal.repository.js";
 import { getUserById } from "../repository/user.repository.js";
 
-export const getDailyMealService = async (data: MealRequest) => {
+export const addDailyMealService = async (data: MealRequest) => {
   const user = await getUserById(data.userId);
-
   if (!user) {
     throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
   }
@@ -119,8 +118,8 @@ Example output:
     result = await axios.post(
       "https://api.openai.com/v1/chat/completions",
       {
-        //model: "gpt-4-turbo",
-        model: "gpt-3.5-turbo",
+        model: "gpt-4-turbo",
+        //model: "gpt-3.5-turbo",
         temperature: 0.4,
         messages: messages,
       },
@@ -154,6 +153,18 @@ Example output:
     mealArr.push(await getMealById(meals[i].mealId));
   }
   return mealArr;
+};
+
+export const getDailyMealService = async (data: MealRequest) => {
+  const user = await getUserById(data.userId);
+
+  if (!user) {
+    throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
+  }
+
+  const meals = await getMealByDate(data);
+
+  return meals;
 };
 export const refreshMealService = async (data: any) => {
   const user = await getUserById(data.userId);
