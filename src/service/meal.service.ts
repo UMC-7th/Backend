@@ -17,7 +17,7 @@ import {
   getFavoritMealById,
   getMealByDate,
   getMealById,
-  getMealsByIds,
+  getManualMealsByIds,
   getmealUserByIds,
 } from "../repository/meal.repository.js";
 import { addMealToUser } from "../repository/meal.repository.js";
@@ -400,7 +400,7 @@ export const getManualMealService = async (userId: number) => {
 
   if (mealIds.length === 0) return [];
 
-  const meals = await getMealsByIds(mealIds);
+  const meals = await getManualMealsByIds(mealIds);
 
   return meals;
 };
@@ -438,4 +438,21 @@ export const getFavoriteMealService = async (userId: number) => {
   const favoriteMeals = await getFavoritMealById(userId);
 
   return favoriteMeals;
+};
+export const getMealDetailService = async (data: any) => {
+  const user = await getUserById(data.userId);
+
+  if (!user) {
+    throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
+  }
+
+  const meal = await getMealById(data.mealId);
+
+  if (!meal) {
+    throw new NotFoundError("존재하지 않는 식단입니다", data.mealId);
+  }
+
+  const mealDetail = getMealById(data.mealId);
+
+  return mealDetail;
 };

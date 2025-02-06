@@ -7,6 +7,7 @@ import {
   getDailyMeal,
   getFavoriteMeal,
   getManualMeal,
+  getMealDetail,
   preferredMeal,
   refreshMeal,
 } from "../controller/meal.controller.js";
@@ -40,5 +41,8 @@ router.delete("/manual/delete", jwtAuthMiddleware, deleteManualMeal);
 
 //즐겨찾기한 식단 조회
 router.get("/favorite/list", jwtAuthMiddleware, getFavoriteMeal);
+
+//즐겨찾기한 식단 조회
+router.get("/detail/list", jwtAuthMiddleware, getMealDetail);
 
 export default router;
