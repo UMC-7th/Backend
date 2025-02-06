@@ -2,6 +2,7 @@ import express from "express";
 import {
   addManualMeal,
   completeMeal,
+  deleteFavoriteMeal,
   deleteManualMeal,
   favoriteMeal,
   getDailyMeal,
@@ -44,5 +45,8 @@ router.get("/favorite/list", jwtAuthMiddleware, getFavoriteMeal);
 
 //즐겨찾기한 식단 조회
 router.get("/detail/list", jwtAuthMiddleware, getMealDetail);
+
+//식단 즐겨찾기 취소
+router.patch("/favorite/delete", jwtAuthMiddleware, deleteFavoriteMeal);
 
 export default router;
