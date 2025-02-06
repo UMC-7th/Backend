@@ -17,7 +17,7 @@ export const addMealToUser = async (
     },
   });
 
-  return meal.mealId;
+  return meal.time;
 };
 //식단을 저장하는 함수
 export const addMeal = async (data: any) => {
