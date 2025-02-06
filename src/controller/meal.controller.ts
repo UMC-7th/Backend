@@ -8,6 +8,7 @@ import {
   getDailyMealService,
   getFavoriteMealService,
   getManualMealService,
+  getMealDetailService,
   preferredMealService,
   refreshMealService,
 } from "../service/meal.service.js";
@@ -234,6 +235,29 @@ export const getFavoriteMeal = async (
     }
 
     const favoriteMeals = await getFavoriteMealService(userId);
+
+    res.status(200).success(favoriteMeals);
+  } catch (error) {
+    next(error);
+  }
+};
+export const getMealDetail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.user?.id;
+  const mealId = req.body.mealId;
+
+  try {
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
+
+    const favoriteMeals = await getMealDetailService({ userId, mealId });
 
     res.status(200).success(favoriteMeals);
   } catch (error) {

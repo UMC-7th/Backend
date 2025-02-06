@@ -74,7 +74,8 @@ export const getMealById = async (mealId: number) => {
 
   return meal;
 };
-export const getMealsByIds = async (mealIds: number[]) => {
+
+export const getManualMealsByIds = async (mealIds: number[]) => {
   const meals = await prisma.meal.findMany({
     where: {
       mealId: { in: mealIds },
