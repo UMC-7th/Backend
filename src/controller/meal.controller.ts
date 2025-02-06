@@ -3,6 +3,7 @@ import {
   addDailyMealService,
   addManualMealService,
   completeMealService,
+  deleteFavoriteMealService,
   deleteManualMealService,
   favoriteMealService,
   getDailyMealService,
@@ -260,6 +261,32 @@ export const getMealDetail = async (
     const favoriteMeals = await getMealDetailService({ userId, mealId });
 
     res.status(200).success(favoriteMeals);
+  } catch (error) {
+    next(error);
+  }
+};
+export const deleteFavoriteMeal = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.user?.id;
+  const mealId = req.body.mealId;
+
+  try {
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
+
+    const deletedFavoriteMeal = await deleteFavoriteMealService({
+      userId,
+      mealId,
+    });
+
+    res.status(200).success(deletedFavoriteMeal);
   } catch (error) {
     next(error);
   }

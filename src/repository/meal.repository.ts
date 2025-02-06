@@ -165,3 +165,16 @@ export const getFavoritMealById = async (userId: number) => {
   });
   return favoriteMeals;
 };
+export const deleteFavoriteMeal = async (data: any) => {
+  const deletedFavoriteMeal = await prisma.mealUser.updateMany({
+    where: {
+      userId: data.userId,
+      mealId: data.mealId,
+      isMark: true,
+    },
+    data: {
+      isMark: false,
+    },
+  });
+  return deletedFavoriteMeal;
+};
