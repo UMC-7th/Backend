@@ -155,3 +155,12 @@ export const addPreferreMeal = async (mealUserId: number) => {
 
   return mealUser;
 };
+export const getFavoritMealById = async (userId: number) => {
+  const favoriteMeals = await prisma.mealUser.findMany({
+    where: {
+      userId,
+      isMark: true,
+    },
+  });
+  return favoriteMeals;
+};

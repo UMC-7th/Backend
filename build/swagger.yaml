@@ -1438,6 +1438,60 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
+  /api/v1/meals/favorite/list:
+    get:
+      tags:
+        - Meal
+      summary: Get favorite meal list
+      description: 사용자가 즐겨찾기한 식단 목록을 가져오는 API
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        mealUserId:
+                          type: integer
+                          example: 58
+                        userId:
+                          type: integer
+                          example: 999
+                        mealId:
+                          type: integer
+                          example: 75
+                        time:
+                          type: string
+                          example: "저녁"
+                        mealDate:
+                          type: string
+                          format: date-time
+                          example: "2025-02-04T14:59:59.999Z"
+                        isMark:
+                          type: boolean
+                          example: true
+                        isLike:
+                          type: boolean
+                          example: false
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
 
   #==================================배송지 관련 api==================================#
   #배송지 관련 url
