@@ -14,6 +14,7 @@ import {
   deleteMealById,
   deleteUserMealByIds,
   getEatMealById,
+  getFavoritMealById,
   getMealByDate,
   getMealById,
   getMealsByIds,
@@ -426,4 +427,15 @@ export const deleteManualMealService = async (data: any) => {
   const deletedMeal = await deleteMealById(data.mealId);
 
   return deletedMeal;
+};
+export const getFavoriteMealService = async (userId: number) => {
+  const user = await getUserById(userId);
+
+  if (!user) {
+    throw new NotFoundError("존재하지 않는 유저입니다", userId);
+  }
+
+  const favoriteMeals = await getFavoritMealById(userId);
+
+  return favoriteMeals;
 };

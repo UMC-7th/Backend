@@ -5,6 +5,7 @@ import {
   deleteManualMeal,
   favoriteMeal,
   getDailyMeal,
+  getFavoriteMeal,
   getManualMeal,
   preferredMeal,
   refreshMeal,
@@ -36,5 +37,8 @@ router.get("/manual/list", jwtAuthMiddleware, getManualMeal);
 
 //수동으로 추가한 식단 삭제
 router.delete("/manual/delete", jwtAuthMiddleware, deleteManualMeal);
+
+//즐겨찾기한 식단 조회
+router.get("/favorite/list", jwtAuthMiddleware, getFavoriteMeal);
 
 export default router;
