@@ -24,6 +24,7 @@ export const getDailyMeal = async (
 ) => {
   const userId = req.user?.id;
   const mealDate = req.body.mealDate;
+
   try {
     if (!userId) {
       throw new InvalidInputError(
@@ -31,18 +32,23 @@ export const getDailyMeal = async (
         "입력 값: " + req.headers.authorization
       );
     }
-    const mealRequest = mealRequestDTO({ userId, mealDate });
 
+    const mealRequest = mealRequestDTO({ userId, mealDate });
     const existingMeals = await getDailyMealService(mealRequest);
 
-    let meals;
-    if (existingMeals.length == 0) {
-      meals = await addDailyMealService(mealRequest);
+    if (existingMeals.length === 0) {
+      // 아침, 점심, 저녁 병렬 처리
+      const [breakfastMeals, lunchMeals, dinnerMeals] = await Promise.all([
+        addDailyMealService(mealRequest, "아침"),
+        addDailyMealService(mealRequest, "점심"),
+        addDailyMealService(mealRequest, "저녁"),
+      ]);
 
-      res.status(200).success(meals);
-
+      const allMeals = [...breakfastMeals, ...lunchMeals, ...dinnerMeals];
+      res.status(200).success(allMeals);
       return;
     }
+
     res.status(200).success(existingMeals);
   } catch (error) {
     next(error);
