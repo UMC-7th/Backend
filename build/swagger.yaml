@@ -1561,6 +1561,50 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
+  # 즐겨찾기 취소
+  /api/v1/meals/favorite/delete:
+    patch:
+      tags:
+        - Meal
+      summary: 즐겨찾기 취소
+      description: 즐겨찾기 취소하는  API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mealId:
+                  type: integer
+                  example: 80
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        example: 1
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
 
   #==================================배송지 관련 api==================================#
   #배송지 관련 url
