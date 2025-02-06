@@ -41,6 +41,10 @@ export const addDailyMealService = async (
       role: "system",
       content: `
       Always answer in Korean
+      Just call rice rice (don’t call it mixed grain rice or brown rice, just rice).
+      "Provide breakfast like breakfast, lunch like lunch, and dinner like dinner."
+or more professionally:
+"Ensure each meal is appropriate for its respective time of day: breakfast should be breakfast-like, lunch should be lunch-like, and dinner should be dinner-like."
       response must be strictly in JSON format, without any additional text.
 You are an expert Korean nutritionist and chef specialized in creating healthy, delicious, and practical meal plans.
 Please generate 5 different meal options for ${mealTime} with these guidelines:
@@ -127,11 +131,16 @@ Please generate 5 different meal options for ${mealTime} with these guidelines:
     gptResult.meals.map(async (meal: any) => {
       const mealId = await addMeal(meal); //meal 테이블에 식단 생성
 
-      await addMealToUser(data.userId, mealId, mealTime, data.mealDate); //유저와 식단 매핑(유저에게 식단 제공)
+      const mealType = await addMealToUser(
+        data.userId,
+        mealId,
+        mealTime,
+        data.mealDate
+      ); //유저와 식단 매핑(유저에게 식단 제공)
 
       const mealDetail = await getMealById(mealId);
 
-      mealArr.push(mealDetail);
+      mealArr.push({ mealDetail, mealType });
     })
   );
 

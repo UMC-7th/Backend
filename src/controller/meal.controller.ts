@@ -45,11 +45,11 @@ export const getDailyMeal = async (
       ]);
 
       const allMeals = [...breakfastMeals, ...lunchMeals, ...dinnerMeals];
-      res.status(200).success(allMeals);
+      res.status(200).success({ mealDate, allMeals });
       return;
     }
 
-    res.status(200).success(existingMeals);
+    res.status(200).success({ mealDate, existingMeals });
   } catch (error) {
     next(error);
   }
