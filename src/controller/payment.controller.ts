@@ -27,7 +27,7 @@ connectRedis();
 export const kakaoPayment = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const data = await kakaoPaymentService(kakaoPaymentDTO(req.body));
-        await redisClient.v4.setEx(req.body.userId, 180, data.tid) // 인증번호를 3분간 redis에 저장
+        await setRedisValue(req.body.userId, data.tid, 3); // 인증번호를 3분간 redis에 저장
         res.status(StatusCodes.OK).success({ data });
     } catch (error) {
         next(error);
@@ -36,7 +36,7 @@ export const kakaoPayment = async (req: Request, res: Response, next: NextFuncti
 
 export const kakaoSuccess = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const tid = await redisClient.v4.get(req.query.uid);
+        const tid = await getRedisValue(req.query.uid);
         const data = { 
             cid: req.query.cid,
             orderId: req.query.oid,
@@ -57,4 +57,13 @@ export const kakaoCancel = async (req: Request, res: Response, next: NextFunctio
 
 export const kakaoFail = async (req: Request, res: Response, next: NextFunction) => {
     throw Error("카카오 페이 결제 실패");
+}
+
+export const setRedisValue = async (key: any, value: string, minute: number) => {{
+    redisClient.v4.setEx(key, 60 * minute, value) // redis에 저장
+}}
+
+export const getRedisValue = async (key: any) => {
+    const value = redisClient.v4.get(key);
+    return value;
 }

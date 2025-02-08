@@ -1,5 +1,10 @@
 import { APIError, InvalidInputError, NotFoundError, AlreadyExistError } from "../util/error.js";
 import { getUserByEmail, getUserByNickName, addUser, updateNickname } from "../repository/user.repository.js";
+import { setRedisValue, getRedisValue } from "../controller/payment.controller.js";
+import CoolSMS from "coolsms-node-sdk";
+
+const smsService = CoolSMS.default;
+const messageService = new smsService(process.env.COOL_SMS_API_KEY!, process.env.COOL_SMS_API_SECRET!);
 
 export const googleLoginService = async (profile: any) => {
     try {
@@ -129,4 +134,35 @@ export const userLoginService = async (profile: any) => {
     } catch (error: any) {
         throw new Error("로그인 중 에러 발생 " + error);
     }
+}
+
+export const sendOtp = async (phoneNumber: string) => {
+    try {
+        // 인증번호 발급 및 Redis에 3분간 저장
+        const code = generateCode();
+        await setRedisValue(phoneNumber, code, 3);
+
+        // 해당 휴대폰으로 인증번호 발송
+        const result = await sendMessage(phoneNumber, code);
+
+        return result;
+
+    } catch (error) {
+        throw new Error("인증번호 전송 중 에러 발생 " + error);
+    }
+}
+
+export const generateCode = () => {
+    const code = Math.floor(100000 + Math.random() * 900000).toString(); // 6자리 랜덤 숫자 생성
+    return code
+}
+
+export const sendMessage = async (phoneNumber: string, code: string) => {
+    const result = messageService.sendOne({
+        to: phoneNumber,
+        from: "01049442682",
+        text: `[이거먹자] 인증번호 ${code}`,
+        autoTypeDetect: true
+    })
+    return result;
 }

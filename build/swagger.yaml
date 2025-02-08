@@ -304,6 +304,118 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
+  # 휴회원가입 시 휴대폰 인증번호 발급 & 문자 발송하는 API
+  /api/v1/users/signup/otp:
+    post:
+      tags:
+        - User
+      summary: User PhoneNumber Code
+      description: 회원가입 시 휴대폰 인증번호 발급 & 문자 발송하는 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phoneNumber:
+                  type: string
+                  example: "01012345678"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      mes:
+                        type: string
+                        example: "인증번호 전송에 성공했습니다."
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
+
+  # 휴대폰 인증번호 검증하는 API
+  /api/v1/users/signup/otp/validation:
+    post:
+      tags:
+        - User
+      summary: Validate Code
+      description: 휴대폰 인증번호 검증하는 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phoneNumber:
+                  type: string
+                  example: "01012345678"
+                code:
+                  type: string
+                  example: "123456"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      mes:
+                        type: string
+                        example: "인증번호가 일치합니다."
+        "400":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      mes:
+                        type: string
+                        example: "인증번호가 불일치합니다."
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
 
   #로그인 한 유저 데이터 조회 api
   /api/v1/users/mypage/profile:
