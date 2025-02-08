@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { userSignUpService, userLoginService, createUsernameService } from "../service/user.service.js";
+import { userSignUpService, userLoginService, createUsernameService, sendOtp } from "../service/user.service.js";
 import { signupDTO, loginDTO } from "../dto/user.dto.js";
 import { generateAccessToken, generateRefreshToken } from "../util/jwt.util.js";
 import { StatusCodes } from "http-status-codes";
@@ -47,4 +47,17 @@ export const socialAuthCallback = (req: Request, res: Response, next: NextFuncti
     } catch (error) {
         next(error);
     }
-  };
+};
+
+// 회원가입 시 휴대폰 인증번호 발급 & 문자 발송
+export const postOtp = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { phoneNumber } = req.body;
+        console.log(phoneNumber);
+        const sms = await sendOtp(phoneNumber); // 인증번호 발급 및 전송
+        res.status(StatusCodes.OK).success({ msg: '인증번호 전송에 성공했습니다.' });
+        
+    } catch (error) {
+        next(error);
+    }
+}
