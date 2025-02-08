@@ -3,6 +3,7 @@ import { userSignUpService, userLoginService, createUsernameService, sendOtp } f
 import { signupDTO, loginDTO } from "../dto/user.dto.js";
 import { generateAccessToken, generateRefreshToken } from "../util/jwt.util.js";
 import { StatusCodes } from "http-status-codes";
+import { getRedisValue } from "./payment.controller.js";
 
 
 // 이메일로 회원가입 시 사용자 필수 정보 입력
@@ -53,10 +54,26 @@ export const socialAuthCallback = (req: Request, res: Response, next: NextFuncti
 export const postOtp = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { phoneNumber } = req.body;
-        console.log(phoneNumber);
         const sms = await sendOtp(phoneNumber); // 인증번호 발급 및 전송
         res.status(StatusCodes.OK).success({ msg: '인증번호 전송에 성공했습니다.' });
         
+    } catch (error) {
+        next(error);
+    }
+}
+
+// 인증번호 일치 확인
+export const validateOtp = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const { phoneNumber, code } = req.body;
+        const storedCode = await getRedisValue(phoneNumber);
+
+        if (storedCode && storedCode === code) {
+            res.status(StatusCodes.OK).success({ msg: "인증번호가 일치합니다." });
+        } else {
+            res.status(400).success({ msg: "인증번호가 불일치합니다." });
+        }
+
     } catch (error) {
         next(error);
     }

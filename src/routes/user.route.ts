@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { userSignUp, userLogin, createUsername, postOtp } from "../controller/user.controller.js";
+import { userSignUp, userLogin, createUsername, postOtp, validateOtp } from "../controller/user.controller.js";
 
 const router = express.Router();
 
@@ -10,7 +10,7 @@ router.post("/signup", userSignUp);
 router.post("/signup/otp", postOtp)
 
 // 휴대폰 인증번호 검증하는 API
-router.post("/signup/otp/validation", )
+router.post("/signup/otp/validation", validateOtp)
 
 // 이메일 로그인 api
 router.post("/login", userLogin);
