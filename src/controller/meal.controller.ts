@@ -48,7 +48,6 @@ export const getDailyMeal = async (
       res.status(200).success({ mealDate, allMeals });
       return;
     }
-
     res.status(200).success({ mealDate, existingMeals });
   } catch (error) {
     next(error);

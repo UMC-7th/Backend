@@ -15,11 +15,13 @@ import {
   deleteUserMealByIds,
   getEatMealById,
   getFavoritMealById,
-  getMealByDate,
+  getMealIdsByDate,
   getMealById,
   getManualMealsByIds,
   getmealUserByIds,
   deleteFavoriteMeal,
+  getLikedMeal,
+  getMealsByIds,
 } from "../repository/meal.repository.js";
 import { addMealToUser } from "../repository/meal.repository.js";
 import { getUserById } from "../repository/user.repository.js";
@@ -33,8 +35,10 @@ export const addDailyMealService = async (
     throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
   }
 
+  const likedMeal = await getLikedMeal(data.userId);
+
   const apiKey = process.env.OPENAI_API_KEY;
-  const prompt = `${data.mealDate}의 ${mealTime} 식단 ${user.purpose} 5개`;
+  const prompt = `${data.mealDate}의 ${mealTime} 식단 ${user.purpose} 5개 유저 선호 식단 ${likedMeal}`;
 
   const messages = [
     {
@@ -154,8 +158,9 @@ export const getDailyMealService = async (data: MealRequest) => {
     throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
   }
 
-  const meals = await getMealByDate(data);
-
+  const mealIds = await getMealIdsByDate(data);
+  const mealIdsArray = mealIds.map((meal) => meal.mealId);
+  const meals = await getMealsByIds(mealIdsArray);
   return meals;
 };
 export const refreshMealService = async (data: any) => {
