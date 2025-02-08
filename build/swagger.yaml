@@ -913,61 +913,61 @@ paths:
                   format: date-time
                   example: "2025-02-04T12:34:56.789Z"
       responses:
-  "200":
-    description: Successful operation
-    content:
-      application/json:
-        schema:
-          type: object
-          properties:
-            resultType:
-              type: string
-              example: "SUCCESS"
-            error:
-              type: string
-              nullable: true
-              example: null
-            success:
-              type: array
-              items:
-                type: object
-                properties:
-                  mealId:
-                    type: integer
-                    example: 155
-                  food:
-                    type: string
-                    example: "밥, 시래기국, 돼지고기김치볶음, 부추겉절이, 포기김치"
-                  calorieTotal:
-                    type: integer
-                    example: 560
-                  material:
-                    type: string
-                    example: "백미, 시래기, 돼지고기, 부추, 포기김치"
-                  calorieDetail:
-                    type: string
-                    example: "밥: 200, 시래기국: 100, 돼지고기김치볶음: 200, 부추겉절이: 60"
-                  price:
-                    type: integer
-                    example: 7800
-                  difficulty:
-                    type: integer
-                    example: 3
-                  recipe:
-                    type: string
-                    example: "돼지고기김치볶음: 돼지고기와 김치를 함께 볶음. 부추겉절이: 부추를 양념하여 겉절이로 준비."
-                  addedByUser:
-                    type: boolean
-                    example: false
-            mealType:
-              type: string
-              example: "아침"
-        "500":
-          description: Fail operation
+        "200":
+          description: Successful operation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/FailResponse"
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        mealId:
+                          type: integer
+                          example: 155
+                        food:
+                          type: string
+                          example: "밥, 시래기국, 돼지고기김치볶음, 부추겉절이, 포기김치"
+                        calorieTotal:
+                          type: integer
+                          example: 560
+                        material:
+                          type: string
+                          example: "백미, 시래기, 돼지고기, 부추, 포기김치"
+                        calorieDetail:
+                          type: string
+                          example: "밥: 200, 시래기국: 100, 돼지고기김치볶음: 200, 부추겉절이: 60"
+                        price:
+                          type: integer
+                          example: 7800
+                        difficulty:
+                          type: integer
+                          example: 3
+                        recipe:
+                          type: string
+                          example: "돼지고기김치볶음: 돼지고기와 김치를 함께 볶음. 부추겉절이: 부추를 양념하여 겉절이로 준비."
+                        addedByUser:
+                          type: boolean
+                          example: false
+                  mealType:
+                    type: string
+                    example: "아침"
+              "500":
+                description: Fail operation
+                content:
+                  application/json:
+                    schema:
+                      $ref: "#/components/schemas/FailResponse"
   # 식단 수동 추가
   /api/v1/meals/manual:
     post:

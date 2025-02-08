@@ -49,7 +49,7 @@ export const addCompletedMeal = async (data: MealRequest, mealId: number) => {
   return eatMeal;
 };
 // 날짜로 제공한 식단 가져오는 함수
-export const getMealByDate = async (data: MealRequest) => {
+export const getMealIdsByDate = async (data: MealRequest) => {
   const start = new Date(data.mealDate.setHours(0, 0, 0, 0));
   const end = new Date(data.mealDate.setHours(23, 59, 59, 999));
 
@@ -60,6 +60,9 @@ export const getMealByDate = async (data: MealRequest) => {
         gte: start,
         lte: end,
       },
+    },
+    select: {
+      mealId: true,
     },
   });
 
@@ -74,7 +77,14 @@ export const getMealById = async (mealId: number) => {
 
   return meal;
 };
-
+export const getMealsByIds = async (mealIds: number[]) => {
+  const meals = await prisma.meal.findMany({
+    where: {
+      mealId: { in: mealIds },
+    },
+  });
+  return meals;
+};
 export const getManualMealsByIds = async (mealIds: number[]) => {
   const meals = await prisma.meal.findMany({
     where: {
@@ -177,4 +187,21 @@ export const deleteFavoriteMeal = async (data: any) => {
     },
   });
   return deletedFavoriteMeal;
+};
+export const getLikedMeal = async (userId: number) => {
+  const likedMeals = await prisma.mealUser.findMany({
+    where: {
+      userId: userId,
+      isLike: true,
+    },
+    take: 3,
+    include: {
+      meal: {
+        select: {
+          food: true,
+        },
+      },
+    },
+  });
+  return likedMeals;
 };
