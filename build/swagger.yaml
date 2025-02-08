@@ -777,11 +777,7 @@ paths:
                         format: date-time
                       updateAt:
                         type: string
-                        format: date-time
-                        
-                      
-                        
-
+                        format: date-time                        
         "500":
           description: Fail operation
           content:
