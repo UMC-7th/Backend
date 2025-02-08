@@ -5,6 +5,7 @@ import {
   findGoalProfile,
   findhealthscoreProfile,
   findResultProfile,
+  saveHealthScore,
 } from "../repository/mypage.repository.js";
 import { getUserById } from "../repository/user.repository.js";
 import { DBError, NotFoundError } from "../util/error.js";
@@ -110,7 +111,7 @@ The healthScore should be based on:
 
 Example output:
 {
-  "healthScore": 90점,
+  "healthScore": 90,
 }`,
     },
     {
@@ -141,12 +142,12 @@ Example output:
 
   try {
     const gptResult = JSON.parse(result.data.choices[0].message.content);
+    const healthScore = gptResult.healthScore;
 
-    return {
-      healthScore: gptResult.healthScore,
-      advice: gptResult.advice,
-    };
+    const savedHealthScore = await saveHealthScore(userId, healthScore);
+    return savedHealthScore;
   } catch (error) {
+    console.error("Error parsing GPT response:", error);
     throw new Error("GPT 응답 중 에러 발생");
   }
 };

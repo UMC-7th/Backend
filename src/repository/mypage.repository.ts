@@ -81,3 +81,56 @@ export const findResultProfile = async (userId: number) => {
     throw new DBError("사용자 조회 중 오류가 발생했습니다.", error);
   }
 };
+
+export const saveHealthScore = async (userId: number, healthScore: number) => {
+  try {
+    const now = new Date();
+    const nowKST = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+
+    const todayKST = new Date(nowKST);
+    todayKST.setHours(0, 0, 0, 0);
+
+    const tomorrowKST = new Date(todayKST);
+    tomorrowKST.setDate(todayKST.getDate() + 1);
+
+    const existScore = await prisma.healthScore.findFirst({
+      where: {
+        userId,
+        createdAt: {
+          gte: todayKST,
+          lt: tomorrowKST,
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    if (existScore) {
+      return existScore;
+    }
+
+    const previousScore = await prisma.healthScore.findFirst({
+      where: {
+        userId,
+        createdAt: { lt: todayKST },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    let comparison = 0;
+    if (previousScore && previousScore.healthScore !== null) {
+      comparison = healthScore - previousScore.healthScore;
+    }
+
+    const savedHealthScore = await prisma.healthScore.create({
+      data: {
+        userId,
+        healthScore,
+        comparison: comparison || 0,
+        createdAt: nowKST,
+      },
+    });
+    return savedHealthScore;
+  } catch (error) {
+    throw new DBError("건강 점수 저장 중 오류가 발생했습니다.", error);
+  }
+};

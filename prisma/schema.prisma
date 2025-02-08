@@ -32,6 +32,7 @@ model User {
   Subscribe       Subscribe[]
   DeliveryAddress DeliveryAddress[]
   Survey          Survey[]
+  HealthScore     HealthScore[]
   @@map("user")
 }
 
@@ -205,4 +206,17 @@ model Survey {
   user            User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
   @@map("survey")
+}
+
+model HealthScore {
+  healthscoreId   Int      @id @default(autoincrement()) @map("healthscore_id")
+  userId          Int      @map("user_id")
+  healthScore     Int    @map("health_score")  
+  comparison      Float?   @map("comparison")
+  createdAt       DateTime @default(now())      
+  updatedAt       DateTime @updatedAt    
+
+  user            User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  
+  @@map("healthscore")     
 }
