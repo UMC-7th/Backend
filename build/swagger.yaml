@@ -760,9 +760,28 @@ paths:
                   success:
                     type: object
                     properties:
-                      healthscore:
+                      healthscoreId:
+                        type: integer
+                        example: 1
+                      userId:
+                        type: integer
+                        example: 1
+                      healthScore:
+                        type: integer
+                        exampe: 0~100
+                      comparison:
+                        type: integer
+                        example: -100 ~ +100
+                      createdAt:
                         type: string
-                        example: 0~100점
+                        format: date-time
+                      updateAt:
+                        type: string
+                        format: date-time
+                        
+                      
+                        
+
         "500":
           description: Fail operation
           content:
