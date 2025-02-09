@@ -9,7 +9,7 @@
 |----------------------------------------------------|------------------------------------------------------------------------------------------------------------------|
 | <a href="https://github.com/namkungkang"> 남궁강 </a>   | **Backend Developer**<br>- 
 | <a href="https://github.com/ye-seob"> 변예섭 </a>    | **Backend Developer**<br>-                                                    |
-| <a href="https://github.com/R-J-Woo"> 류제우 </a>     | **Backend Developer**<br>- 
+| <a href="https://github.com/R-J-Woo"> 류제우 </a>     | **Backend Developer**<br>- Naver, Kakao 소셜 로그인 API 연동 <br>- Kakao Pay 결제 API 연동 <br>- 로그인 API, 회원가입 API, 휴대폰 인증 API, 식단 장바구니 API, 식단 결제 API 개발
 | <a href="https://github.com/ohige01"> 최선규 </a> | **Backend Developer**<br>- 서버 배포 및 관리 (EC2, RDS, Github Actions, PM2) <br>- ERD 설계 <br>- Dall-e-3, Naver Shopping API 연동 <br>- 이미지 생성 API, 배송지 관련 API, 유저 구독 내역 API, 식재료 관련 API 개발                              |
 
 <br><br>
