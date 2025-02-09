@@ -1971,12 +1971,12 @@ paths:
                 $ref: "#/components/schemas/FailResponse"
   #==================================구독 관련 api==================================#
   #구독 캘린더형 조회 api
-  /api/v1/subscribes/calendar:
+  /api/v1/subscribes/users/calendar:
     get:
       tags:
         - Subscribe
       summary: Get Subscribe List Calendar
-      description: 구독 캘린더형 조회 API
+      description: 구독중인 식단 캘린더형 조회 API
       responses:
         #성공 응답
         "200":
@@ -2008,12 +2008,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/FailResponse"
   #구독 리스트형 조회 api
-  /api/v1/subscribes/list:
+  /api/v1/subscribes/users/list:
     get:
       tags:
         - Subscribe
       summary: Get Subscribe List
-      description: 구독 식단 리스트형 조회 API
+      description: 구독중인 식단 리스트형 조회 API
       responses:
         #성공 응답
         "200":
@@ -2042,12 +2042,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/FailResponse"
   #구독 내역 검색 api
-  /api/v1/subscribes/search:
+  /api/v1/subscribes/users/search:
     get:
       tags:
         - Subscribe
       summary: Search Subscribe
-      description: 구독 식단 내역 검색 API
+      description: 구독중인 식단 내역 검색 API
       parameters:
         - name: date
           in: query
