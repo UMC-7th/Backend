@@ -1,5 +1,5 @@
 import { APIError, InvalidInputError, NotFoundError, AlreadyExistError } from "../util/error.js";
-import { getUserByEmail, getUserByNickName, addUser, updateNickname } from "../repository/user.repository.js";
+import { addSub } from "../repository/subscribe.repository.js";
 import axios from "axios";
 
 // 카카오 결제 준비
@@ -56,6 +56,9 @@ export const kakaoPaymentSuccessService = async (data: any) => {
               },
             }
         );
+
+        // 결제 내용 DB에 저장
+        const sub = addSub(userId, orderId);
 
         return response.data;
 
