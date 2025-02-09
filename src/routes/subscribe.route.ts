@@ -10,11 +10,11 @@ router.post("/meals/cart", jwtAuthMiddleware, addCart);
 // 식단 장바구니 제거 api
 router.delete("/meals/cart/:cart_id", jwtAuthMiddleware, deleteCart);
 
-//구독 목록 캘린더형 조회
-router.get("/calendar", jwtAuthMiddleware, getSubListCalendar);
-//구독 목록 리스트형 조회
-router.get("/list", jwtAuthMiddleware, getSubList);
-//구독 목록 검색
-router.get("/search", jwtAuthMiddleware, searchSubList);
+//구독중인 식단 목록 캘린더형 조회
+router.get("/users/calendar", jwtAuthMiddleware, getSubListCalendar);
+//구독중인 식단 목록 리스트형 조회
+router.get("/users/list", jwtAuthMiddleware, getSubList);
+//구독중인 식단 목록 검색
+router.get("/users/search", jwtAuthMiddleware, searchSubList);
 
 export default router;
