@@ -43,7 +43,7 @@ router.delete("/manual/delete", jwtAuthMiddleware, deleteManualMeal);
 //즐겨찾기한 식단 조회
 router.get("/favorite/list", jwtAuthMiddleware, getFavoriteMeal);
 
-//즐겨찾기한 식단 조회
+//식단 상세 조회
 router.get("/detail/list", jwtAuthMiddleware, getMealDetail);
 
 //식단 즐겨찾기 취소
