@@ -11,6 +11,17 @@ export const addImageFood = async (data: saveFoodImageDto) => {
     }
 };
 
+export const updateImageFood = async (imageId: number, imageUrl: string) => {
+    try {
+        await prisma.imageFood.update({
+            where: { imageId: imageId },
+            data: { imageUrl: imageUrl },
+        });
+    } catch (error) {
+        throw new DBError("음식 이미지 업데이트 중 오류가 발생했습니다.", imageId);
+    }
+};
+
 export const getImageFood = async (name: string) => {
     try {
         const imageFood = await prisma.imageFood.findFirst({

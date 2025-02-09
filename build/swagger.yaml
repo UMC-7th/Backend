@@ -67,7 +67,7 @@ paths:
     get:
       tags:
         - Image
-      summary: Get Food Image
+      summary: Get Meal Image
       description: 식단 이미지 조회 API
       parameters:
         - in: query

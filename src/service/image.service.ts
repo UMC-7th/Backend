@@ -1,6 +1,6 @@
 import axios from "axios";
 import { APIError, InvalidInputError, NotFoundError } from "../util/error.js";
-import { addImageFood, getImageFood } from "../repository/image.repository.js";
+import { addImageFood, getImageFood, updateImageFood } from "../repository/image.repository.js";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { v4 as uuidv4 } from "uuid";
 
@@ -19,7 +19,12 @@ export const getImageFoodService = async (name: string) => {
 
 // DB(ImageFood)에 이미지 추가
 export const addImageFoodService = async (name: string, imageUrl: string) => {
-    await addImageFood({ name: name, imageUrl: imageUrl });
+    return await addImageFood({ name: name, imageUrl: imageUrl });
+};
+
+// DB(ImageFood)에 이미지 갱신
+export const updateImageFoodService = async (imageId: number, imageUrl: string) => {
+    await updateImageFood(imageId, imageUrl);
 };
 
 // 식재료 이미지 생성
