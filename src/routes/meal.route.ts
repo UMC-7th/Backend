@@ -23,7 +23,7 @@ router.post("/daily", jwtAuthMiddleware, getDailyMeal);
 router.post("/refresh", jwtAuthMiddleware, refreshMeal);
 
 //완료한 식단 api
-router.patch("/complete", jwtAuthMiddleware, completeMeal);
+router.post("/complete", jwtAuthMiddleware, completeMeal);
 
 //식단 즐겨찾기 api
 router.patch("/favorite", jwtAuthMiddleware, favoriteMeal);

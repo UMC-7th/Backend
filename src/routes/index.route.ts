@@ -19,7 +19,7 @@ router.get("/", (req: Request, res: Response) => {
 router.use("/images", imageRouter);
 
 //api/v1/users 경로 요청 처리 라우터
-router.use("/users", userRouter,mypageRouter,surveyRouter);
+router.use("/users", userRouter, mypageRouter, surveyRouter);
 
 //api/v1/meals 경로 요청 처리 라우터
 router.use("/meals", mealRouter);
@@ -35,5 +35,8 @@ router.use("/payment", paymentRouter);
 
 //api/v1/materials 경로 요청 처리 라우터
 router.use("/materials", materialRouter);
+
+//api/v1/subscribes/meals 경로 요청 처리 라우터
+router.use("/subscribes/meals", materialRouter);
 
 export default router;
