@@ -253,7 +253,7 @@ export const getMealDetail = async (
   next: NextFunction
 ) => {
   const userId = req.user?.id;
-  const mealId = req.body.mealId;
+  const mealId = req.query.mealId;
 
   try {
     if (!userId) {
