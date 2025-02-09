@@ -71,6 +71,7 @@ export const addUser = async (type: string, profile: any) => {
           nickname: "",
           phoneNum: "",
           purpose: "",
+          profileImage: profile._json.properties.profile_image,
           loginMethod : type
         
         },
@@ -87,6 +88,7 @@ export const addUser = async (type: string, profile: any) => {
           nickname: "",
           phoneNum: "",
           purpose: "",
+          profileImage: profile._json.profile_image,
           loginMethod : type
         
         },
