@@ -19,6 +19,7 @@ jobs:
           echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
           echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
           echo "KAKAO_CLIENT_ID=${{ secrets.KAKAO_CLIENT_ID }}" >> .env
+          echo "KAKAO_ADMIN_KEY=${{ secrets.KAKAO_ADMIN_KEY }}" >> .env
           echo "NAVER_LOGIN_CLIENT_ID=${{ secrets.NAVER_LOGIN_CLIENT_ID }}" >> .env
           echo "NAVER_LOGIN_CLIENT_SECRET=${{ secrets.NAVER_LOGIN_CLIENT_SECRET }}" >> .env
           echo "JWT_SECRET_ACCESS_KEY=${{ secrets.JWT_SECRET_ACCESS_KEY }}" >> .env
