@@ -32,7 +32,9 @@ jobs:
           echo "REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}" >> .env
           echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env
           echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
-
+          echo "COOL_SMS_API_KEY=${{ secrets.COOL_SMS_API_KEY }}" >> .env
+          echo "COOL_SMS_API_SECRET=${{ secrets.COOL_SMS_API_SECRET }}" >> .env
+          
       - name: Copy .env file to EC2
         uses: appleboy/scp-action@master
         with:
