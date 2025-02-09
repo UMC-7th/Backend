@@ -47,6 +47,23 @@ export const deleteKartSub = async (userId: number, cartId: number) => {
     }
 };
 
+// 구독 추가
+export const addSub = async (userId: string, mealSubId: string) => {
+    try {
+        const subscribe = await prisma.subscribe.create({
+            data: {
+                userId: parseInt(userId),
+                mealSubId: parseInt(mealSubId),
+                review: "",
+                score: 0
+            },
+        });
+        return subscribe;
+    } catch (error) {
+        throw new DBError("구독 추가 중 오류가 발생했습니다.", error);
+    }
+}
+
 //구독 내역 캘린더형 조회
 export const getSubListCalendar = async (userId: number) => {
     try {
