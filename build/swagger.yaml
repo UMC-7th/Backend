@@ -16,6 +16,8 @@ tags:
     description: Subscribe Tag
   - name: Meal
     description: Meal API Tag
+  - name: SubMeal
+    description: SubMeal API Tag
   - name: Material
     description: Material API Tag
 #api paths
@@ -889,7 +891,7 @@ paths:
                         format: date-time
                       updateAt:
                         type: string
-                        format: date-time                        
+                        format: date-time
         "500":
           description: Fail operation
           content:
@@ -1735,6 +1737,160 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
+
+    # 구독식단 조회
+  # 구독 식단 조회
+  /api/v1/subscribes/meals/list:
+    get:
+      tags:
+        - MealSub
+      summary: 구독식단 조회
+      description: 구독 식단 목록을 조회하는 API
+      parameters:
+        - in: query
+          name: category
+          required: true
+          schema:
+            type: string
+            example: "맛있는 일상 음식"
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        mealId:
+                          type: integer
+                          example: 53
+                        food:
+                          type: string
+                          example: "밥, 김치"
+                        calorieTotal:
+                          type: integer
+                          example: 100
+                        material:
+                          type: string
+                          example: "제공되지 않았습니다"
+                        calorieDetail:
+                          type: string
+                          example: "제공되지 않았습니다"
+                        price:
+                          type: integer
+                          example: 0
+                        difficulty:
+                          type: integer
+                          example: 0
+                        recipe:
+                          type: string
+                          example: "제공되지 않았습니다"
+                        addedByUser:
+                          type: boolean
+                          example: false
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
+  # 구독 식단 추가 (영양사)
+  /api/v1/subscribes/meals:
+    post:
+      tags:
+        - Subscribe
+      summary: 영양사가 식단을 추가하는 API
+      description: 영양사가 식단을 추가하는 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  example: "맛있는 일상 음식"
+                mealDate:
+                  type: string
+                  format: date-time
+                  example: "2025-02-12T00:00:00.000Z"
+                time:
+                  type: string
+                  example: "아침"
+                foods:
+                  type: array
+                  items:
+                    type: string
+                    example: "밥"
+                calorieTotal:
+                  type: integer
+                  example: 100
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      mealId:
+                        type: integer
+                        example: 53
+                      food:
+                        type: string
+                        example: "밥, 김치"
+                      calorieTotal:
+                        type: integer
+                        example: 100
+                      material:
+                        type: string
+                        example: "제공되지 않았습니다"
+                      calorieDetail:
+                        type: string
+                        example: "제공되지 않았습니다"
+                      price:
+                        type: integer
+                        example: 0
+                      difficulty:
+                        type: integer
+                        example: 0
+                      recipe:
+                        type: string
+                        example: "제공되지 않았습니다"
+                      addedByUser:
+                        type: boolean
+                        example: false
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
+
+  #==================================구독 식단 api==================================#
 
   #==================================배송지 관련 api==================================#
   #배송지 관련 url

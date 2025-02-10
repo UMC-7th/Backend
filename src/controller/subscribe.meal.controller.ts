@@ -37,18 +37,18 @@ export const addSubMeal = async (
   res: Response,
   next: NextFunction
 ) => {
-  //구독타입,날짜,식사시간(아침,점심,저녁),식단,칼로리
-  const { type, mealDate, time, foods, calorieTotal } = req.body;
-  const subMeal = await addSubMealService(
-    type,
-    mealDate,
-    time,
-    foods,
-    calorieTotal
-  );
-
-  res.status(200).success(subMeal);
   try {
+    //구독타입,날짜,식사시간(아침,점심,저녁),식단,칼로리
+    const { type, mealDate, time, foods, calorieTotal } = req.body;
+    const subMeal = await addSubMealService(
+      type,
+      mealDate,
+      time,
+      foods,
+      calorieTotal
+    );
+
+    res.status(200).success(subMeal);
   } catch (error) {
     next(error);
   }

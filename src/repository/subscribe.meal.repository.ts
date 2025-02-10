@@ -54,3 +54,26 @@ export const getSubMealByTypeId = async (typeId: number) => {
 
   return mealSubs;
 };
+export const getSubMealIdsByDate = async (
+  mealDate: Date,
+  time: string,
+  categoryId: number
+) => {
+  const dateObj = new Date(mealDate);
+
+  const start = new Date(dateObj.setHours(0, 0, 0, 0));
+  const end = new Date(dateObj.setHours(23, 59, 59, 999));
+
+  const meals = await prisma.mealSub.findFirstOrThrow({
+    where: {
+      categoryId: categoryId,
+      time: time,
+      mealDate: {
+        gte: start,
+        lte: end,
+      },
+    },
+  });
+
+  return meals;
+};
