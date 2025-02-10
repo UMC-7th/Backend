@@ -89,10 +89,6 @@ export const createMealImageService = async (name: string) => {
 
         return imageUrl;
     } catch (error: any) {
-        //정의되지 않은 에러 발생 시 APIError로 처리
-        if (error.errorCode == "DB_PROCESS_ERROR") {
-            throw error;
-        }
         throw new APIError("OpenAI API Error", "입력 값: " + name);
     }
 };
