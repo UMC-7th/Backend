@@ -91,6 +91,14 @@ export const getManualMealsByIds = async (mealIds: number[]) => {
       mealId: { in: mealIds },
       addedByUser: true,
     },
+    include: {
+      MealUser: {
+        select: {
+          mealDate: true,
+          time: true,
+        },
+      },
+    },
   });
   return meals;
 };
