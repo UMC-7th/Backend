@@ -984,7 +984,7 @@ paths:
                 $ref: "#/components/schemas/FailResponse"
   # 식단 장바구니 제거 api
   /api/v1/subscribes/meals/cart/{cart_id}:
-    post:
+    delete:
       tags:
         - Subscribe
       summary: Delete Cart
