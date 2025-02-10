@@ -1,24 +1,6 @@
 import { prisma } from "../db.config.js";
-import { DailyMeal, MealRequest } from "../dto/meal.dto.js";
+import { MealRequest } from "../dto/meal.dto.js";
 
-//유저에게 제공한 식단과 유저 매핑하는 함수
-export const addMealToUser = async (
-  userId: number,
-  mealId: number,
-  time: string,
-  mealDate: Date
-) => {
-  const meal = await prisma.mealUser.create({
-    data: {
-      mealId: mealId,
-      userId: userId,
-      time: time,
-      mealDate: mealDate,
-    },
-  });
-
-  return meal.time;
-};
 //식단을 저장하는 함수
 export const addMeal = async (data: any) => {
   const mealId = await prisma.meal.create({
@@ -36,52 +18,39 @@ export const addMeal = async (data: any) => {
 
   return mealId.mealId;
 };
-//완료한 식사를 저장하는 함수
-export const addCompletedMeal = async (data: MealRequest, mealId: number) => {
-  const eatMeal = await prisma.eatMeal.create({
+
+export const getCategoryIdByType = async (type: string) => {
+  const category = await prisma.mealSubCategory.findFirstOrThrow({
+    where: {
+      name: type,
+    },
+  });
+
+  return category?.categoryId;
+};
+export const addSubMeal = async (
+  categoryId: number,
+  mealId: number,
+  time: string,
+  mealDate: Date
+) => {
+  const subMeal = await prisma.mealSub.create({
     data: {
-      userId: data.userId,
       mealId: mealId,
-      eatAt: data.mealDate,
+      categoryId: categoryId,
+      time: time,
+      mealDate: mealDate,
     },
   });
 
-  return eatMeal;
+  return subMeal.time;
 };
-// 날짜로 제공한 식단 가져오는 함수
-export const getMealIdsByDate = async (data: MealRequest) => {
-  const start = new Date(data.mealDate.setHours(0, 0, 0, 0));
-  const end = new Date(data.mealDate.setHours(23, 59, 59, 999));
-
-  const meals = await prisma.mealUser.findMany({
+export const getSubMealByTypeId = async (typeId: number) => {
+  const mealSubs = await prisma.mealSub.findMany({
     where: {
-      userId: data.userId,
-      mealDate: {
-        gte: start,
-        lte: end,
-      },
-    },
-    select: {
-      mealId: true,
+      categoryId: typeId,
     },
   });
 
-  return meals;
-};
-export const getMealById = async (mealId: number) => {
-  const meal = await prisma.meal.findFirst({
-    where: {
-      mealId,
-    },
-  });
-
-  return meal;
-};
-export const getMealsByIds = async (mealIds: number[]) => {
-  const meals = await prisma.meal.findMany({
-    where: {
-      mealId: { in: mealIds },
-    },
-  });
-  return meals;
+  return mealSubs;
 };

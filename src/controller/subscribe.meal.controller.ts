@@ -5,16 +5,15 @@ import {
   getSubMealService,
 } from "../service/subscribe.meal.service.js";
 import { InvalidInputError } from "../util/error.js";
-import { mealRequestDTO } from "../dto/meal.dto.js";
 
-//구독 식단을 조회 및 생성하는 컨트롤러
+//구독 식단을 조회하는 컨트롤러
 export const getSubMeal = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const userId = req.user?.id;
-  const mealDate = req.body.mealDate;
+  const category = req.query?.category as string;
 
   try {
     if (!userId) {
@@ -24,21 +23,32 @@ export const getSubMeal = async (
       );
     }
 
-    const existingMeals = await getSubMealService(mealRequest);
+    const existingSubMeals = await getSubMealService(category);
 
-    if (existingMeals.length === 0) {
-      // 아침, 점심, 저녁 병렬 처리
-      const [breakfastMeals, lunchMeals, dinnerMeals] = await Promise.all([
-        addSubMealService(mealRequest, "아침"),
-        addSubMealService(mealRequest, "점심"),
-        addSubMealService(mealRequest, "저녁"),
-      ]);
+    res.status(200).success(existingSubMeals);
+  } catch (error) {
+    next(error);
+  }
+};
 
-      const allMeals = [...breakfastMeals, ...lunchMeals, ...dinnerMeals];
-      res.status(200).success({ mealDate, allMeals });
-      return;
-    }
-    res.status(200).success({ mealDate, existingMeals });
+//구독 식단을 조회하는 컨트롤러
+export const addSubMeal = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  //구독타입,날짜,식사시간(아침,점심,저녁),식단,칼로리
+  const { type, mealDate, time, foods, calorieTotal } = req.body;
+  const subMeal = await addSubMealService(
+    type,
+    mealDate,
+    time,
+    foods,
+    calorieTotal
+  );
+
+  res.status(200).success(subMeal);
+  try {
   } catch (error) {
     next(error);
   }

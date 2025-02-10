@@ -1,10 +1,6 @@
 import axios from "axios";
 import { manualMealRequest, MealRequest } from "../dto/meal.dto.js";
-import {
-  AlreadyExistError,
-  InvalidInputError,
-  NotFoundError,
-} from "../util/error.js";
+import { InvalidInputError, NotFoundError } from "../util/error.js";
 import {
   addCompletedMeal,
   addFavoriteMeal,

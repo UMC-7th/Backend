@@ -8,7 +8,7 @@ import deliveryAddressRouter from "./deliveryAddress.route.js";
 import subscribeRouter from "./subscribe.route.js";
 import paymentRouter from "./payment.route.js";
 import materialRouter from "./material.route.js";
-
+import subMealRouter from "./subscribe.meal.route.js";
 const router = express.Router();
 
 router.get("/", (req: Request, res: Response) => {
@@ -37,6 +37,6 @@ router.use("/payment", paymentRouter);
 router.use("/materials", materialRouter);
 
 //api/v1/subscribes/meals 경로 요청 처리 라우터
-router.use("/subscribes/meals", materialRouter);
+router.use("/subscribes/meals", subMealRouter);
 
 export default router;
