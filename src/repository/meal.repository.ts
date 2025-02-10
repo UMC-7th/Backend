@@ -17,7 +17,7 @@ export const addMealToUser = async (
     },
   });
 
-  return meal.time;
+  return meal;
 };
 //식단을 저장하는 함수
 export const addMeal = async (data: any) => {
@@ -90,6 +90,14 @@ export const getManualMealsByIds = async (mealIds: number[]) => {
     where: {
       mealId: { in: mealIds },
       addedByUser: true,
+    },
+    include: {
+      MealUser: {
+        select: {
+          mealDate: true,
+          time: true,
+        },
+      },
     },
   });
   return meals;
