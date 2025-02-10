@@ -1355,12 +1355,25 @@ paths:
                         addedByUser:
                           type: boolean
                           example: true
+                        MealUser:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              mealDate:
+                                type: string
+                                format: date-time
+                                example: "2025-02-12T00:00:00.000Z"
+                              time:
+                                type: string
+                                example: "아침"
         "500":
           description: Fail operation
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
+
   # 식단 재생성 (새로 고침)
   /api/v1/meals/refresh:
     post:
