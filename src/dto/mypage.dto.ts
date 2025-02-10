@@ -5,6 +5,7 @@ export const mypageDTO = (body: any) => {
     nickname: body.nickname,
     name: body.name,
     phoneNum: body.phoneNum,
+    profileImage:body.profileImage
   };
 };
 

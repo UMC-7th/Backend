@@ -6,10 +6,13 @@ import {
   findhealthscoreProfile,
   findResultProfile,
   saveHealthScore,
+  updateImageProfile,
 } from "../repository/mypage.repository.js";
 import { getUserById } from "../repository/user.repository.js";
-import { DBError, NotFoundError } from "../util/error.js";
+import { APIError, DBError, NotFoundError } from "../util/error.js";
 import axios from "axios";
+import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
+import { v4 as uuidv4 } from "uuid";
 
 export const getUserProfile = async (userId: number) => {
   const user = await findUserProfile(userId);
@@ -233,4 +236,51 @@ Example output:
   } catch (error) {
     throw new Error("GPT 응답 중 에러 발생");
   }
+};
+
+export const updateImageS3 = async (imageUrl: string): Promise<string> => {
+  try {
+    const response = await axios.get(imageUrl, {
+      responseType: "arraybuffer",
+    });
+
+    const imageBuffer = Buffer.from(response.data, "binary");
+
+    const s3 = new S3Client({
+      region: "ap-northeast-2",
+      credentials: {
+        accessKeyId: process.env.S3_ACCESS_KEY || "",
+        secretAccessKey: process.env.S3_SECRET_KEY || "",
+      },
+    });
+
+    const fileKey = "profileimg/" + uuidv4() + Date.now() + ".jpeg";
+
+    await s3.send(
+      new PutObjectCommand({
+        Bucket: "umc7theatthis",
+        Key: fileKey,
+        Body: imageBuffer,
+        ContentType: "image/jpeg",
+      })
+    );
+
+    const imageUrlS3 = `https://umc7theatthis.s3.ap-northeast-2.amazonaws.com/${fileKey}`;
+
+    return imageUrlS3;
+  } catch (error: any) {
+    throw new APIError("File save Error", "입력 값: " + imageUrl);
+  }
+};
+
+export const upImageProfile = async (userId: number, imageUrl: any) => {
+  const s3ImageUrl = await updateImageS3(imageUrl);
+
+  const updateImage = await updateImageProfile(userId, s3ImageUrl);
+
+  if (!updateImage) {
+    throw new NotFoundError("존재하지 않는 유저", "입력 값: " + updateImage);
+  }
+
+  return updateImage;
 };

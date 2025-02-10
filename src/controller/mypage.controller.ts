@@ -5,7 +5,8 @@ import {
   upUserProfile,
   getGoalProfile,
   getHealthScoreProfile,
-  getResultProfile
+  getResultProfile,
+  upImageProfile,
 } from "../service/mypage.service.js";
 import { StatusCodes } from "http-status-codes";
 import { updateUserDTO } from "../dto/mypage.dto.js";
@@ -26,6 +27,7 @@ export const getUser = async (
         birth: user.birth,
         name: user.name,
         phoneNum: user.phoneNum,
+        profileImage: user.profileImage,
       });
     } else {
     }
@@ -89,7 +91,6 @@ export const getGoal = async (
   }
 };
 
-
 export const getHealthScore = async (
   req: Request,
   res: Response,
@@ -115,6 +116,23 @@ export const getResult = async (
     const result = await getResultProfile(userId);
 
     res.status(StatusCodes.OK).success({ result });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateImage = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const userId = req.user?.id;
+    const imageUrl = req.body.imageUrl; 
+
+    const updateImage = await upImageProfile(userId, imageUrl);
+
+    res.status(StatusCodes.OK).success({ updateImage });
   } catch (error) {
     next(error);
   }

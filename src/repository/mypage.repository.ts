@@ -11,6 +11,7 @@ export const findUserProfile = async (userId: number) => {
         email: true,
         birth: true,
         phoneNum: true,
+        profileImage: true,
       },
     });
 
@@ -132,5 +133,18 @@ export const saveHealthScore = async (userId: number, healthScore: number) => {
     return savedHealthScore;
   } catch (error) {
     throw new DBError("건강 점수 저장 중 오류가 발생했습니다.", error);
+  }
+};
+
+export const updateImageProfile = async (userId: number, imageUrl: string) => {
+  try {
+    const updateImage = await prisma.user.update({
+      where: { userId: userId },
+      data: { profileImage: imageUrl },
+    });
+
+    return updateImage;
+  } catch (error) {
+    throw new DBError("사용자 조회 중 오류가 발생했습니다.", error);
   }
 };
