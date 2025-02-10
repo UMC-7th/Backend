@@ -451,6 +451,9 @@ paths:
                       phoneNum:
                         type: string
                         example: 010-1234-1234
+                      profileImage:
+                        tpye: string
+                        example: https://umc7theatthis.s3.ap-northeast-2.amazonaws.com/profileimg/xxx.jpeg
         "500":
           description: Fail operation
           content:
@@ -936,6 +939,45 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
+  #프로필 이미지 변경 api
+  /api/v1/users/mypage/image:
+    put:
+      tags:
+        - User
+      summary: Update user profile image
+      description: 프로필 이미지 변경 API(JWT 필요)
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                Image:
+                  type: string
+                  format: binary
+                  description: 업로드할 이미지 파일
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: object
+                    properties:
+                      Image:
+                        type: string
+                        example: "https://umc7theatthis.s3.ap-northeast-2.amazonaws.com/profileimage/uuid_123456.jpeg"
+    
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"  
   #================================== 구독 관련 api==================================#
   # 식단 장바구니 추가 api
   /api/v1/subscribes/meals/cart:
