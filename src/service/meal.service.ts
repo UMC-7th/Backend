@@ -388,7 +388,7 @@ export const getManualMealService = async (userId: number) => {
   if (mealIds.length === 0) return [];
 
   const meals = await getManualMealsByIds(mealIds);
-
+  console.log(meals);
   return meals;
 };
 export const deleteManualMealService = async (data: any) => {
