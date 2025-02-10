@@ -1,10 +1,6 @@
 import axios from "axios";
 import { manualMealRequest, MealRequest } from "../dto/meal.dto.js";
-import {
-  AlreadyExistError,
-  InvalidInputError,
-  NotFoundError,
-} from "../util/error.js";
+import { InvalidInputError, NotFoundError } from "../util/error.js";
 import {
   addCompletedMeal,
   addFavoriteMeal,
@@ -135,16 +131,17 @@ Please generate 5 different meal options for ${mealTime} with these guidelines:
     gptResult.meals.map(async (meal: any) => {
       const mealId = await addMeal(meal); //meal 테이블에 식단 생성
 
-      const mealType = await addMealToUser(
+      const meals = await addMealToUser(
         data.userId,
         mealId,
         mealTime,
         data.mealDate
       ); //유저와 식단 매핑(유저에게 식단 제공)
+      const time = meals.time;
 
       const mealDetail = await getMealById(mealId);
 
-      mealArr.push({ mealDetail, mealType });
+      mealArr.push({ mealDetail, time });
     })
   );
 
