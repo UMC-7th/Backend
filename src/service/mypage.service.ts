@@ -13,6 +13,7 @@ import { APIError, DBError, NotFoundError } from "../util/error.js";
 import axios from "axios";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { v4 as uuidv4 } from "uuid";
+import multer from "multer";
 
 export const getUserProfile = async (userId: number) => {
   const user = await findUserProfile(userId);
@@ -238,14 +239,10 @@ Example output:
   }
 };
 
-export const updateImageS3 = async (imageUrl: string): Promise<string> => {
+export const updateImageS3 = async (
+  file: Express.Multer.File
+): Promise<string> => {
   try {
-    const response = await axios.get(imageUrl, {
-      responseType: "arraybuffer",
-    });
-
-    const imageBuffer = Buffer.from(response.data, "binary");
-
     const s3 = new S3Client({
       region: "ap-northeast-2",
       credentials: {
@@ -254,27 +251,29 @@ export const updateImageS3 = async (imageUrl: string): Promise<string> => {
       },
     });
 
-    const fileKey = "profileimg/" + uuidv4() + Date.now() + ".jpeg";
+    const fileKey = `profileimage/${uuidv4()}_${Date.now()}.jpeg`;
 
     await s3.send(
       new PutObjectCommand({
         Bucket: "umc7theatthis",
         Key: fileKey,
-        Body: imageBuffer,
-        ContentType: "image/jpeg",
+        Body: file.buffer, 
+        ContentType: file.mimetype, 
       })
     );
 
-    const imageUrlS3 = `https://umc7theatthis.s3.ap-northeast-2.amazonaws.com/${fileKey}`;
-
-    return imageUrlS3;
+    const fileUrl = `https://umc7theatthis.s3.ap-northeast-2.amazonaws.com/${fileKey}`;
+    return fileUrl;
   } catch (error: any) {
-    throw new APIError("File save Error", "입력 값: " + imageUrl);
+    throw new APIError("파일 에러러", "입력값: ", + filekey);
   }
 };
 
-export const upImageProfile = async (userId: number, imageUrl: any) => {
-  const s3ImageUrl = await updateImageS3(imageUrl);
+export const upImageProfile = async (
+  userId: number,
+  file: Express.Multer.File
+) => {
+  const s3ImageUrl = await updateImageS3(file);
 
   const updateImage = await updateImageProfile(userId, s3ImageUrl);
 
