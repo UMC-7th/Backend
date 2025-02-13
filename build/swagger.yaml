@@ -1732,7 +1732,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/FailResponse"
   #식단 싫어요
-  /api/v1/meals/dislike/delete:
+  /api/v1/meals/dislike:
     patch:
       tags:
         - Meal
@@ -1775,8 +1775,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
-  
-  #식단 싫어요 취소 
+
+  #식단 싫어요 취소
   /api/v1/meals/dislike/delete:
     patch:
       tags:
@@ -1821,12 +1821,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/FailResponse"
 
-    # 구독식단 조회
   # 구독 식단 조회
   /api/v1/subscribes/meals/list:
     get:
       tags:
-        - MealSub
+        - SubMeal
       summary: 구독식단 조회
       description: 구독 식단 목록을 조회하는 API
       parameters:
@@ -1893,7 +1892,7 @@ paths:
   /api/v1/subscribes/meals:
     post:
       tags:
-        - Subscribe
+        - SubMeal
       summary: 영양사가 식단을 추가하는 API
       description: 영양사가 식단을 추가하는 API
       requestBody:
