@@ -319,8 +319,7 @@ export const addDislikeMeal = async (
       userId,
       mealId,
     });
-    const a = await getDislikeMeal(userId);
-    console.log(a);
+
     res.status(200).success(dislikeMeal);
   } catch (error) {
     next(error);
