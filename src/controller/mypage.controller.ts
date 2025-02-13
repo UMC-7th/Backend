@@ -128,8 +128,7 @@ export const updateImage = async (
 ) => {
   try {
     const userId = req.user?.id;
-    const file = req.file; 
-
+    const file = req.file;
     const updateImage = await upImageProfile(userId, file);
 
     res.status(StatusCodes.OK).success({ updateImage });
