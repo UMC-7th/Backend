@@ -205,3 +205,45 @@ export const getLikedMeal = async (userId: number) => {
   });
   return likedMeals;
 };
+export const addDislikeMeal = async (data: any) => {
+  const dislikeMeal = await prisma.mealUser.updateMany({
+    where: {
+      userId: data.userId,
+      mealId: data.mealId,
+    },
+    data: {
+      isHate: true,
+    },
+  });
+  return dislikeMeal;
+};
+
+export const deleteDislikeMeal = async (data: any) => {
+  const likedMeals = await prisma.mealUser.updateMany({
+    where: {
+      userId: data.userId,
+      mealId: data.mealId,
+    },
+    data: {
+      isHate: false,
+    },
+  });
+  return likedMeals;
+};
+export const getDislikeMeal = async (userId: number) => {
+  const dislikeMeals = await prisma.mealUser.findMany({
+    where: {
+      userId: userId,
+      isHate: true,
+    },
+    take: 3,
+    include: {
+      meal: {
+        select: {
+          food: true,
+        },
+      },
+    },
+  });
+  return dislikeMeals;
+};

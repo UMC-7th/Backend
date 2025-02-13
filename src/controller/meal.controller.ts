@@ -1,8 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import {
   addDailyMealService,
+  addDislikeMealService,
   addManualMealService,
   completeMealService,
+  deleteDislikeMealService,
   deleteFavoriteMealService,
   deleteManualMealService,
   favoriteMealService,
@@ -15,6 +17,7 @@ import {
 } from "../service/meal.service.js";
 import { mealRequestDTO } from "../dto/meal.dto.js";
 import { InvalidInputError } from "../util/error.js";
+import { getDislikeMeal } from "../repository/meal.repository.js";
 
 //하루 식단을 생성하는 api 컨트롤러
 export const getDailyMeal = async (
@@ -292,6 +295,59 @@ export const deleteFavoriteMeal = async (
     });
 
     res.status(200).success(deletedFavoriteMeal);
+  } catch (error) {
+    next(error);
+  }
+};
+export const addDislikeMeal = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.user?.id;
+  const mealId = req.body.mealId;
+
+  try {
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
+
+    const dislikeMeal = await addDislikeMealService({
+      userId,
+      mealId,
+    });
+    const a = await getDislikeMeal(userId);
+    console.log(a);
+    res.status(200).success(dislikeMeal);
+  } catch (error) {
+    next(error);
+  }
+};
+export const deleteDislikeMeal = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.user?.id;
+  const mealId = req.body.mealId;
+
+  try {
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
+
+    const deleteDislikeMeal = await deleteDislikeMealService({
+      userId,
+      mealId,
+    });
+
+    res.status(200).success(deleteDislikeMeal);
   } catch (error) {
     next(error);
   }
