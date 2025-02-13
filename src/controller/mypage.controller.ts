@@ -10,6 +10,7 @@ import {
 } from "../service/mypage.service.js";
 import { StatusCodes } from "http-status-codes";
 import { updateUserDTO } from "../dto/mypage.dto.js";
+import { InvalidInputError } from "../util/error.js";
 
 export const getUser = async (
   req: Request,
@@ -17,7 +18,13 @@ export const getUser = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.user?.id as number;
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
     const user = await getUserProfile(userId);
 
     if (user) {
@@ -42,7 +49,13 @@ export const deleteUser = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.user?.id as number;
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
     const deleteuser = await delUserProfile(userId);
 
     if (deleteuser) {
@@ -59,7 +72,13 @@ export const updateUser = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.user?.id as number;
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
     const loginMethod = req.user?.loginMethod;
 
     const isSocialLogin = loginMethod !== "email";
@@ -82,7 +101,13 @@ export const getGoal = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.user?.id as number;
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
     const goal = await getGoalProfile(userId);
 
     res.status(StatusCodes.OK).success({ goal });
@@ -97,7 +122,13 @@ export const getHealthScore = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.user?.id as number;
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
     const healthscore = await getHealthScoreProfile(userId);
 
     res.status(StatusCodes.OK).success({ healthscore });
@@ -112,7 +143,13 @@ export const getResult = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.user?.id as number;
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
     const result = await getResultProfile(userId);
 
     res.status(StatusCodes.OK).success({ result });
@@ -127,7 +164,13 @@ export const updateImage = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.user?.id as number;
+    const userId = req.user?.id;
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
     const file = req.file;
 
     const updateImage = await upImageProfile(userId, file);
