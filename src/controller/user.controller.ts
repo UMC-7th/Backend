@@ -54,7 +54,7 @@ export const socialAuthCallback = (req: Request, res: Response, next: NextFuncti
 export const postOtp = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { phoneNumber } = req.body;
-        console.log("phoneNumber: ", phoneNumber);
+        console.log("phoneNumber: ", phoneNumber.substr(23, 11));
         const sms = await sendOtp(phoneNumber); // 인증번호 발급 및 전송
         res.status(StatusCodes.OK).success({ msg: '인증번호 전송에 성공했습니다.' });
         
