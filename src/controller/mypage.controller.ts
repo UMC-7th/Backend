@@ -17,7 +17,7 @@ export const getUser = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.id as number;
     const user = await getUserProfile(userId);
 
     if (user) {
@@ -42,7 +42,7 @@ export const deleteUser = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.id as number;
     const deleteuser = await delUserProfile(userId);
 
     if (deleteuser) {
@@ -59,7 +59,7 @@ export const updateUser = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.id as number;
     const loginMethod = req.user?.loginMethod;
 
     const isSocialLogin = loginMethod !== "email";
@@ -82,7 +82,7 @@ export const getGoal = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.id as number;
     const goal = await getGoalProfile(userId);
 
     res.status(StatusCodes.OK).success({ goal });
@@ -97,8 +97,7 @@ export const getHealthScore = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.user?.id;
-
+    const userId = req.user?.id as number;
     const healthscore = await getHealthScoreProfile(userId);
 
     res.status(StatusCodes.OK).success({ healthscore });
@@ -113,7 +112,7 @@ export const getResult = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.user?.id;
+    const userId = req.user?.id as number;
     const result = await getResultProfile(userId);
 
     res.status(StatusCodes.OK).success({ result });
@@ -128,8 +127,9 @@ export const updateImage = async (
   next: NextFunction
 ) => {
   try {
-    const userId = req.user?.id;
-    const file = req.file; 
+    const userId = req.user?.id as number;
+    const file = req.file;
+
     const updateImage = await upImageProfile(userId, file);
 
     res.status(StatusCodes.OK).success({ updateImage });

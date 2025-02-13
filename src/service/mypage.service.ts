@@ -265,7 +265,7 @@ export const updateImageS3 = async (
     const fileUrl = `https://umc7theatthis.s3.ap-northeast-2.amazonaws.com/${fileKey}`;
     return fileUrl;
   } catch (error: any) {
-    throw new APIError("파일 에러러", "입력값: ", + filekey);
+    throw new APIError("파일 에러", "입력값: ", + filekey);
   }
 };
 
