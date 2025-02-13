@@ -1,7 +1,9 @@
 import express from "express";
 import {
+  addDislikeMeal,
   addManualMeal,
   completeMeal,
+  deleteDislikeMeal,
   deleteFavoriteMeal,
   deleteManualMeal,
   favoriteMeal,
@@ -48,5 +50,11 @@ router.get("/detail/list", jwtAuthMiddleware, getMealDetail);
 
 //식단 즐겨찾기 취소
 router.patch("/favorite/delete", jwtAuthMiddleware, deleteFavoriteMeal);
+
+//식단 싫어요
+router.patch("/dislike", jwtAuthMiddleware, addDislikeMeal);
+
+//식단 싫어요
+router.patch("/dislike/delete", jwtAuthMiddleware, deleteDislikeMeal);
 
 export default router;
