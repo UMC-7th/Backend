@@ -44,7 +44,7 @@ router.get("/manual/list", jwtAuthMiddleware, getManualMeal);
 router.delete("/manual/delete", jwtAuthMiddleware, deleteManualMeal);
 
 //즐겨찾기한 식단 조회
-router.get("/favorite/list", jwtAuthMiddleware, getFavoriteMeal);
+router.get("/favorite/list/calorie", jwtAuthMiddleware, getFavoriteMeal);
 
 // 즐겨찾기한 식단 최신순 조회
 router.get("/favorite/list/latest", jwtAuthMiddleware, getFavoriteMealLatest);
