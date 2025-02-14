@@ -60,7 +60,7 @@ model MealUser {
   mealDate   DateTime @map("meal_date") @db.DateTime(6)
   isMark     Boolean  @default(false) @map("is_mark")
   isLike     Boolean  @default(false) @map("is_like")
-
+  isHate     Boolean  @default(false) @map("is_hate")
   user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
   meal Meal @relation(fields: [mealId], references: [mealId])
 

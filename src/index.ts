@@ -5,9 +5,7 @@ import swaggerUi from "swagger-ui-express";
 import YAML from "yamljs";
 import path from "path";
 import passport from "passport";
-import { fileURLToPath } from "url";
 import { errorMiddleware, successMiddleware } from "./util/middleware.js";
-import { dummyController } from "./controller/dummy.controller.js";
 import mainRouter from "./routes/index.route.js";
 import { socialAuthCallback } from "./controller/user.controller.js";
 import {
@@ -80,8 +78,6 @@ app.get(
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World!");
 });
-
-app.get("/temp", dummyController);
 
 app.use("/api/v1", mainRouter);
 

@@ -18,6 +18,8 @@ import {
   deleteFavoriteMeal,
   getLikedMeal,
   getMealsByIds,
+  addDislikeMeal,
+  deleteDislikeMeal,
 } from "../repository/meal.repository.js";
 import { addMealToUser } from "../repository/meal.repository.js";
 import { getUserById } from "../repository/user.repository.js";
@@ -108,7 +110,7 @@ Please generate 5 different meal options for ${mealTime} with these guidelines:
     result = await axios.post(
       "https://api.openai.com/v1/chat/completions",
       {
-        model: "gpt-4-turbo",
+        model: "gpt-3.5-turbo",
         temperature: 0.4,
         messages: messages,
       },
@@ -123,7 +125,6 @@ Please generate 5 different meal options for ${mealTime} with these guidelines:
     throw new Error(`${mealTime} 식단 생성 중 에러 발생: ${error}`);
   }
   const gptResult = JSON.parse(result.data.choices[0].message.content);
-  const mealIds: number[] = [];
   const mealArr: any[] = [];
 
   // 5개의 식단을 병렬로 데이터베이스에 저장
@@ -459,4 +460,38 @@ export const deleteFavoriteMealService = async (data: any) => {
   const deletedFavoriteMeal = deleteFavoriteMeal(data);
 
   return deletedFavoriteMeal;
+};
+export const addDislikeMealService = async (data: any) => {
+  const user = await getUserById(data.userId);
+
+  if (!user) {
+    throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
+  }
+
+  const meal = await getMealById(data.mealId);
+
+  if (!meal) {
+    throw new NotFoundError("존재하지 않는 식단입니다", data.mealId);
+  }
+
+  const dislikeMeal = addDislikeMeal(data);
+
+  return dislikeMeal;
+};
+export const deleteDislikeMealService = async (data: any) => {
+  const user = await getUserById(data.userId);
+
+  if (!user) {
+    throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
+  }
+
+  const meal = await getMealById(data.mealId);
+
+  if (!meal) {
+    throw new NotFoundError("존재하지 않는 식단입니다", data.mealId);
+  }
+
+  const dislikeMeal = deleteDislikeMeal(data);
+
+  return dislikeMeal;
 };
