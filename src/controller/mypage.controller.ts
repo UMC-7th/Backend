@@ -79,8 +79,8 @@ export const updateUser = async (
         "입력 값: " + req.headers.authorization
       );
     }
-    const updateData = updateUserDTO(req.body);
 
+    const updateData = updateUserDTO(req.body);
     const updatedUser = await upUserProfile(userId, updateData);
 
     if (updatedUser) {
