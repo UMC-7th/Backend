@@ -73,6 +73,9 @@ export const getMealById = async (mealId: number) => {
     where: {
       mealId,
     },
+    orderBy: {
+      calorieTotal: "desc",
+    },
   });
 
   return meal;
@@ -180,9 +183,19 @@ export const getFavoritMealById = async (userId: number) => {
       userId,
       isMark: true,
     },
+    include: {
+      meal: true,
+    },
+    orderBy: {
+      meal: {
+        calorieTotal: "desc",
+      },
+    },
   });
+
   return favoriteMeals;
 };
+
 export const deleteFavoriteMeal = async (data: any) => {
   const deletedFavoriteMeal = await prisma.mealUser.updateMany({
     where: {
