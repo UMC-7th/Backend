@@ -79,11 +79,7 @@ export const updateUser = async (
         "입력 값: " + req.headers.authorization
       );
     }
-    const loginMethod = req.user?.loginMethod;
-
-    const isSocialLogin = loginMethod !== "email";
-
-    const updateData = updateUserDTO(req.body, isSocialLogin);
+    const updateData = updateUserDTO(req.body);
 
     const updatedUser = await upUserProfile(userId, updateData);
 
