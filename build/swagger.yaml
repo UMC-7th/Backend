@@ -453,9 +453,6 @@ paths:
                       phoneNum:
                         type: string
                         example: 010-1234-1234
-                      profileImage:
-                        tpye: string
-                        example: https://umc7theatthis.s3.ap-northeast-2.amazonaws.com/profileimg/xxx.jpeg
         "500":
           description: Fail operation
           content:

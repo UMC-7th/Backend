@@ -34,7 +34,6 @@ export const getUser = async (
         birth: user.birth,
         name: user.name,
         phoneNum: user.phoneNum,
-        profileImage: user.profileImage,
       });
     } else {
     }
