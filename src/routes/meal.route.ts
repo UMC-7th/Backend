@@ -9,6 +9,7 @@ import {
   favoriteMeal,
   getDailyMeal,
   getFavoriteMeal,
+  getFavoriteMealLatest,
   getManualMeal,
   getMealDetail,
   preferredMeal,
@@ -44,6 +45,9 @@ router.delete("/manual/delete", jwtAuthMiddleware, deleteManualMeal);
 
 //즐겨찾기한 식단 조회
 router.get("/favorite/list", jwtAuthMiddleware, getFavoriteMeal);
+
+// 즐겨찾기한 식단 최신순 조회
+router.get("/favorite/list/latest", jwtAuthMiddleware, getFavoriteMealLatest);
 
 //식단 상세 조회
 router.get("/detail/list", jwtAuthMiddleware, getMealDetail);

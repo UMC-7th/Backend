@@ -20,6 +20,7 @@ import {
   getMealsByIds,
   addDislikeMeal,
   deleteDislikeMeal,
+  getFavoritMealByIdLatest,
 } from "../repository/meal.repository.js";
 import { addMealToUser } from "../repository/meal.repository.js";
 import { getUserById } from "../repository/user.repository.js";
@@ -427,6 +428,18 @@ export const getFavoriteMealService = async (userId: number) => {
 
   return favoriteMeals;
 };
+export const getFavoriteMealLatestService = async (userId: number) => {
+  const user = await getUserById(userId);
+
+  if (!user) {
+    throw new NotFoundError("존재하지 않는 유저입니다", userId);
+  }
+
+  const favoriteMeals = await getFavoritMealByIdLatest(userId);
+
+  return favoriteMeals;
+};
+
 export const getMealDetailService = async (data: any) => {
   const user = await getUserById(data.userId);
 
