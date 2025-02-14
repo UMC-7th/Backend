@@ -9,6 +9,7 @@ import {
   deleteManualMealService,
   favoriteMealService,
   getDailyMealService,
+  getFavoriteMealLatestService,
   getFavoriteMealService,
   getManualMealService,
   getMealDetailService,
@@ -243,13 +244,35 @@ export const getFavoriteMeal = async (
       );
     }
 
-    const favoriteMeals = await getFavoriteMealService(userId);
+    const favoriteMeals = await getFavoriteMealLatestService(userId);
 
     res.status(200).success(favoriteMeals);
   } catch (error) {
     next(error);
   }
 };
+export const getFavoriteMealLatest = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.user?.id;
+  try {
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
+
+    const favoriteMeals = await getFavoriteMealLatestService(userId);
+
+    res.status(200).success(favoriteMeals);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getMealDetail = async (
   req: Request,
   res: Response,
