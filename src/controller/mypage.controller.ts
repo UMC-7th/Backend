@@ -167,6 +167,12 @@ export const updateImage = async (
       );
     }
     const file = req.file;
+    if (!file) {
+      throw new InvalidInputError(
+        "잘못된 파일 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
 
     const updateImage = await upImageProfile(userId, file);
 
