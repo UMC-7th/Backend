@@ -310,13 +310,13 @@ export const completeMealService = async (data: CompleteMeal) => {
     throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
   }
 
-  const meal = await getMealById(mealId);
+  const meal = await getMealById(data.mealId);
 
   if (!meal) {
-    throw new NotFoundError("존재하지 않는 식단입니다", mealId);
+    throw new NotFoundError("존재하지 않는 식단입니다", data.mealId);
   }
 
-  const mealComplete = await addCompletedMeal(data, mealId);
+  const mealComplete = await addCompletedMeal(data);
 
   return mealComplete;
 };
