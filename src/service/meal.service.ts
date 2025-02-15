@@ -1,5 +1,9 @@
 import axios from "axios";
-import { manualMealRequest, MealRequest } from "../dto/meal.dto.js";
+import {
+  CompleteMeal,
+  manualMealRequest,
+  MealRequest,
+} from "../dto/meal.dto.js";
 import { InvalidInputError, NotFoundError } from "../util/error.js";
 import {
   addCompletedMeal,
@@ -299,23 +303,22 @@ Example output when '저녁' is included:
 
   return await getMealById(mealId);
 };
-export const completeMealService = async (
-  data: MealRequest,
-  mealId: number
-) => {
+export const completeMealService = async (data: CompleteMeal) => {
+  // 유효성 검사
   const user = await getUserById(data.userId);
 
   if (!user) {
     throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
   }
 
-  const meal = await getMealById(mealId);
+  const meal = await getMealById(data.mealId);
 
   if (!meal) {
-    throw new NotFoundError("존재하지 않는 식단입니다", mealId);
+    throw new NotFoundError("존재하지 않는 식단입니다", data.mealId);
   }
 
-  const mealComplete = await addCompletedMeal(data, mealId);
+  // 리포지토리 계층 호출
+  const mealComplete = await addCompletedMeal(data);
 
   return mealComplete;
 };

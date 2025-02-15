@@ -16,9 +16,8 @@ import {
   preferredMealService,
   refreshMealService,
 } from "../service/meal.service.js";
-import { mealRequestDTO } from "../dto/meal.dto.js";
+import { completeMealDTO, mealRequestDTO } from "../dto/meal.dto.js";
 import { InvalidInputError } from "../util/error.js";
-import { getDislikeMeal } from "../repository/meal.repository.js";
 
 //하루 식단을 생성하는 api 컨트롤러
 export const getDailyMeal = async (
@@ -88,16 +87,29 @@ export const completeMeal = async (
   const { mealDate, mealId } = req.body;
 
   try {
+    // 유효성 검사
     if (!userId) {
       throw new InvalidInputError(
         "잘못된 토큰 값입니다.",
         "입력 값: " + req.headers.authorization
       );
     }
+    if (!mealDate) {
+      throw new InvalidInputError(
+        "날짜가 누락되었습니다 ",
+        "입력 값: " + mealDate
+      );
+    }
+    if (!mealId) {
+      throw new InvalidInputError(
+        "식단 아이디가 누락되었습니다.",
+        "입력 값: " + mealId
+      );
+    }
 
+    // 서비스 계층 호출
     const meal = await completeMealService(
-      mealRequestDTO({ userId, mealDate }),
-      mealId
+      completeMealDTO({ userId, mealDate, mealId })
     );
 
     res.status(200).success(meal);

@@ -1,5 +1,5 @@
 import { prisma } from "../db.config.js";
-import { DailyMeal, MealRequest } from "../dto/meal.dto.js";
+import { CompleteMeal, DailyMeal, MealRequest } from "../dto/meal.dto.js";
 
 //유저에게 제공한 식단과 유저 매핑하는 함수
 export const addMealToUser = async (
@@ -36,12 +36,13 @@ export const addMeal = async (data: any) => {
 
   return mealId.mealId;
 };
+
 //완료한 식사를 저장하는 함수
-export const addCompletedMeal = async (data: MealRequest, mealId: number) => {
+export const addCompletedMeal = async (data: CompleteMeal) => {
   const eatMeal = await prisma.eatMeal.create({
     data: {
       userId: data.userId,
-      mealId: mealId,
+      mealId: data.mealId,
       eatAt: data.mealDate,
     },
   });
