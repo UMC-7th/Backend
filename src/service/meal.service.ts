@@ -377,7 +377,6 @@ export const addManualMealService = async (data: AddManualMealDTO) => {
 
   const mealId: number = await addMeal(data);
 
-  // mealUserDTO를 사용하여 DTO 변환
   const mealUserData = mealUserDTO({
     userId: data.userId,
     mealId: mealId,
@@ -387,7 +386,6 @@ export const addManualMealService = async (data: AddManualMealDTO) => {
 
   await addMealToUser(mealUserData);
 
-  // completeMealDTO를 사용하여 DTO 변환
   const completedMealData = completeMealDTO({
     userId: data.userId,
     mealId: mealId,
@@ -396,7 +394,9 @@ export const addManualMealService = async (data: AddManualMealDTO) => {
 
   await addCompletedMeal(completedMealData);
 
-  return await getMealById(mealId);
+  const meal = await getMealById(mealId);
+
+  return meal;
 };
 
 export const getManualMealService = async (userId: number) => {
