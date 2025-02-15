@@ -30,16 +30,63 @@ export const mealRequestDTO = (body: MealRequest): MealRequest => {
   };
 };
 
-export interface CompleteMeal {
+export interface CompleteMealDTO {
   userId: number;
   mealId: number;
   mealDate: Date;
 }
 
-export const completeMealDTO = (body: CompleteMeal): CompleteMeal => {
+export const completeMealDTO = (body: CompleteMealDTO): CompleteMealDTO => {
   return {
     userId: body.userId,
     mealId: body.mealId,
     mealDate: new Date(body.mealDate),
+  };
+};
+
+export interface AddManualMealDTO {
+  userId: number;
+  mealDate: Date;
+  time: string;
+  foods: string[];
+  calorieTotal: number;
+  addedByUser: boolean;
+}
+
+export const addManualMealDTO = (body: {
+  userId: number;
+  mealDate: Date;
+  time: string;
+  foods: string[];
+  calorieTotal: number;
+}): AddManualMealDTO => {
+  return {
+    userId: body.userId,
+    mealDate: new Date(body.mealDate),
+    time: body.time,
+    foods: body.foods,
+    calorieTotal: body.calorieTotal,
+    addedByUser: true,
+  };
+};
+export interface MealUserDTO {
+  userId: number;
+  mealId: number;
+  time: string;
+  mealDate: Date;
+}
+
+export const mealUserDTO = (body: {
+  userId: number;
+  mealId: number;
+  time: string;
+  mealDate: string | Date;
+}): MealUserDTO => {
+  return {
+    userId: body.userId,
+    mealId: body.mealId,
+    time: body.time,
+    mealDate:
+      body.mealDate instanceof Date ? body.mealDate : new Date(body.mealDate),
   };
 };

@@ -16,7 +16,11 @@ import {
   preferredMealService,
   refreshMealService,
 } from "../service/meal.service.js";
-import { completeMealDTO, mealRequestDTO } from "../dto/meal.dto.js";
+import {
+  addManualMealDTO,
+  completeMealDTO,
+  mealRequestDTO,
+} from "../dto/meal.dto.js";
 import { InvalidInputError } from "../util/error.js";
 
 //하루 식단을 생성하는 api 컨트롤러
@@ -182,14 +186,43 @@ export const addManualMeal = async (
       );
     }
 
-    const meal = await addManualMealService({
+    if (!mealDate) {
+      throw new InvalidInputError(
+        "식사 날짜가 누락되었습니다.",
+        "입력 값: " + mealDate
+      );
+    }
+
+    if (!time) {
+      throw new InvalidInputError(
+        "식사 시간이 누락되었습니다.",
+        "입력 값: " + time
+      );
+    }
+
+    if (!foods || !Array.isArray(foods) || foods.length === 0) {
+      throw new InvalidInputError(
+        "음식 목록이 누락되었거나 올바르지 않습니다.",
+        "입력 값: " + foods
+      );
+    }
+
+    if (!calorieTotal || calorieTotal <= 0) {
+      throw new InvalidInputError(
+        "칼로리 총합이 누락되었거나 유효하지 않습니다.",
+        "입력 값: " + calorieTotal
+      );
+    }
+
+    const mealDTO = addManualMealDTO({
       userId,
       mealDate,
       time,
       foods,
       calorieTotal,
-      addedByUser: true,
     });
+
+    const meal = await addManualMealService(mealDTO);
 
     res.status(200).success(meal);
   } catch (error) {
