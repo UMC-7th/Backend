@@ -29,3 +29,17 @@ export const mealRequestDTO = (body: MealRequest): MealRequest => {
     mealDate: new Date(body.mealDate),
   };
 };
+
+export interface CompleteMeal {
+  userId: number;
+  mealId: number;
+  mealDate: Date;
+}
+
+export const completeMealDTO = (body: CompleteMeal): CompleteMeal => {
+  return {
+    userId: body.userId,
+    mealId: body.mealId,
+    mealDate: new Date(body.mealDate),
+  };
+};

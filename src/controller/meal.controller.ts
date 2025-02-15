@@ -18,7 +18,6 @@ import {
 } from "../service/meal.service.js";
 import { mealRequestDTO } from "../dto/meal.dto.js";
 import { InvalidInputError } from "../util/error.js";
-import { getDislikeMeal } from "../repository/meal.repository.js";
 
 //하루 식단을 생성하는 api 컨트롤러
 export const getDailyMeal = async (
@@ -96,8 +95,7 @@ export const completeMeal = async (
     }
 
     const meal = await completeMealService(
-      mealRequestDTO({ userId, mealDate }),
-      mealId
+      completeMealDTO({ userId, mealDate, mealId })
     );
 
     res.status(200).success(meal);

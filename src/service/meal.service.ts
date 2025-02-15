@@ -1,5 +1,9 @@
 import axios from "axios";
-import { manualMealRequest, MealRequest } from "../dto/meal.dto.js";
+import {
+  CompleteMeal,
+  manualMealRequest,
+  MealRequest,
+} from "../dto/meal.dto.js";
 import { InvalidInputError, NotFoundError } from "../util/error.js";
 import {
   addCompletedMeal,
@@ -299,10 +303,7 @@ Example output when '저녁' is included:
 
   return await getMealById(mealId);
 };
-export const completeMealService = async (
-  data: MealRequest,
-  mealId: number
-) => {
+export const completeMealService = async (data: CompleteMeal) => {
   const user = await getUserById(data.userId);
 
   if (!user) {
