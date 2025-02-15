@@ -304,6 +304,7 @@ Example output when '저녁' is included:
   return await getMealById(mealId);
 };
 export const completeMealService = async (data: CompleteMeal) => {
+  // 유효성 검사
   const user = await getUserById(data.userId);
 
   if (!user) {
@@ -316,6 +317,7 @@ export const completeMealService = async (data: CompleteMeal) => {
     throw new NotFoundError("존재하지 않는 식단입니다", data.mealId);
   }
 
+  // 리포지토리 계층 호출
   const mealComplete = await addCompletedMeal(data);
 
   return mealComplete;

@@ -87,6 +87,7 @@ export const completeMeal = async (
   const { mealDate, mealId } = req.body;
 
   try {
+    // 유효성 검사
     if (!userId) {
       throw new InvalidInputError(
         "잘못된 토큰 값입니다.",
@@ -106,6 +107,7 @@ export const completeMeal = async (
       );
     }
 
+    // 서비스 계층 호출
     const meal = await completeMealService(
       completeMealDTO({ userId, mealDate, mealId })
     );
