@@ -179,6 +179,7 @@ export const addManualMeal = async (
   const { mealDate, time, foods, calorieTotal } = req.body;
 
   try {
+    //유효성 검사
     if (!userId) {
       throw new InvalidInputError(
         "잘못된 토큰 값입니다.",
@@ -214,6 +215,7 @@ export const addManualMeal = async (
       );
     }
 
+    //DTO
     const mealDTO = addManualMealDTO({
       userId,
       mealDate,
@@ -222,6 +224,7 @@ export const addManualMeal = async (
       calorieTotal,
     });
 
+    //서비스 계층 호출
     const meal = await addManualMealService(mealDTO);
 
     res.status(200).success(meal);

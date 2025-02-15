@@ -375,8 +375,10 @@ export const addManualMealService = async (data: AddManualMealDTO) => {
     throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
   }
 
+  //식단 테이블에 추가 후 mealId 저장
   const mealId: number = await addMeal(data);
 
+  // DTO
   const mealUserData = mealUserDTO({
     userId: data.userId,
     mealId: mealId,
@@ -384,16 +386,20 @@ export const addManualMealService = async (data: AddManualMealDTO) => {
     mealDate: data.mealDate,
   });
 
+  // 유저와 식단 매핑
   await addMealToUser(mealUserData);
 
+  // DTO
   const completedMealData = completeMealDTO({
     userId: data.userId,
     mealId: mealId,
     mealDate: data.mealDate,
   });
 
+  // 수동 식단이므로 바로 완료 처리
   await addCompletedMeal(completedMealData);
 
+  //해당 식단 리턴
   const meal = await getMealById(mealId);
 
   return meal;

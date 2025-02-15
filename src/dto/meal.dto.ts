@@ -30,6 +30,7 @@ export const mealRequestDTO = (body: MealRequest): MealRequest => {
   };
 };
 
+// -----------  CompleteMeal  DTO ----------
 export interface CompleteMealDTO {
   userId: number;
   mealId: number;
@@ -44,6 +45,7 @@ export const completeMealDTO = (body: CompleteMealDTO): CompleteMealDTO => {
   };
 };
 
+// -----------  AddManualMeal  DTO ----------
 export interface AddManualMealDTO {
   userId: number;
   mealDate: Date;
@@ -69,6 +71,8 @@ export const addManualMealDTO = (body: {
     addedByUser: true,
   };
 };
+
+// -----------  MEALUSER DTO ----------
 export interface MealUserDTO {
   userId: number;
   mealId: number;
