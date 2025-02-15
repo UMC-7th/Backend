@@ -1,8 +1,10 @@
 import axios from "axios";
 import {
-  CompleteMeal,
-  manualMealRequest,
+  AddManualMealDTO,
+  CompleteMealDTO,
+  completeMealDTO,
   MealRequest,
+  mealUserDTO,
 } from "../dto/meal.dto.js";
 import { InvalidInputError, NotFoundError } from "../util/error.js";
 import {
@@ -303,7 +305,7 @@ Example output when '저녁' is included:
 
   return await getMealById(mealId);
 };
-export const completeMealService = async (data: CompleteMeal) => {
+export const completeMealService = async (data: CompleteMealDTO) => {
   // 유효성 검사
   const user = await getUserById(data.userId);
 
@@ -366,20 +368,43 @@ export const preferredMealService = async (userId: number, mealId: number) => {
 
   return mealUser;
 };
-export const addManualMealService = async (data: manualMealRequest) => {
+export const addManualMealService = async (data: AddManualMealDTO) => {
   const user = await getUserById(data.userId);
 
   if (!user) {
     throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
   }
+
+  //식단 테이블에 추가 후 mealId 저장
   const mealId: number = await addMeal(data);
 
-  await addMealToUser(data.userId, mealId, data.time, data.mealDate);
+  // DTO
+  const mealUserData = mealUserDTO({
+    userId: data.userId,
+    mealId: mealId,
+    time: data.time,
+    mealDate: data.mealDate,
+  });
 
-  await addCompletedMeal(data, mealId);
+  // 유저와 식단 매핑
+  await addMealToUser(mealUserData);
 
-  return await getMealById(mealId);
+  // DTO
+  const completedMealData = completeMealDTO({
+    userId: data.userId,
+    mealId: mealId,
+    mealDate: data.mealDate,
+  });
+
+  // 수동 식단이므로 바로 완료 처리
+  await addCompletedMeal(completedMealData);
+
+  //해당 식단 리턴
+  const meal = await getMealById(mealId);
+
+  return meal;
 };
+
 export const getManualMealService = async (userId: number) => {
   const user = await getUserById(userId);
 
