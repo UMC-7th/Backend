@@ -14,7 +14,7 @@
 
 <br><br>
 ## 📝 ERD
-![eatThis_erd](https://github.com/user-attachments/assets/fe8c2b2c-1755-4ef7-b0ca-c734e948d697)
+![eatThis (1)](https://github.com/user-attachments/assets/5dfc7079-2411-424d-b46a-504881fbd729)
 
 <br><br>
 ## 🔨 개발 환경

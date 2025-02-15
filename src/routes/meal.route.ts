@@ -1,12 +1,15 @@
 import express from "express";
 import {
+  addDislikeMeal,
   addManualMeal,
   completeMeal,
+  deleteDislikeMeal,
   deleteFavoriteMeal,
   deleteManualMeal,
   favoriteMeal,
   getDailyMeal,
   getFavoriteMeal,
+  getFavoriteMealLatest,
   getManualMeal,
   getMealDetail,
   preferredMeal,
@@ -41,12 +44,21 @@ router.get("/manual/list", jwtAuthMiddleware, getManualMeal);
 router.delete("/manual/delete", jwtAuthMiddleware, deleteManualMeal);
 
 //즐겨찾기한 식단 조회
-router.get("/favorite/list", jwtAuthMiddleware, getFavoriteMeal);
+router.get("/favorite/list/calorie", jwtAuthMiddleware, getFavoriteMeal);
+
+// 즐겨찾기한 식단 최신순 조회
+router.get("/favorite/list/latest", jwtAuthMiddleware, getFavoriteMealLatest);
 
 //식단 상세 조회
 router.get("/detail/list", jwtAuthMiddleware, getMealDetail);
 
 //식단 즐겨찾기 취소
 router.patch("/favorite/delete", jwtAuthMiddleware, deleteFavoriteMeal);
+
+//식단 싫어요
+router.patch("/dislike", jwtAuthMiddleware, addDislikeMeal);
+
+//식단 싫어요
+router.patch("/dislike/delete", jwtAuthMiddleware, deleteDislikeMeal);
 
 export default router;

@@ -453,9 +453,6 @@ paths:
                       phoneNum:
                         type: string
                         example: 010-1234-1234
-                      profileImage:
-                        tpye: string
-                        example: https://umc7theatthis.s3.ap-northeast-2.amazonaws.com/profileimg/xxx.jpeg
         "500":
           description: Fail operation
           content:
@@ -973,13 +970,13 @@ paths:
                       Image:
                         type: string
                         example: "https://umc7theatthis.s3.ap-northeast-2.amazonaws.com/profileimage/uuid_123456.jpeg"
-    
+
         "500":
           description: Fail operation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/FailResponse"  
+                $ref: "#/components/schemas/FailResponse"
   #================================== 구독 관련 api==================================#
   # 식단 장바구니 추가 api
   /api/v1/subscribes/meals/cart:
@@ -1622,12 +1619,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
-  # 즐겨찾기한 식단 조회
-  /api/v1/meals/favorite/list:
+  # 즐겨찾기한 식단 조회 (칼로리)
+  /api/v1/meals/favorite/list/calorie:
     get:
       tags:
         - Meal
-      summary: Get favorite meal list
+      summary: Get favorite meal list (calorie)
       description: 사용자가 즐겨찾기한 식단 목록을 가져오는 API
       responses:
         "200":
@@ -1677,6 +1674,66 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
+                # 즐겨찾기한 식단 최신순 조회
+  # 즐겨찾기한 식단 조회 (최신순)
+  /api/v1/meals/favorite/list/latest:
+    get:
+      tags:
+        - Meal
+      summary: Get favorite meal list (latest)
+      description: 사용자가 즐겨찾기한 식단 목록을 최신순으로 가져오는 API
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        mealUserId:
+                          type: integer
+                          example: 58
+                        userId:
+                          type: integer
+                          example: 999
+                        mealId:
+                          type: integer
+                          example: 75
+                        time:
+                          type: string
+                          example: "저녁"
+                        mealDate:
+                          type: string
+                          format: date-time
+                          example: "2025-02-04T14:59:59.999Z"
+                        isMark:
+                          type: boolean
+                          example: true
+                        isLike:
+                          type: boolean
+                          example: false
+                        isHate:
+                          type: boolean
+                          example: false
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
+
   # 식단 상세 조회
   /api/v1/meals/detail/list:
     get:
@@ -1786,13 +1843,100 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
+  #식단 싫어요
+  /api/v1/meals/dislike:
+    patch:
+      tags:
+        - Meal
+      summary: 식단 싫어요
+      description: 특정 식단의 싫어요하는 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mealId:
+                  type: integer
+                  example: 2
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        example: 1
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
+  #식단 싫어요 취소
+  /api/v1/meals/dislike/delete:
+    patch:
+      tags:
+        - Meal
+      summary: 식단 싫어요 취소
+      description: 특정 식단의 싫어요를 취소하는 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mealId:
+                  type: integer
+                  example: 2
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      count:
+                        type: integer
+                        example: 1
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
 
-    # 구독식단 조회
   # 구독 식단 조회
   /api/v1/subscribes/meals/list:
     get:
       tags:
-        - MealSub
+        - SubMeal
       summary: 구독식단 조회
       description: 구독 식단 목록을 조회하는 API
       parameters:
@@ -1859,7 +2003,7 @@ paths:
   /api/v1/subscribes/meals:
     post:
       tags:
-        - Subscribe
+        - SubMeal
       summary: 영양사가 식단을 추가하는 API
       description: 영양사가 식단을 추가하는 API
       requestBody:

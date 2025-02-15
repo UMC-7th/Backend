@@ -35,7 +35,7 @@ jobs:
           echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env
           echo "COOL_SMS_API_KEY=${{ secrets.COOL_SMS_API_KEY }}" >> .env
           echo "COOL_SMS_API_SECRET=${{ secrets.COOL_SMS_API_SECRET }}" >> .env
-          
+
       - name: Copy .env file to EC2
         uses: appleboy/scp-action@master
         with:
@@ -45,7 +45,7 @@ jobs:
           port: 22
           source: ".env"
           target: "/home/ubuntu/Backend"
-      
+
       - name: install code and install dependencies
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -53,7 +53,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
-          script: | 
+          script: |
             cd /home/ubuntu/Backend
             git pull origin main
             npm i --force
@@ -67,7 +67,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           port: 22
-          script: | 
+          script: |
             cd /home/ubuntu/Backend
             pm2 kill
             npm run build
