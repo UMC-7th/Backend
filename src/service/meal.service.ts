@@ -1,9 +1,10 @@
 import axios from "axios";
 import {
   AddManualMealDTO,
+  BaseMealDTO,
   CompleteMealDTO,
   completeMealDTO,
-  MealRequest,
+  DailyMealDTO,
   mealUserDTO,
 } from "../dto/meal.dto.js";
 import { InvalidInputError, NotFoundError } from "../util/error.js";
@@ -31,19 +32,19 @@ import {
 import { addMealToUser } from "../repository/meal.repository.js";
 import { getUserById } from "../repository/user.repository.js";
 
-export const addDailyMealService = async (
-  data: MealRequest,
-  mealTime: string
-) => {
+export const addDailyMealService = async (data: DailyMealDTO) => {
   const user = await getUserById(data.userId);
+
   if (!user) {
     throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
   }
 
+  //유저의 선호 식단을 조회
   const likedMeal = await getLikedMeal(data.userId);
 
   const apiKey = process.env.OPENAI_API_KEY;
-  const prompt = `${data.mealDate}의 ${mealTime} 식단 ${user.purpose} 5개 유저 선호 식단 ${likedMeal}`;
+
+  const prompt = `${data.mealDate}의 ${data.time} 식단 ${user.purpose} 5개 유저 선호 식단 ${likedMeal}`;
 
   const messages = [
     {
@@ -56,7 +57,7 @@ or more professionally:
 "Ensure each meal is appropriate for its respective time of day: breakfast should be breakfast-like, lunch should be lunch-like, and dinner should be dinner-like."
       response must be strictly in JSON format, without any additional text.
 You are an expert Korean nutritionist and chef specialized in creating healthy, delicious, and practical meal plans.
-Please generate 5 different meal options for ${mealTime} with these guidelines:
+Please generate 5 different meal options for ${data.time} with these guidelines:
 
 1. Meal Composition Rules:
 - Each meal must follow traditional Korean meal structure (밥, 국/찌개, 메인반찬, 부반찬)
@@ -91,7 +92,7 @@ Please generate 5 different meal options for ${mealTime} with these guidelines:
 
       {
         "day": string (e.g., "2025-01-15"),
-        "mealTime": "${mealTime}",
+        "mealTime": "${data.time}",
         "meals": [
           {
             "calorieTotal": integer,
@@ -129,26 +130,39 @@ Please generate 5 different meal options for ${mealTime} with these guidelines:
       }
     );
   } catch (error) {
-    throw new Error(`${mealTime} 식단 생성 중 에러 발생: ${error}`);
+    throw new Error(`${data.time} 식단 생성 중 에러 발생: ${error}`);
   }
+
+  //json 변환
   const gptResult = JSON.parse(result.data.choices[0].message.content);
+
+  //식단을 저장할 배열
   const mealArr: any[] = [];
 
   // 5개의 식단을 병렬로 데이터베이스에 저장
   await Promise.all(
     gptResult.meals.map(async (meal: any) => {
-      const mealId = await addMeal(meal); //meal 테이블에 식단 생성
+      //식단 생성
+      const mealId = await addMeal(meal);
 
-      const meals = await addMealToUser(
-        data.userId,
-        mealId,
-        mealTime,
-        data.mealDate
-      ); //유저와 식단 매핑(유저에게 식단 제공)
+      // DTO
+      const mealUserData = mealUserDTO({
+        userId: data.userId,
+        mealId: mealId,
+        time: data.time,
+        mealDate: data.mealDate,
+      });
+
+      // 유저와 식단 매핑
+      const meals = await addMealToUser(mealUserData);
+
+      //식사 시간(ex : 아침)
       const time = meals.time;
 
+      //식단 조회
       const mealDetail = await getMealById(mealId);
 
+      //배열에 저장
       mealArr.push({ mealDetail, time });
     })
   );
@@ -156,7 +170,7 @@ Please generate 5 different meal options for ${mealTime} with these guidelines:
   return mealArr;
 };
 
-export const getDailyMealService = async (data: MealRequest) => {
+export const getDailyMealService = async (data: BaseMealDTO) => {
   const user = await getUserById(data.userId);
 
   if (!user) {
@@ -301,7 +315,16 @@ Example output when '저녁' is included:
 
   const mealId: number = await addMeal(gptResult.meals[0]);
 
-  await addMealToUser(data.userId, mealId, data.time, data.mealDate); // 유저에게 식단 제공
+  // DTO
+  const mealUserData = mealUserDTO({
+    userId: data.userId,
+    mealId: mealId,
+    time: data.time,
+    mealDate: data.mealDate,
+  });
+
+  // 유저와 식단 매핑
+  await addMealToUser(mealUserData);
 
   return await getMealById(mealId);
 };

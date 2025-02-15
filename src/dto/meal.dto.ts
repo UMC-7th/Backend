@@ -1,7 +1,5 @@
-export interface MealRequest {
-  userId: number;
-  mealDate: Date;
-}
+import { InvalidInputError } from "../util/error.js";
+
 export interface Meal {
   time: string;
   calorieTotal: number;
@@ -23,10 +21,40 @@ export interface manualMealRequest {
   addedByUser: true;
 }
 
-export const mealRequestDTO = (body: MealRequest): MealRequest => {
+// -----------  BaseMeal  DTO ----------
+export interface BaseMealDTO {
+  userId: number;
+  mealDate: Date;
+}
+
+export const baseMealDTO = (body: {
+  userId?: number;
+  mealDate: Date;
+}): BaseMealDTO => {
+  if (!body.userId) {
+    throw new InvalidInputError("잘못된 토큰 값입니다.", "입력 값: 없음");
+  }
+  if (!body.mealDate) {
+    throw new InvalidInputError("날짜가 누락되었습니다.", "입력 값: 없음");
+  }
+
   return {
     userId: body.userId,
     mealDate: new Date(body.mealDate),
+  };
+};
+export interface DailyMealDTO extends BaseMealDTO {
+  time: string;
+}
+
+export const dailyMealDTO = (body: BaseMealDTO, time: string): DailyMealDTO => {
+  if (!time) {
+    throw new InvalidInputError("식사 시간이 누락되었습니다.", "입력 값: 없음");
+  }
+
+  return {
+    ...body,
+    time,
   };
 };
 

@@ -1,10 +1,5 @@
 import { prisma } from "../db.config.js";
-import {
-  CompleteMealDTO,
-  DailyMeal,
-  MealRequest,
-  MealUserDTO,
-} from "../dto/meal.dto.js";
+import { BaseMealDTO, CompleteMealDTO, MealUserDTO } from "../dto/meal.dto.js";
 
 //유저에게 제공한 식단과 유저 매핑하는 함수
 export const addMealToUser = async (data: MealUserDTO) => {
@@ -51,7 +46,7 @@ export const addCompletedMeal = async (data: CompleteMealDTO) => {
   return eatMeal;
 };
 // 날짜로 제공한 식단 가져오는 함수
-export const getMealIdsByDate = async (data: MealRequest) => {
+export const getMealIdsByDate = async (data: BaseMealDTO) => {
   const start = new Date(data.mealDate.setHours(0, 0, 0, 0));
   const end = new Date(data.mealDate.setHours(23, 59, 59, 999));
 

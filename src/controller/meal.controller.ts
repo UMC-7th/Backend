@@ -18,8 +18,9 @@ import {
 } from "../service/meal.service.js";
 import {
   addManualMealDTO,
+  baseMealDTO,
   completeMealDTO,
-  mealRequestDTO,
+  dailyMealDTO,
 } from "../dto/meal.dto.js";
 import { InvalidInputError } from "../util/error.js";
 
@@ -40,15 +41,15 @@ export const getDailyMeal = async (
       );
     }
 
-    const mealRequest = mealRequestDTO({ userId, mealDate });
+    const mealRequest = baseMealDTO({ userId, mealDate });
     const existingMeals = await getDailyMealService(mealRequest);
 
     if (existingMeals.length === 0) {
       // 아침, 점심, 저녁 병렬 처리
       const [breakfastMeals, lunchMeals, dinnerMeals] = await Promise.all([
-        addDailyMealService(mealRequest, "아침"),
-        addDailyMealService(mealRequest, "점심"),
-        addDailyMealService(mealRequest, "저녁"),
+        addDailyMealService(dailyMealDTO(mealRequest, "아침")),
+        addDailyMealService(dailyMealDTO(mealRequest, "점심")),
+        addDailyMealService(dailyMealDTO(mealRequest, "저녁")),
       ]);
 
       const allMeals = [...breakfastMeals, ...lunchMeals, ...dinnerMeals];
