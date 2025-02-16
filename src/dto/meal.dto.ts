@@ -43,6 +43,30 @@ export const baseMealDTO = (body: {
     mealDate: new Date(body.mealDate),
   };
 };
+
+export interface BaseMealActionDTO {
+  userId: number;
+  mealId: number;
+}
+
+export const baseMealActionDTO = (body: {
+  userId?: number;
+  mealId?: number;
+}): BaseMealActionDTO => {
+  if (!body.userId) {
+    throw new InvalidInputError("잘못된 토큰 값입니다.", "입력 값: 없음");
+  }
+
+  if (!body.mealId) {
+    throw new InvalidInputError("식단 ID가 누락되었습니다.", "입력 값: 없음");
+  }
+
+  return {
+    userId: body.userId,
+    mealId: body.mealId,
+  };
+};
+
 export interface DailyMealDTO extends BaseMealDTO {
   time: string;
 }

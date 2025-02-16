@@ -1,5 +1,10 @@
 import { prisma } from "../db.config.js";
-import { BaseMealDTO, CompleteMealDTO, MealUserDTO } from "../dto/meal.dto.js";
+import {
+  BaseMealActionDTO,
+  BaseMealDTO,
+  CompleteMealDTO,
+  MealUserDTO,
+} from "../dto/meal.dto.js";
 
 //유저에게 제공한 식단과 유저 매핑하는 함수
 export const addMealToUser = async (data: MealUserDTO) => {
@@ -111,7 +116,7 @@ export const getEatMealById = async (userId: number) => {
 
   return eatMeal;
 };
-export const deleteUserMealByIds = async (data: any) => {
+export const deleteUserMealByIds = async (data: BaseMealActionDTO) => {
   const meal = await prisma.mealUser.deleteMany({
     where: {
       userId: data.userId,
@@ -140,15 +145,15 @@ export const deleteMealById = async (mealId: number) => {
 
   return meal;
 };
-export const getmealUserByIds = async (userId: number, mealId: number) => {
+export const getmealUserByIds = async (data: BaseMealActionDTO) => {
   const mealUser = await prisma.mealUser.findFirst({
     where: {
-      userId: userId,
-      mealId: mealId,
+      userId: data.userId,
+      mealId: data.mealId,
     },
   });
 
-  return mealUser?.mealUserId || null;
+  return mealUser;
 };
 export const addFavoriteMeal = async (mealUserId: number) => {
   const mealUser = await prisma.mealUser.update({

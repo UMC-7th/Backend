@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   AddManualMealDTO,
+  BaseMealActionDTO,
   BaseMealDTO,
   CompleteMealDTO,
   completeMealDTO,
@@ -182,7 +183,8 @@ export const getDailyMealService = async (data: BaseMealDTO) => {
   const meals = await getMealsByIds(mealIdsArray);
   return meals;
 };
-export const refreshMealService = async (data: any) => {
+export const refreshMealService = async (data: BaseMealActionDTO) => {
+  //유효성 검사
   const user = await getUserById(data.userId);
 
   if (!user) {
@@ -195,12 +197,18 @@ export const refreshMealService = async (data: any) => {
     throw new NotFoundError("존재하지 않는 식단입니다", data.mealId);
   }
 
-  //식단 삭제
+  const mealUser = await getmealUserByIds(data);
+
+  if (!mealUser) {
+    throw new NotFoundError("유저에게 제공된 식단이 아닙니다", data.mealId);
+  }
+
+  //유저에게 제공한 식단 삭제
   await deleteUserMealByIds(data);
 
   const apiKey = process.env.OPENAI_API_KEY;
 
-  const prompt: string = `${data.mealDate}의 식단 ${user.purpose}, ${data.time}`; // 유저 프롬프트
+  const prompt: string = `${mealUser.mealDate}의 식단 ${user.purpose}, ${mealUser.time}`; // 유저 프롬프트
 
   //gpt 프롬프트
   const messages = [
@@ -297,7 +305,7 @@ Example output when '저녁' is included:
       "https://api.openai.com/v1/chat/completions",
       {
         model: "gpt-3.5-turbo", //gpt 모델 설정
-        temperature: 1, //대답 창의성 (0~1)
+        temperature: 0.4, //대답 창의성 (0~1)
         messages: messages,
       },
       {
@@ -311,22 +319,26 @@ Example output when '저녁' is included:
     throw new Error("gpt 요청 중 에러 발생!");
   }
 
+  //json 변환
   gptResult = JSON.parse(result.data.choices[0].message.content);
 
+  //식단 테이블에 식단 추가
   const mealId: number = await addMeal(gptResult.meals[0]);
 
   // DTO
   const mealUserData = mealUserDTO({
     userId: data.userId,
     mealId: mealId,
-    time: data.time,
-    mealDate: data.mealDate,
+    time: mealUser.time,
+    mealDate: mealUser.mealDate,
   });
 
   // 유저와 식단 매핑
   await addMealToUser(mealUserData);
 
-  return await getMealById(mealId);
+  const newMeal = await getMealById(mealId);
+
+  return newMeal;
 };
 export const completeMealService = async (data: CompleteMealDTO) => {
   // 유효성 검사
@@ -360,14 +372,17 @@ export const favoriteMealService = async (userId: number, mealId: number) => {
     throw new NotFoundError("존재하지 않는 식단입니다", mealId);
   }
 
-  const mealUserId = await getmealUserByIds(userId, mealId);
+  const mealUser = await getmealUserByIds({ userId, mealId });
 
-  if (!mealUserId) {
-    throw new NotFoundError("유저에게 제공되지 않은 식단입니다", mealUserId);
+  if (!mealUser) {
+    throw new NotFoundError("유저에게 제공되지 않은 식단입니다", {
+      userId,
+      mealId,
+    });
   }
-  const mealUser = await addFavoriteMeal(mealUserId);
+  const favoriteMeal = await addFavoriteMeal(mealUser.mealUserId);
 
-  return mealUser;
+  return favoriteMeal;
 };
 export const preferredMealService = async (userId: number, mealId: number) => {
   const user = await getUserById(userId);
@@ -382,14 +397,17 @@ export const preferredMealService = async (userId: number, mealId: number) => {
     throw new NotFoundError("존재하지 않는 식단입니다", mealId);
   }
 
-  const mealUserId = await getmealUserByIds(userId, mealId);
+  const mealUser = await getmealUserByIds({ userId, mealId });
 
-  if (!mealUserId) {
-    throw new NotFoundError("유저에게 제공되지 않은 식단입니다", mealUserId);
+  if (!mealUser) {
+    throw new NotFoundError("유저에게 제공되지 않은 식단입니다", {
+      userId,
+      mealId,
+    });
   }
-  const mealUser = await addPreferreMeal(mealUserId);
+  const preferreMeal = await addPreferreMeal(mealUser.mealUserId);
 
-  return mealUser;
+  return preferreMeal;
 };
 export const addManualMealService = async (data: AddManualMealDTO) => {
   const user = await getUserById(data.userId);
