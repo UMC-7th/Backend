@@ -613,7 +613,8 @@ export const preferredMealService = async (userId: number, mealId: number) => {
 // #==================================식단 싫어요 ==================================#
 
 //식단 싫어요 추가
-export const addDislikeMealService = async (data: any) => {
+export const addDislikeMealService = async (data: BaseMealActionDTO) => {
+  // 유효성 검사
   const user = await getUserById(data.userId);
 
   if (!user) {
@@ -626,13 +627,25 @@ export const addDislikeMealService = async (data: any) => {
     throw new NotFoundError("존재하지 않는 식단입니다", data.mealId);
   }
 
+  const mealUser = await getmealUserByIds(data);
+
+  if (!mealUser) {
+    throw new NotFoundError("유저에게 제공되지 않은 식단입니다", data);
+  }
+
+  if (mealUser.isHate === true) {
+    throw new InvalidInputError("이미 싫어요를 누른 식단입니다", data);
+  }
+
+  //싫어요
   const dislikeMeal = addDislikeMeal(data);
 
   return dislikeMeal;
 };
 
 // 식단 싫어요 삭제
-export const deleteDislikeMealService = async (data: any) => {
+export const deleteDislikeMealService = async (data: BaseMealActionDTO) => {
+  // 유효성 검사
   const user = await getUserById(data.userId);
 
   if (!user) {
@@ -645,6 +658,17 @@ export const deleteDislikeMealService = async (data: any) => {
     throw new NotFoundError("존재하지 않는 식단입니다", data.mealId);
   }
 
+  const mealUser = await getmealUserByIds(data);
+
+  if (!mealUser) {
+    throw new NotFoundError("유저에게 제공되지 않은 식단입니다", data);
+  }
+
+  if (mealUser.isHate === false) {
+    throw new InvalidInputError("싫어요하지 않은 식단입니다", data);
+  }
+
+  // 싫어요 취소
   const dislikeMeal = deleteDislikeMeal(data);
 
   return dislikeMeal;

@@ -403,6 +403,7 @@ export const addDislikeMeal = async (
   const mealId = req.body.mealId;
 
   try {
+    // 유효성 검사
     if (!userId) {
       throw new InvalidInputError(
         "잘못된 토큰 값입니다.",
@@ -410,10 +411,14 @@ export const addDislikeMeal = async (
       );
     }
 
-    const dislikeMeal = await addDislikeMealService({
+    // DTO
+    const mealData = baseMealActionDTO({
       userId,
       mealId,
     });
+
+    // 서비스 계층 호출
+    const dislikeMeal = await addDislikeMealService(mealData);
 
     res.status(200).success(dislikeMeal);
   } catch (error) {
@@ -431,6 +436,7 @@ export const deleteDislikeMeal = async (
   const mealId = req.body.mealId;
 
   try {
+    // 유효성 검사
     if (!userId) {
       throw new InvalidInputError(
         "잘못된 토큰 값입니다.",
@@ -438,10 +444,14 @@ export const deleteDislikeMeal = async (
       );
     }
 
-    const deleteDislikeMeal = await deleteDislikeMealService({
+    // DTO
+    const mealData = baseMealActionDTO({
       userId,
       mealId,
     });
+
+    // 서비스 계층 호출
+    const deleteDislikeMeal = await deleteDislikeMealService(mealData);
 
     res.status(200).success(deleteDislikeMeal);
   } catch (error) {

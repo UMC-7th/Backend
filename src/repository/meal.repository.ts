@@ -244,7 +244,7 @@ export const getLikedMeal = async (userId: number) => {
   });
   return likedMeals;
 };
-export const addDislikeMeal = async (data: any) => {
+export const addDislikeMeal = async (data: BaseMealActionDTO) => {
   const dislikeMeal = await prisma.mealUser.updateMany({
     where: {
       userId: data.userId,
@@ -257,7 +257,7 @@ export const addDislikeMeal = async (data: any) => {
   return dislikeMeal;
 };
 
-export const deleteDislikeMeal = async (data: any) => {
+export const deleteDislikeMeal = async (data: BaseMealActionDTO) => {
   const likedMeals = await prisma.mealUser.updateMany({
     where: {
       userId: data.userId,
