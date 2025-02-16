@@ -133,6 +133,7 @@ export const favoriteMeal = async (
   const mealId = req.body.mealId;
 
   try {
+    // 유효성 검사
     if (!userId) {
       throw new InvalidInputError(
         "잘못된 토큰 값입니다.",
@@ -140,14 +141,95 @@ export const favoriteMeal = async (
       );
     }
 
-    const meals = await favoriteMealService(userId, mealId);
+    // DTO
+    const mealData = baseMealActionDTO({
+      userId,
+      mealId,
+    });
 
-    res.status(200).success(meals);
+    const meal = await favoriteMealService(mealData);
+
+    res.status(200).success(meal);
+  } catch (error) {
+    next(error);
+  }
+};
+export const deleteFavoriteMeal = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.user?.id;
+  const mealId = req.body.mealId;
+
+  try {
+    // 유효성 검사
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
+
+    // DTO
+    const mealData = baseMealActionDTO({
+      userId,
+      mealId,
+    });
+
+    //서비스 계층 호출
+    const deletedFavoriteMeal = await deleteFavoriteMealService(mealData);
+
+    res.status(200).success(deletedFavoriteMeal);
   } catch (error) {
     next(error);
   }
 };
 
+export const getFavoriteMeal = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.user?.id;
+
+  try {
+    // 유효성 검사
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
+    //칼로리 순으로 즐겨찾기한 식단 조회
+    const favoriteMeals = await getFavoriteMealService(userId);
+
+    res.status(200).success(favoriteMeals);
+  } catch (error) {
+    next(error);
+  }
+};
+export const getFavoriteMealLatest = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.user?.id;
+  try {
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
+
+    const favoriteMeals = await getFavoriteMealLatestService(userId);
+
+    res.status(200).success(favoriteMeals);
+  } catch (error) {
+    next(error);
+  }
+};
 export const preferredMeal = async (
   req: Request,
   res: Response,
@@ -261,48 +343,6 @@ export const deleteManualMeal = async (
     next(error);
   }
 };
-export const getFavoriteMeal = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const userId = req.user?.id;
-  try {
-    if (!userId) {
-      throw new InvalidInputError(
-        "잘못된 토큰 값입니다.",
-        "입력 값: " + req.headers.authorization
-      );
-    }
-
-    const favoriteMeals = await getFavoriteMealLatestService(userId);
-
-    res.status(200).success(favoriteMeals);
-  } catch (error) {
-    next(error);
-  }
-};
-export const getFavoriteMealLatest = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const userId = req.user?.id;
-  try {
-    if (!userId) {
-      throw new InvalidInputError(
-        "잘못된 토큰 값입니다.",
-        "입력 값: " + req.headers.authorization
-      );
-    }
-
-    const favoriteMeals = await getFavoriteMealLatestService(userId);
-
-    res.status(200).success(favoriteMeals);
-  } catch (error) {
-    next(error);
-  }
-};
 
 export const getMealDetail = async (
   req: Request,
@@ -327,32 +367,7 @@ export const getMealDetail = async (
     next(error);
   }
 };
-export const deleteFavoriteMeal = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const userId = req.user?.id;
-  const mealId = req.body.mealId;
 
-  try {
-    if (!userId) {
-      throw new InvalidInputError(
-        "잘못된 토큰 값입니다.",
-        "입력 값: " + req.headers.authorization
-      );
-    }
-
-    const deletedFavoriteMeal = await deleteFavoriteMealService({
-      userId,
-      mealId,
-    });
-
-    res.status(200).success(deletedFavoriteMeal);
-  } catch (error) {
-    next(error);
-  }
-};
 export const addDislikeMeal = async (
   req: Request,
   res: Response,

@@ -213,7 +213,7 @@ export const getFavoritMealByIdLatest = async (userId: number) => {
   return favoriteMeals;
 };
 
-export const deleteFavoriteMeal = async (data: any) => {
+export const deleteFavoriteMeal = async (data: BaseMealActionDTO) => {
   const deletedFavoriteMeal = await prisma.mealUser.updateMany({
     where: {
       userId: data.userId,
@@ -224,6 +224,7 @@ export const deleteFavoriteMeal = async (data: any) => {
       isMark: false,
     },
   });
+
   return deletedFavoriteMeal;
 };
 export const getLikedMeal = async (userId: number) => {
