@@ -44,21 +44,27 @@ export const getDailyMeal = async (
       );
     }
 
-    const mealRequest = baseMealDTO({ userId, mealDate });
-    const existingMeals = await getDailyMealService(mealRequest);
+    const mealData = baseMealDTO({ userId, mealDate });
+
+    const existingMeals = await getDailyMealService(mealData);
+
+    //해달 날짜에 식단이 존재하지 않는다면 생성
 
     if (existingMeals.length === 0) {
       // 아침, 점심, 저녁 병렬 처리
       const [breakfastMeals, lunchMeals, dinnerMeals] = await Promise.all([
-        addDailyMealService(dailyMealDTO(mealRequest, "아침")),
-        addDailyMealService(dailyMealDTO(mealRequest, "점심")),
-        addDailyMealService(dailyMealDTO(mealRequest, "저녁")),
+        addDailyMealService(dailyMealDTO(mealData, "아침")),
+        addDailyMealService(dailyMealDTO(mealData, "점심")),
+        addDailyMealService(dailyMealDTO(mealData, "저녁")),
       ]);
 
       const allMeals = [...breakfastMeals, ...lunchMeals, ...dinnerMeals];
+
       res.status(200).success({ mealDate, allMeals });
+
       return;
     }
+
     res.status(200).success({ mealDate, existingMeals });
   } catch (error) {
     next(error);
@@ -376,6 +382,7 @@ export const preferredMeal = async (
   const mealId = req.body.mealId;
 
   try {
+    // 유효성 검사
     if (!userId) {
       throw new InvalidInputError(
         "잘못된 토큰 값입니다.",
@@ -383,9 +390,16 @@ export const preferredMeal = async (
       );
     }
 
-    const meals = await preferredMealService(userId, mealId);
+    // DTO
+    const mealData = baseMealActionDTO({
+      userId,
+      mealId,
+    });
 
-    res.status(200).success(meals);
+    // 서비스 계층 호출
+    const meal = await preferredMealService(mealData);
+
+    res.status(200).success(meal);
   } catch (error) {
     next(error);
   }
