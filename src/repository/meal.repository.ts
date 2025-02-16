@@ -1,24 +1,25 @@
 import { prisma } from "../db.config.js";
-import { DailyMeal, MealRequest } from "../dto/meal.dto.js";
+import {
+  BaseMealActionDTO,
+  BaseMealDTO,
+  CompleteMealDTO,
+  MealUserDTO,
+} from "../dto/meal.dto.js";
 
 //유저에게 제공한 식단과 유저 매핑하는 함수
-export const addMealToUser = async (
-  userId: number,
-  mealId: number,
-  time: string,
-  mealDate: Date
-) => {
+export const addMealToUser = async (data: MealUserDTO) => {
   const meal = await prisma.mealUser.create({
     data: {
-      mealId: mealId,
-      userId: userId,
-      time: time,
-      mealDate: mealDate,
+      mealId: data.mealId,
+      userId: data.userId,
+      time: data.time,
+      mealDate: data.mealDate,
     },
   });
 
   return meal;
 };
+
 //식단을 저장하는 함수
 export const addMeal = async (data: any) => {
   const mealId = await prisma.meal.create({
@@ -36,12 +37,13 @@ export const addMeal = async (data: any) => {
 
   return mealId.mealId;
 };
+
 //완료한 식사를 저장하는 함수
-export const addCompletedMeal = async (data: MealRequest, mealId: number) => {
+export const addCompletedMeal = async (data: CompleteMealDTO) => {
   const eatMeal = await prisma.eatMeal.create({
     data: {
       userId: data.userId,
-      mealId: mealId,
+      mealId: data.mealId,
       eatAt: data.mealDate,
     },
   });
@@ -49,7 +51,7 @@ export const addCompletedMeal = async (data: MealRequest, mealId: number) => {
   return eatMeal;
 };
 // 날짜로 제공한 식단 가져오는 함수
-export const getMealIdsByDate = async (data: MealRequest) => {
+export const getMealIdsByDate = async (data: BaseMealDTO) => {
   const start = new Date(data.mealDate.setHours(0, 0, 0, 0));
   const end = new Date(data.mealDate.setHours(23, 59, 59, 999));
 
@@ -105,6 +107,7 @@ export const getManualMealsByIds = async (mealIds: number[]) => {
   });
   return meals;
 };
+
 export const getEatMealById = async (userId: number) => {
   const eatMeal = await prisma.eatMeal.findMany({
     where: {
@@ -114,7 +117,7 @@ export const getEatMealById = async (userId: number) => {
 
   return eatMeal;
 };
-export const deleteUserMealByIds = async (data: any) => {
+export const deleteUserMealByIds = async (data: BaseMealActionDTO) => {
   const meal = await prisma.mealUser.deleteMany({
     where: {
       userId: data.userId,
@@ -143,15 +146,15 @@ export const deleteMealById = async (mealId: number) => {
 
   return meal;
 };
-export const getmealUserByIds = async (userId: number, mealId: number) => {
+export const getmealUserByIds = async (data: BaseMealActionDTO) => {
   const mealUser = await prisma.mealUser.findFirst({
     where: {
-      userId: userId,
-      mealId: mealId,
+      userId: data.userId,
+      mealId: data.mealId,
     },
   });
 
-  return mealUser?.mealUserId || null;
+  return mealUser;
 };
 export const addFavoriteMeal = async (mealUserId: number) => {
   const mealUser = await prisma.mealUser.update({
@@ -201,7 +204,9 @@ export const getFavoritMealByIdLatest = async (userId: number) => {
       userId,
       isMark: true,
     },
-
+    include: {
+      meal: true,
+    },
     orderBy: {
       mealDate: "desc",
     },
@@ -210,7 +215,7 @@ export const getFavoritMealByIdLatest = async (userId: number) => {
   return favoriteMeals;
 };
 
-export const deleteFavoriteMeal = async (data: any) => {
+export const deleteFavoriteMeal = async (data: BaseMealActionDTO) => {
   const deletedFavoriteMeal = await prisma.mealUser.updateMany({
     where: {
       userId: data.userId,
@@ -221,6 +226,7 @@ export const deleteFavoriteMeal = async (data: any) => {
       isMark: false,
     },
   });
+
   return deletedFavoriteMeal;
 };
 export const getLikedMeal = async (userId: number) => {
@@ -240,7 +246,7 @@ export const getLikedMeal = async (userId: number) => {
   });
   return likedMeals;
 };
-export const addDislikeMeal = async (data: any) => {
+export const addDislikeMeal = async (data: BaseMealActionDTO) => {
   const dislikeMeal = await prisma.mealUser.updateMany({
     where: {
       userId: data.userId,
@@ -253,7 +259,7 @@ export const addDislikeMeal = async (data: any) => {
   return dislikeMeal;
 };
 
-export const deleteDislikeMeal = async (data: any) => {
+export const deleteDislikeMeal = async (data: BaseMealActionDTO) => {
   const likedMeals = await prisma.mealUser.updateMany({
     where: {
       userId: data.userId,
