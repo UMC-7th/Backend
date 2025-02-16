@@ -204,7 +204,9 @@ export const getFavoritMealByIdLatest = async (userId: number) => {
       userId,
       isMark: true,
     },
-
+    include: {
+      meal: true,
+    },
     orderBy: {
       mealDate: "desc",
     },
