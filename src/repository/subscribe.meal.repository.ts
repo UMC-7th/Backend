@@ -1,5 +1,4 @@
 import { prisma } from "../db.config.js";
-import { MealRequest } from "../dto/meal.dto.js";
 
 //식단을 저장하는 함수
 export const addMeal = async (data: any) => {
@@ -19,14 +18,14 @@ export const addMeal = async (data: any) => {
   return mealId.mealId;
 };
 
-export const getCategoryIdByType = async (type: string) => {
-  const category = await prisma.mealSubCategory.findFirstOrThrow({
+export const getCategoryIdByCategory = async (category: string) => {
+  const result = await prisma.mealSubCategory.findFirstOrThrow({
     where: {
-      name: type,
+      name: category,
     },
   });
 
-  return category?.categoryId;
+  return result?.categoryId;
 };
 export const addSubMeal = async (
   categoryId: number,
@@ -45,10 +44,10 @@ export const addSubMeal = async (
 
   return subMeal.time;
 };
-export const getSubMealByTypeId = async (typeId: number) => {
+export const getSubMealByCategoryId = async (categoryId: number) => {
   const mealSubs = await prisma.mealSub.findMany({
     where: {
-      categoryId: typeId,
+      categoryId: categoryId,
     },
   });
 

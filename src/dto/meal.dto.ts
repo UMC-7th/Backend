@@ -90,6 +90,16 @@ export interface CompleteMealDTO {
 }
 
 export const completeMealDTO = (body: CompleteMealDTO): CompleteMealDTO => {
+  if (!body.userId) {
+    throw new InvalidInputError("잘못된 토큰 값입니다.", "입력 값: 없음");
+  }
+  if (!body.mealId) {
+    throw new InvalidInputError("식단 ID가 누락되었습니다.", "입력 값: 없음");
+  }
+
+  if (!body.mealDate) {
+    throw new InvalidInputError("날짜가 누락되었습니다.", "입력 값: 없음");
+  }
   return {
     userId: body.userId,
     mealId: body.mealId,
