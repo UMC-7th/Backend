@@ -25,7 +25,9 @@ import {
 } from "../dto/meal.dto.js";
 import { InvalidInputError } from "../util/error.js";
 
-//하루 식단을 생성하는 api 컨트롤러
+// #==================================식단 생성 및 조회==================================#
+
+//하루 식단 생성 및 조회
 export const getDailyMeal = async (
   req: Request,
   res: Response,
@@ -62,6 +64,8 @@ export const getDailyMeal = async (
     next(error);
   }
 };
+
+// 식단 재생성
 export const refreshMeal = async (
   req: Request,
   res: Response,
@@ -84,6 +88,32 @@ export const refreshMeal = async (
   }
 };
 
+// 식단 상세 조회
+export const getMealDetail = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.user?.id;
+  const mealId = Number(req.query.mealId);
+
+  try {
+    if (!userId) {
+      throw new InvalidInputError(
+        "잘못된 토큰 값입니다.",
+        "입력 값: " + req.headers.authorization
+      );
+    }
+
+    const favoriteMeals = await getMealDetailService({ userId, mealId });
+
+    res.status(200).success(favoriteMeals);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// 식단 완료
 export const completeMeal = async (
   req: Request,
   res: Response,
@@ -124,6 +154,9 @@ export const completeMeal = async (
   }
 };
 
+// #==================================  식단 즐겨찾기 ==================================#
+
+// 식단 즐겨찾기 추가
 export const favoriteMeal = async (
   req: Request,
   res: Response,
@@ -154,6 +187,8 @@ export const favoriteMeal = async (
     next(error);
   }
 };
+
+// 식단 즐겨찾기 삭제
 export const deleteFavoriteMeal = async (
   req: Request,
   res: Response,
@@ -186,6 +221,7 @@ export const deleteFavoriteMeal = async (
   }
 };
 
+// 식단 즐겨찾기 칼로리순 조회
 export const getFavoriteMeal = async (
   req: Request,
   res: Response,
@@ -209,6 +245,8 @@ export const getFavoriteMeal = async (
     next(error);
   }
 };
+
+// 식단 즐겨찾기 최신순 조회
 export const getFavoriteMealLatest = async (
   req: Request,
   res: Response,
@@ -230,30 +268,10 @@ export const getFavoriteMealLatest = async (
     next(error);
   }
 };
-export const preferredMeal = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const userId = req.user?.id;
-  const mealId = req.body.mealId;
 
-  try {
-    if (!userId) {
-      throw new InvalidInputError(
-        "잘못된 토큰 값입니다.",
-        "입력 값: " + req.headers.authorization
-      );
-    }
+// #==================================수동 식단 ==================================#
 
-    const meals = await preferredMealService(userId, mealId);
-
-    res.status(200).success(meals);
-  } catch (error) {
-    next(error);
-  }
-};
-
+// 수동 식단 추가
 export const addManualMeal = async (
   req: Request,
   res: Response,
@@ -289,6 +307,7 @@ export const addManualMeal = async (
   }
 };
 
+// 수동 식단 조회
 export const getManualMeal = async (
   req: Request,
   res: Response,
@@ -314,6 +333,7 @@ export const getManualMeal = async (
   }
 };
 
+// 수동 식단 삭제
 export const deleteManualMeal = async (
   req: Request,
   res: Response,
@@ -344,13 +364,16 @@ export const deleteManualMeal = async (
   }
 };
 
-export const getMealDetail = async (
+// #==================================식단 좋아요 ==================================#
+
+// 식단 좋아요 추가
+export const preferredMeal = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   const userId = req.user?.id;
-  const mealId = Number(req.query.mealId);
+  const mealId = req.body.mealId;
 
   try {
     if (!userId) {
@@ -360,14 +383,17 @@ export const getMealDetail = async (
       );
     }
 
-    const favoriteMeals = await getMealDetailService({ userId, mealId });
+    const meals = await preferredMealService(userId, mealId);
 
-    res.status(200).success(favoriteMeals);
+    res.status(200).success(meals);
   } catch (error) {
     next(error);
   }
 };
 
+// #==================================식단 싫어요 ==================================#
+
+//식단 싫어요 추가
 export const addDislikeMeal = async (
   req: Request,
   res: Response,
@@ -394,6 +420,8 @@ export const addDislikeMeal = async (
     next(error);
   }
 };
+
+// 식단 싫어요 삭제
 export const deleteDislikeMeal = async (
   req: Request,
   res: Response,
