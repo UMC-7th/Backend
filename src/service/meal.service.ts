@@ -176,6 +176,7 @@ Please generate 5 different meal options for ${data.time} with these guidelines:
 
 // 하루 식단 조회
 export const getDailyMealService = async (data: BaseMealDTO) => {
+  // 유효성 검사
   const user = await getUserById(data.userId);
 
   if (!user) {
@@ -183,8 +184,13 @@ export const getDailyMealService = async (data: BaseMealDTO) => {
   }
 
   const mealIds = await getMealIdsByDate(data);
+
+  // userId와 mealDate로 조회 후 mealId들을 배열에 저장
   const mealIdsArray = mealIds.map((meal) => meal.mealId);
+
+  // mealId로 meal 조회 후 리턴
   const meals = await getMealsByIds(mealIdsArray);
+
   return meals;
 };
 
@@ -584,27 +590,31 @@ export const deleteManualMealService = async (data: BaseMealActionDTO) => {
 // #==================================식단 좋아요 ==================================#
 
 // 식단 좋아요 추가
-export const preferredMealService = async (userId: number, mealId: number) => {
-  const user = await getUserById(userId);
+export const preferredMealService = async (data: BaseMealActionDTO) => {
+  // 유효성 검사
+  const user = await getUserById(data.userId);
 
   if (!user) {
-    throw new NotFoundError("존재하지 않는 유저입니다", userId);
+    throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
   }
 
-  const meal = await getMealById(mealId);
+  const meal = await getMealById(data.mealId);
 
   if (!meal) {
-    throw new NotFoundError("존재하지 않는 식단입니다", mealId);
+    throw new NotFoundError("존재하지 않는 식단입니다", data.mealId);
   }
 
-  const mealUser = await getmealUserByIds({ userId, mealId });
+  const mealUser = await getmealUserByIds(data);
 
   if (!mealUser) {
-    throw new NotFoundError("유저에게 제공되지 않은 식단입니다", {
-      userId,
-      mealId,
-    });
+    throw new NotFoundError("유저에게 제공되지 않은 식단입니다", data);
   }
+
+  if (mealUser.isLike === true) {
+    throw new InvalidInputError("이미 좋아요를 누른 식단입니다", data);
+  }
+
+  //좋아요
   const preferreMeal = await addPreferreMeal(mealUser.mealUserId);
 
   return preferreMeal;
