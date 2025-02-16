@@ -565,6 +565,10 @@ export const deleteManualMealService = async (data: BaseMealActionDTO) => {
     throw new NotFoundError("존재하지 않는 식단입니다", data.mealId);
   }
 
+  if (meal.addedByUser == false) {
+    throw new NotFoundError("유저가 추가한 식단이 아닙니다", data.mealId);
+  }
+
   const mealUser = await getmealUserByIds(data);
 
   if (!mealUser) {
