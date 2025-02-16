@@ -503,23 +503,27 @@ export const deleteManualMealService = async (data: BaseMealActionDTO) => {
   return deletedMeal;
 };
 export const getFavoriteMealService = async (userId: number) => {
+  // 유효성 검사
   const user = await getUserById(userId);
 
   if (!user) {
     throw new NotFoundError("존재하지 않는 유저입니다", userId);
   }
 
+  // 칼로리순으로 즐겨찾기한 식단 조회
   const favoriteMeals = await getFavoritMealById(userId);
 
   return favoriteMeals;
 };
 export const getFavoriteMealLatestService = async (userId: number) => {
+  // 유효성 검사
   const user = await getUserById(userId);
 
   if (!user) {
     throw new NotFoundError("존재하지 않는 유저입니다", userId);
   }
 
+  // 최신순으로 즐겨찾기한 식단 조회
   const favoriteMeals = await getFavoritMealByIdLatest(userId);
 
   return favoriteMeals;
@@ -542,7 +546,8 @@ export const getMealDetailService = async (data: any) => {
 
   return mealDetail;
 };
-export const deleteFavoriteMealService = async (data: any) => {
+export const deleteFavoriteMealService = async (data: BaseMealActionDTO) => {
+  // 유효성 검사
   const user = await getUserById(data.userId);
 
   if (!user) {
@@ -555,6 +560,7 @@ export const deleteFavoriteMealService = async (data: any) => {
     throw new NotFoundError("존재하지 않는 식단입니다", data.mealId);
   }
 
+  // 즐겨찾기 취소
   const deletedFavoriteMeal = deleteFavoriteMeal(data);
 
   return deletedFavoriteMeal;
