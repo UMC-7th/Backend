@@ -104,6 +104,7 @@ export const getMealDetail = async (
   const mealId = Number(req.query.mealId);
 
   try {
+    // 유효성 검사
     if (!userId) {
       throw new InvalidInputError(
         "잘못된 토큰 값입니다.",
@@ -111,9 +112,15 @@ export const getMealDetail = async (
       );
     }
 
-    const favoriteMeals = await getMealDetailService({ userId, mealId });
+    // DTO
+    const mealData = baseMealActionDTO({
+      userId,
+      mealId,
+    });
 
-    res.status(200).success(favoriteMeals);
+    const mealDetail = await getMealDetailService(mealData);
+
+    res.status(200).success(mealDetail);
   } catch (error) {
     next(error);
   }
@@ -134,18 +141,6 @@ export const completeMeal = async (
       throw new InvalidInputError(
         "잘못된 토큰 값입니다.",
         "입력 값: " + req.headers.authorization
-      );
-    }
-    if (!mealDate) {
-      throw new InvalidInputError(
-        "날짜가 누락되었습니다 ",
-        "입력 값: " + mealDate
-      );
-    }
-    if (!mealId) {
-      throw new InvalidInputError(
-        "식단 아이디가 누락되었습니다.",
-        "입력 값: " + mealId
       );
     }
 

@@ -354,7 +354,8 @@ Example output when '저녁' is included:
 };
 
 //식단 상세 조회
-export const getMealDetailService = async (data: any) => {
+export const getMealDetailService = async (data: BaseMealActionDTO) => {
+  // 유효성 검사
   const user = await getUserById(data.userId);
 
   if (!user) {
