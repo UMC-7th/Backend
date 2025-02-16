@@ -379,6 +379,10 @@ export const favoriteMealService = async (data: BaseMealActionDTO) => {
     throw new NotFoundError("유저에게 제공되지 않은 식단입니다", data);
   }
 
+  if (mealUser.isMark === true) {
+    throw new InvalidInputError("이미 즐겨찾기한 식단입니다", data);
+  }
+
   // 식단 즐겨찾기
   const favoriteMeal = await addFavoriteMeal(mealUser.mealUserId);
 
@@ -558,6 +562,16 @@ export const deleteFavoriteMealService = async (data: BaseMealActionDTO) => {
 
   if (!meal) {
     throw new NotFoundError("존재하지 않는 식단입니다", data.mealId);
+  }
+
+  const mealUser = await getmealUserByIds(data);
+
+  if (!mealUser) {
+    throw new NotFoundError("유저에게 제공되지 않은 식단입니다", data);
+  }
+
+  if (mealUser.isMark === false) {
+    throw new InvalidInputError("즐겨찾기한 식단이 아닙니다", data);
   }
 
   // 즐겨찾기 취소
