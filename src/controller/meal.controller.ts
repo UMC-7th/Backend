@@ -18,6 +18,7 @@ import {
 } from "../service/meal.service.js";
 import {
   addManualMealDTO,
+  baseMealActionDTO,
   baseMealDTO,
   completeMealDTO,
   dailyMealDTO,
@@ -67,17 +68,16 @@ export const refreshMeal = async (
   next: NextFunction
 ) => {
   const userId = req.user?.id;
-  const { mealDate, mealId, time } = req.body;
+  const mealId = req.body.mealId;
   try {
-    if (!userId) {
-      throw new InvalidInputError(
-        "잘못된 토큰 값입니다.",
-        "입력 값: " + req.headers.authorization
-      );
-    }
-    const meal = await refreshMealService({ userId, mealDate, mealId, time });
+    const mealData = baseMealActionDTO({
+      userId,
+      mealId,
+    });
 
-    res.status(200).success(meal);
+    const newMeal = await refreshMealService(mealData);
+
+    res.status(200).success(newMeal);
   } catch (error) {
     next(error);
   }
