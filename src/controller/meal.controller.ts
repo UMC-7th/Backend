@@ -70,6 +70,7 @@ export const refreshMeal = async (
   const userId = req.user?.id;
   const mealId = req.body.mealId;
   try {
+    //DTO
     const mealData = baseMealActionDTO({
       userId,
       mealId,
@@ -188,34 +189,6 @@ export const addManualMeal = async (
       );
     }
 
-    if (!mealDate) {
-      throw new InvalidInputError(
-        "식사 날짜가 누락되었습니다.",
-        "입력 값: " + mealDate
-      );
-    }
-
-    if (!time) {
-      throw new InvalidInputError(
-        "식사 시간이 누락되었습니다.",
-        "입력 값: " + time
-      );
-    }
-
-    if (!foods || !Array.isArray(foods) || foods.length === 0) {
-      throw new InvalidInputError(
-        "음식 목록이 누락되었거나 올바르지 않습니다.",
-        "입력 값: " + foods
-      );
-    }
-
-    if (!calorieTotal || calorieTotal <= 0) {
-      throw new InvalidInputError(
-        "칼로리 총합이 누락되었거나 유효하지 않습니다.",
-        "입력 값: " + calorieTotal
-      );
-    }
-
     //DTO
     const mealDTO = addManualMealDTO({
       userId,
@@ -242,6 +215,7 @@ export const getManualMeal = async (
   const userId = req.user?.id;
 
   try {
+    //유효성 검사
     if (!userId) {
       throw new InvalidInputError(
         "잘못된 토큰 값입니다.",
@@ -249,6 +223,7 @@ export const getManualMeal = async (
       );
     }
 
+    //서비스 계층 호출
     const meals = await getManualMealService(userId);
 
     res.status(200).success(meals);
@@ -264,17 +239,24 @@ export const deleteManualMeal = async (
 ) => {
   const userId = req.user?.id;
   const mealId = req.body.mealId;
+
   try {
+    //유효성 검사
     if (!userId) {
       throw new InvalidInputError(
         "잘못된 토큰 값입니다.",
         "입력 값: " + req.headers.authorization
       );
     }
+    //DTO
+    const mealData = baseMealActionDTO({
+      userId,
+      mealId,
+    });
 
-    const meals = await deleteManualMealService({ userId, mealId });
+    const meal = await deleteManualMealService(mealData);
 
-    res.status(200).success(meals);
+    res.status(200).success(meal);
   } catch (error) {
     next(error);
   }

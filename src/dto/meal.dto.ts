@@ -114,6 +114,21 @@ export const addManualMealDTO = (body: {
   foods: string[];
   calorieTotal: number;
 }): AddManualMealDTO => {
+  if (!body.mealDate) {
+    throw new InvalidInputError("날짜가 누락되었습니다.", "입력 값: 없음");
+  }
+  if (!body.time) {
+    throw new InvalidInputError("식사 시간이 누락되었습니다.", "입력 값: 없음");
+  }
+  if (!body.foods || body.foods.length === 0) {
+    throw new InvalidInputError("음식 목록이 비어 있습니다.", "입력 값: 없음");
+  }
+  if (body.calorieTotal === undefined || body.calorieTotal < 0) {
+    throw new InvalidInputError(
+      "칼로리 정보가 누락되었거나 올바르지 않습니다.",
+      "입력 값: 없음"
+    );
+  }
   return {
     userId: body.userId,
     mealDate: new Date(body.mealDate),

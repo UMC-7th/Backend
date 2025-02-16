@@ -452,17 +452,22 @@ export const getManualMealService = async (userId: number) => {
   if (!user) {
     throw new NotFoundError("존재하지 않는 유저입니다", userId);
   }
+
+  //유저에게 제공된 식단을 받아옴
   const eatMeals = await getEatMealById(userId);
 
+  //mealId만 추출하여 배열에 저장
   const mealIds = eatMeals.map((meal) => meal.mealId);
 
+  //배열의 길이가 0이면 수동 식단 없으므로 [] 리턴
   if (mealIds.length === 0) return [];
 
   const meals = await getManualMealsByIds(mealIds);
-  console.log(meals);
+
   return meals;
 };
-export const deleteManualMealService = async (data: any) => {
+export const deleteManualMealService = async (data: BaseMealActionDTO) => {
+  //유효성 검사
   const user = await getUserById(data.userId);
 
   if (!user) {
@@ -475,13 +480,24 @@ export const deleteManualMealService = async (data: any) => {
     throw new NotFoundError("존재하지 않는 식단입니다", data.mealId);
   }
 
-  const userMealCount = await deleteUserMealByIds(data);
-  const eatMealCount = await deleteEatMealByIds(data);
+  const mealUser = await getmealUserByIds(data);
 
-  if (userMealCount == 0 || eatMealCount == 0) {
-    throw new InvalidInputError("해당 유저에게 할당된 식단이 아닙니다", data);
+  if (!mealUser) {
+    throw new NotFoundError("유저에게 제공된 식단이 아닙니다", data.mealId);
   }
 
+  //mealUser 테이블에서 삭제
+  const userMealCount = await deleteUserMealByIds(data);
+
+  //eatMeal 테이블에서 삭제
+  const eatMealCount = await deleteEatMealByIds(data);
+
+  //삭제된게 없다면
+  if (userMealCount == 0 || eatMealCount == 0) {
+    throw new InvalidInputError("식단이 정상적으로 삭제되지 않았습니다", data);
+  }
+
+  //식단 삭제
   const deletedMeal = await deleteMealById(data.mealId);
 
   return deletedMeal;
