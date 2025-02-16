@@ -359,27 +359,27 @@ export const completeMealService = async (data: CompleteMealDTO) => {
 
   return mealComplete;
 };
-export const favoriteMealService = async (userId: number, mealId: number) => {
-  const user = await getUserById(userId);
+export const favoriteMealService = async (data: BaseMealActionDTO) => {
+  // 유효성 검사
+  const user = await getUserById(data.userId);
 
   if (!user) {
-    throw new NotFoundError("존재하지 않는 유저입니다", userId);
+    throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
   }
 
-  const meal = await getMealById(mealId);
+  const meal = await getMealById(data.mealId);
 
   if (!meal) {
-    throw new NotFoundError("존재하지 않는 식단입니다", mealId);
+    throw new NotFoundError("존재하지 않는 식단입니다", data.mealId);
   }
 
-  const mealUser = await getmealUserByIds({ userId, mealId });
+  const mealUser = await getmealUserByIds(data);
 
   if (!mealUser) {
-    throw new NotFoundError("유저에게 제공되지 않은 식단입니다", {
-      userId,
-      mealId,
-    });
+    throw new NotFoundError("유저에게 제공되지 않은 식단입니다", data);
   }
+
+  // 식단 즐겨찾기
   const favoriteMeal = await addFavoriteMeal(mealUser.mealUserId);
 
   return favoriteMeal;

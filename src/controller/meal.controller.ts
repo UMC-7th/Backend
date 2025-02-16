@@ -133,6 +133,7 @@ export const favoriteMeal = async (
   const mealId = req.body.mealId;
 
   try {
+    // 유효성 검사
     if (!userId) {
       throw new InvalidInputError(
         "잘못된 토큰 값입니다.",
@@ -140,9 +141,15 @@ export const favoriteMeal = async (
       );
     }
 
-    const meals = await favoriteMealService(userId, mealId);
+    // DTO
+    const mealData = baseMealActionDTO({
+      userId,
+      mealId,
+    });
 
-    res.status(200).success(meals);
+    const meal = await favoriteMealService(mealData);
+
+    res.status(200).success(meal);
   } catch (error) {
     next(error);
   }
