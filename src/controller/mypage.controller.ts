@@ -58,7 +58,7 @@ export const deleteUser = async (
     const deleteuser = await delUserProfile(userId);
 
     if (deleteuser) {
-      return res.status(StatusCodes.OK).success({ deleteuser });
+       res.status(StatusCodes.OK).success({ deleteuser });
     }
   } catch (error) {
     next(error);
@@ -83,7 +83,7 @@ export const updateUser = async (
     const updatedUser = await upUserProfile(userId, updateData);
 
     if (updatedUser) {
-      return res.status(StatusCodes.OK).json({ updatedUser });
+      res.status(StatusCodes.OK).json({ updatedUser });
     }
   } catch (error) {
     next(error);

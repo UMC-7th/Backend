@@ -257,15 +257,15 @@ export const updateImageS3 = async (
       new PutObjectCommand({
         Bucket: "umc7theatthis",
         Key: fileKey,
-        Body: file.buffer, 
-        ContentType: file.mimetype, 
+        Body: file.buffer,
+        ContentType: file.mimetype,
       })
     );
 
     const fileUrl = `https://umc7theatthis.s3.ap-northeast-2.amazonaws.com/${fileKey}`;
     return fileUrl;
   } catch (error: any) {
-    throw new APIError("파일 에러", "입력값: ", + filekey);
+    throw new APIError("파일 에러", `입력값: ${JSON.stringify(file)}`);
   }
 };
 
