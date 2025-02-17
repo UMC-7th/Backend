@@ -11,6 +11,7 @@ import { StatusCodes } from "http-status-codes";
 import { getRedisValue, setRedisValue } from "./payment.controller.js";
 import { DBError } from "../util/error.js";
 
+const default_img_url = "https://umc7theatthis.s3.ap-northeast-2.amazonaws.com/default/mealimg.png";
 //식재료 이미지 생성
 export const createFoodImage = async (
     req: Request,
@@ -51,11 +52,11 @@ export const createMealImage = async (
         if (!imageFood) {
             imageFood = await addImageFoodService(
                 data.name,
-                "default image url"
+                default_img_url
             );
         }
         //기본 이미지인 경우 이미지 생성
-        if (imageFood.imageUrl == "default image url") {
+        if (imageFood.imageUrl == default_img_url) {
             //mutex 조회 및 mutex 생성
             let mutex = await getRedisValue("process_createimg");
             if (mutex == null) {
