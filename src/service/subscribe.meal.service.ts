@@ -1,12 +1,9 @@
 import { SubMealDTO } from "../dto/subscribe.meal.dto.js";
-import {
-  addMeal,
-  getMealById,
-  getMealsByIds,
-} from "../repository/meal.repository.js";
+import { addMeal, getMealById } from "../repository/meal.repository.js";
 import {
   addSubMeal,
   getCategoryIdByCategory,
+  getMealsByIds,
   getSubMealByCategoryId,
   getSubMealIdsByDate,
 } from "../repository/subscribe.meal.repository.js";
