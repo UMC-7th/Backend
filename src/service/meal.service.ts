@@ -29,13 +29,13 @@ import {
   addDislikeMeal,
   deleteDislikeMeal,
   getFavoritMealByIdLatest,
+  updateMeal,
 } from "../repository/meal.repository.js";
 import { addMealToUser } from "../repository/meal.repository.js";
 import { getUserById } from "../repository/user.repository.js";
 
 // #==================================식단 생성 및 조회==================================#
 
-// 하루 식단 생성
 export const addDailyMealService = async (data: DailyMealDTO) => {
   const user = await getUserById(data.userId);
 
@@ -43,7 +43,36 @@ export const addDailyMealService = async (data: DailyMealDTO) => {
     throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
   }
 
-  //유저의 선호 식단을 조회
+  // 5개의 dummyMealId를 먼저 생성
+  const dummyMealIds = await Promise.all(
+    Array.from({ length: 5 }).map(() =>
+      addMeal({
+        calorieTotal: 0,
+        calorieDetail: "",
+        foods: ["준비 중"],
+        price: 0,
+        difficulty: 0,
+        material: "",
+        recipe: "",
+        addedByUser: false,
+      })
+    )
+  );
+
+  // 식단을 유저와 매핑
+  await Promise.all(
+    dummyMealIds.map(async (dummyMealId, index) => {
+      const mealUserData = {
+        userId: data.userId,
+        mealId: dummyMealId,
+        time: data.time,
+        mealDate: data.mealDate,
+      };
+      await addMealToUser(mealUserData);
+    })
+  );
+
+  // 유저의 선호 식단을 조회
   const likedMeal = await getLikedMeal(data.userId);
 
   const apiKey = process.env.OPENAI_API_KEY;
@@ -54,7 +83,7 @@ export const addDailyMealService = async (data: DailyMealDTO) => {
     {
       role: "system",
       content: `
-      Always answer in Korean
+           Always answer in Korean
       Just call rice rice (don’t call it mixed grain rice or brown rice, just rice).
       "Provide breakfast like breakfast, lunch like lunch, and dinner like dinner."
 or more professionally:
@@ -62,14 +91,12 @@ or more professionally:
       response must be strictly in JSON format, without any additional text.
 You are an expert Korean nutritionist and chef specialized in creating healthy, delicious, and practical meal plans.
 Please generate 5 different meal options for ${data.time} with these guidelines:
-
 1. Meal Composition Rules:
 - Each meal must follow traditional Korean meal structure (밥, 국/찌개, 메인반찬, 부반찬)
 - Rice (밥) is mandatory and should be white rice, brown rice, or mixed grain rice
 - Include seasonal ingredients appropriate for the current month
 - Ensure dishes complement each other in taste and texture
 - Balance between meat, vegetables, and fermented foods
-
 2. Nutritional Guidelines:
 - Proper protein portion (meat, fish, eggs, or tofu) in each meal
 - Include various vegetables for vitamins and minerals
@@ -79,21 +106,18 @@ Please generate 5 different meal options for ${data.time} with these guidelines:
   * 아침: 400-600 calories
   * 점심: 600-800 calories
   * 저녁: 500-700 calories
-
 3. Practicality Rules:
 - Use commonly available ingredients in Korean households
 - Keep preparation methods realistic for home cooking
 - Vary cooking methods (구이, 조림, 볶음, 찜 etc.)
 - Consider preparation time and difficulty
 - Provide clear, concise recipes for dishes that need them
-
 4. Meal Variety Requirements:
 - Each of the 5 meals must be distinctly different
 - Vary main protein sources (beef, pork, chicken, fish, eggs, tofu)
 - Different cooking methods for each meal
 - Diverse vegetable side dishes
 - Various types of soup/stew (국, 찌개, 탕)
-
       {
         "day": string (e.g., "2025-01-15"),
         "mealTime": "${data.time}",
@@ -117,6 +141,7 @@ Please generate 5 different meal options for ${data.time} with these guidelines:
       content: prompt,
     },
   ];
+
   let result;
   try {
     result = await axios.post(
@@ -137,7 +162,7 @@ Please generate 5 different meal options for ${data.time} with these guidelines:
     throw new Error(`${data.time} 식단 생성 중 에러 발생: ${error}`);
   }
 
-  //json 변환
+  // json 변환
   const gptResult = JSON.parse(result.data.choices[0].message.content);
 
   //식단을 저장할 배열
@@ -145,28 +170,19 @@ Please generate 5 different meal options for ${data.time} with these guidelines:
 
   // 5개의 식단을 병렬로 데이터베이스에 저장
   await Promise.all(
-    gptResult.meals.map(async (meal: any) => {
-      //식단 생성
-      const mealId = await addMeal(meal);
+    gptResult.meals.map(async (meal: any, index: number) => {
+      const dummyMealId = dummyMealIds[index];
 
-      // DTO
-      const mealUserData = mealUserDTO({
-        userId: data.userId,
-        mealId: mealId,
-        time: data.time,
-        mealDate: data.mealDate,
-      });
+      // 식단 업데이트
+      await updateMeal(meal, dummyMealId);
 
-      // 유저와 식단 매핑
-      const meals = await addMealToUser(mealUserData);
+      // 식사 시간(ex : 아침)
+      const time = data.time;
 
-      //식사 시간(ex : 아침)
-      const time = meals.time;
+      // 식단 조회
+      const mealDetail = await getMealById(dummyMealId); // dummyMealId로 식단 조회
 
-      //식단 조회
-      const mealDetail = await getMealById(mealId);
-
-      //배열에 저장
+      // 배열에 저장
       mealArr.push({ mealDetail, time });
     })
   );
@@ -214,6 +230,28 @@ export const refreshMealService = async (data: BaseMealActionDTO) => {
   if (!mealUser) {
     throw new NotFoundError("유저에게 제공된 식단이 아닙니다", data.mealId);
   }
+
+  //  dummyMealId를 먼저 생성
+  const dummyMealId = await addMeal({
+    calorieTotal: 0,
+    calorieDetail: "",
+    foods: ["준비 중"],
+    price: 0,
+    difficulty: 0,
+    material: "",
+    recipe: "",
+    addedByUser: false,
+  });
+
+  // DTO
+  const mealUserData = {
+    userId: data.userId,
+    mealId: dummyMealId,
+    time: mealUser.time,
+    mealDate: mealUser.mealDate,
+  };
+
+  await addMealToUser(mealUserData);
 
   //유저에게 제공한 식단 삭제
   await deleteUserMealByIds(data);
@@ -333,22 +371,13 @@ Example output when '저녁' is included:
 
   //json 변환
   gptResult = JSON.parse(result.data.choices[0].message.content);
-
-  //식단 테이블에 식단 추가
-  const mealId: number = await addMeal(gptResult.meals[0]);
-
-  // DTO
-  const mealUserData = mealUserDTO({
-    userId: data.userId,
-    mealId: mealId,
-    time: mealUser.time,
-    mealDate: mealUser.mealDate,
-  });
+  const updateData = gptResult.meals[0];
+  //식단 업데이트
+  await updateMeal(updateData, dummyMealId);
 
   // 유저와 식단 매핑
-  await addMealToUser(mealUserData);
 
-  const newMeal = await getMealById(mealId);
+  const newMeal = await getMealById(dummyMealId);
 
   return newMeal;
 };
