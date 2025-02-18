@@ -22,10 +22,10 @@ export const addMealToUser = async (data: MealUserDTO) => {
 
 //식단 업데이트 함수
 
-export const updateMeal = async (data: any) => {
+export const updateMeal = async (data: any, mealId: number) => {
   const updatedMeal = await prisma.meal.update({
     where: {
-      mealId: data.mealId,
+      mealId: mealId,
     },
     data: {
       food: data.foods.join(", "),
