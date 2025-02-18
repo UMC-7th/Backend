@@ -368,9 +368,10 @@ export const getMealDetailService = async (data: BaseMealActionDTO) => {
     throw new NotFoundError("존재하지 않는 식단입니다", data.mealId);
   }
 
-  const mealDetail = getMealById(data.mealId);
+  const mealDetail = await getMealById(data.mealId);
 
-  return mealDetail;
+  const mealUser = await getmealUserByIds(data);
+  return { mealDetail, mealUser };
 };
 
 // 식단 완료
