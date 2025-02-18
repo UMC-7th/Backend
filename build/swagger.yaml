@@ -1970,7 +1970,7 @@ paths:
           required: true
           schema:
             type: string
-            example: "맛있는 일상 음식"
+            example: "맛있는 일상 구독"
       responses:
         "200":
           description: Successful operation
@@ -1993,37 +1993,58 @@ paths:
                       properties:
                         mealId:
                           type: integer
-                          example: 53
+                          example: 297
                         food:
                           type: string
-                          example: "밥, 김치"
+                          example: "밥, 계란말이, 무생채, 콩나물국, 배추김치"
                         calorieTotal:
                           type: integer
-                          example: 100
+                          example: 590
                         material:
                           type: string
-                          example: "제공되지 않았습니다"
+                          example: "밥 1공기, 계란 2개, 무 100g, 콩나물 100g, 김치 70g"
                         calorieDetail:
                           type: string
-                          example: "제공되지 않았습니다"
+                          example: "밥: 250, 계란말이: 120, 무생채: 50, 콩나물국: 100, 배추김치: 70"
                         price:
                           type: integer
-                          example: 0
+                          example: 7500
                         difficulty:
                           type: integer
-                          example: 0
+                          example: 2
                         recipe:
                           type: string
-                          example: "제공되지 않았습니다"
+                          example: "1. 계란을 풀어 말아 익힌다. 2. 무를 양념과 함께 무침한다. 3. 콩나물국을 끓여 완성한다. 4. 밥과 김치를 곁들여 완성한다."
                         addedByUser:
                           type: boolean
                           example: false
+                        mealSubs:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              mealSubId:
+                                type: integer
+                                example: 1
+                              mealId:
+                                type: integer
+                                example: 297
+                              categoryId:
+                                type: integer
+                                example: 1
+                              time:
+                                type: string
+                                example: "아침"
+                              mealDate:
+                                type: string
+                                example: "2025-02-18T23:56:05.000Z"
         "500":
           description: Fail operation
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/FailResponse"
+
   # 구독 식단 추가 (영양사)
   /api/v1/subscribes/meals:
     post:
