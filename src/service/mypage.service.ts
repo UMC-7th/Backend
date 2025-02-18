@@ -79,6 +79,8 @@ export const getGoalProfile = async (userId: number) => {
 export const getHealthScoreProfile = async (userId: number) => {
   const apiKey = process.env.OPENAI_API_KEY;
 
+  await saveHealthScore(userId, -1);
+
   const surveyData = await findhealthscoreProfile(userId);
   if (!surveyData) {
     throw new NotFoundError("존재하지 않는 데이터", "입력 값:" + surveyData);
