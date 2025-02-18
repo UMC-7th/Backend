@@ -220,6 +220,28 @@ export const refreshMealService = async (data: BaseMealActionDTO) => {
     throw new NotFoundError("유저에게 제공된 식단이 아닙니다", data.mealId);
   }
 
+  //  dummyMealId를 먼저 생성
+  const dummyMealId = await addMeal({
+    calorieTotal: 0,
+    calorieDetail: "",
+    foods: ["준비 중"],
+    price: 0,
+    difficulty: 0,
+    material: "",
+    recipe: "",
+    addedByUser: false,
+  });
+
+  // DTO
+  const mealUserData = {
+    userId: data.userId,
+    mealId: dummyMealId,
+    time: mealUser.time,
+    mealDate: mealUser.mealDate,
+  };
+
+  await addMealToUser(mealUserData);
+
   //유저에게 제공한 식단 삭제
   await deleteUserMealByIds(data);
 
@@ -339,21 +361,12 @@ Example output when '저녁' is included:
   //json 변환
   gptResult = JSON.parse(result.data.choices[0].message.content);
 
-  //식단 테이블에 식단 추가
-  const mealId: number = await addMeal(gptResult.meals[0]);
-
-  // DTO
-  const mealUserData = mealUserDTO({
-    userId: data.userId,
-    mealId: mealId,
-    time: mealUser.time,
-    mealDate: mealUser.mealDate,
-  });
+  //식단 업데이트
+  await updateMeal(gptResult.meals[0]);
 
   // 유저와 식단 매핑
-  await addMealToUser(mealUserData);
 
-  const newMeal = await getMealById(mealId);
+  const newMeal = await getMealById(dummyMealId);
 
   return newMeal;
 };
