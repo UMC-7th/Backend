@@ -1,0 +1,29 @@
+config:
+  target: 'http://localhost:3000/api/v1'
+  phases:
+    - duration: 1
+      arrivalRate: 5
+ 
+before:
+  flow:
+    - log: 'Get auth token'
+    - post:
+        url: '/users/login'
+        json:
+          email: 'test@gmail.com'
+          password: 'password123'
+        capture:
+            json: '$.success.accessToken'     #1
+            as: 'token' 
+scenarios:
+  - flow:
+      - get:
+          url: '/deliveryAddress'
+          headers:
+            authorization: 'Bearer {{ token }}'
+          capture:
+            json: '$'
+            as: 'response'
+      - log: '{{response}}'
+        
+
