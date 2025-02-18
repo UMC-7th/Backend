@@ -48,6 +48,7 @@ export const getDailyMeal = async (
 
     const existingMeals = await getDailyMealService(mealData);
 
+    
     //해달 날짜에 식단이 존재하지 않는다면 생성
 
     if (existingMeals.length === 0) {

@@ -20,6 +20,28 @@ export const addMealToUser = async (data: MealUserDTO) => {
   return meal;
 };
 
+//식단 업데이트 함수
+
+export const updateMeal = async (data: any) => {
+  const updatedMeal = await prisma.meal.update({
+    where: {
+      mealId: data.mealId,
+    },
+    data: {
+      food: data.foods.join(", "),
+      calorieTotal: data.calorieTotal,
+      calorieDetail: data.calorieDetail || "제공되지 않았습니다",
+      price: data.price || 0,
+      material: data.material || "제공되지 않았습니다",
+      difficulty: data.difficulty || 0,
+      recipe: data.recipe || "제공되지 않았습니다",
+      addedByUser: data.addedByUser || false,
+    },
+  });
+
+  return updatedMeal.mealId;
+};
+
 //식단을 저장하는 함수
 export const addMeal = async (data: any) => {
   const mealId = await prisma.meal.create({
