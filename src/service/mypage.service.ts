@@ -7,6 +7,8 @@ import {
   findResultProfile,
   saveHealthScore,
   updateImageProfile,
+  confirmHealthScore,
+  createHealthScore,
 } from "../repository/mypage.repository.js";
 import { getUserById } from "../repository/user.repository.js";
 import { APIError, DBError, NotFoundError } from "../util/error.js";
@@ -79,6 +81,15 @@ export const getGoalProfile = async (userId: number) => {
 export const getHealthScoreProfile = async (userId: number) => {
   const apiKey = process.env.OPENAI_API_KEY;
 
+  //오늘 갱신한 건강 점수가 있는지 확인
+  let score = await confirmHealthScore(userId);
+  if(score == null){
+    score = await createHealthScore(userId);
+  }
+  else if(score.healthScore > 0){
+    return score
+  }
+
   const surveyData = await findhealthscoreProfile(userId);
   if (!surveyData) {
     throw new NotFoundError("존재하지 않는 데이터", "입력 값:" + surveyData);
@@ -116,7 +127,10 @@ The healthScore should be based on:
 Example output:
 {
   "healthScore": 90,
-}`,
+}
+
+You should follow Example output.
+`,
     },
     {
       role: "user",
@@ -148,7 +162,7 @@ Example output:
     const gptResult = JSON.parse(result.data.choices[0].message.content);
     const healthScore = gptResult.healthScore;
 
-    const savedHealthScore = await saveHealthScore(userId, healthScore);
+    const savedHealthScore = await saveHealthScore(userId, score.healthscoreId, healthScore);
     return savedHealthScore;
   } catch (error) {
     console.error("Error parsing GPT response:", error);
