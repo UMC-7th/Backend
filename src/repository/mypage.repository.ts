@@ -83,7 +83,7 @@ export const findResultProfile = async (userId: number) => {
   }
 };
 
-export const saveHealthScore = async (userId: number, healthScore: number) => {
+export const confirmHealthScore = async (userId: number) => {
   try {
     const now = new Date();
     const nowKST = new Date(now.getTime() + 9 * 60 * 60 * 1000);
@@ -105,9 +105,37 @@ export const saveHealthScore = async (userId: number, healthScore: number) => {
       orderBy: { createdAt: "desc" },
     });
 
-    if (existScore) {
-      return existScore;
-    }
+    return existScore;
+  } catch (error) {
+    throw new DBError("건강 점수 검증 중 오류가 발생했습니다.", error);
+  }
+}
+
+export const createHealthScore = async (userId: number) => {
+  try {
+    const now = new Date();
+    const nowKST = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+    const savedHealthScore = await prisma.healthScore.create({
+      data: {
+        userId,
+        healthScore: -1,
+        comparison: 0,
+        createdAt: nowKST,
+      },
+    });
+    return savedHealthScore;
+  } catch (error) {
+    throw new DBError("건강 점수 생성 중 오류가 발생했습니다.", error);
+  }
+}
+
+export const saveHealthScore = async (userId: number, scoreId: number, healthScore: number) => {
+  try {
+    const now = new Date();
+    const nowKST = new Date(now.getTime() + 9 * 60 * 60 * 1000);
+
+    const todayKST = new Date(nowKST);
+    todayKST.setHours(0, 0, 0, 0);
 
     const previousScore = await prisma.healthScore.findFirst({
       where: {
@@ -120,16 +148,19 @@ export const saveHealthScore = async (userId: number, healthScore: number) => {
     let comparison = 0;
     if (previousScore && previousScore.healthScore !== null) {
       comparison = healthScore - previousScore.healthScore;
+      await prisma.healthScore.delete({
+        where: {healthscoreId: previousScore?.healthscoreId}
+      });
     }
 
-    const savedHealthScore = await prisma.healthScore.create({
+    const savedHealthScore = await prisma.healthScore.update({
+      where: {healthscoreId: scoreId},
       data: {
-        userId,
         healthScore,
-        comparison: comparison || 0,
-        createdAt: nowKST,
+        comparison: comparison || 0
       },
     });
+    
     return savedHealthScore;
   } catch (error) {
     throw new DBError("건강 점수 저장 중 오류가 발생했습니다.", error);
