@@ -80,7 +80,6 @@ export const getHealthScoreProfile = async (userId: number) => {
   const apiKey = process.env.OPENAI_API_KEY;
 
   await saveHealthScore(userId, -1);
-  console.log("기본값 저장됨");
 
   const surveyData = await findhealthscoreProfile(userId);
   if (!surveyData) {
@@ -152,7 +151,6 @@ Example output:
     const healthScore = gptResult.healthScore;
 
     const savedHealthScore = await saveHealthScore(userId, healthScore);
-    console.log("업데이트 완료");
     return savedHealthScore;
   } catch (error) {
     console.error("Error parsing GPT response:", error);
