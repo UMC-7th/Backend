@@ -2,12 +2,12 @@ import { prisma } from "../db.config.js";
 import { DBError } from "../util/error.js";
 
 //식재료 북마크 단일 조회
-export const getMarkMaterial = async (userId: number, material: string) => {
+export const getMarkMaterial = async (userId: number, materialId: number) => {
     try {
         const mark = await prisma.markMaterial.findFirst({
             where: {
                 userId: userId,
-                material: material
+                materialId: materialId
             }
         });
         return mark;
@@ -17,16 +17,17 @@ export const getMarkMaterial = async (userId: number, material: string) => {
 };
 
 //식재료 북마크 추가
-export const markMaterial = async (userId: number, material: string) => {
+export const markMaterial = async (userId: number, materialId: number) => {
     try {
         const mark = await prisma.markMaterial.create({
             data: {
                 userId: userId,
-                material: material
+                materialId: materialId
             },
         });
         return mark;
     } catch (error) {
+        console.log(error);
         throw new DBError("식재료 북마크 추가 중 오류가 발생했습니다.", error);
     }
 };
@@ -37,6 +38,10 @@ export const getMarkMaterialList = async (userId: number) => {
         const markList = await prisma.markMaterial.findMany({
             where: {
                 userId: userId
+            },
+            select: {
+                markId: true,
+                material: true
             }
         });
         return markList;
@@ -56,5 +61,17 @@ export const deleteMarkMaterial = async (markId: number) => {
         return deleteMark;
     } catch (error) {
         throw new DBError("식재료 북마크 삭제 중 오류가 발생했습니다.", error);
+    }
+};
+
+//식재료 전체 조회
+export const getAllMaterial = async () => {
+    try {
+        const materialList = await prisma.material.findMany({
+            
+        });
+        return materialList;
+    } catch (error) {
+        throw new DBError("식재료 전체 조회 중 오류가 발생했습니다.", error);
     }
 };
