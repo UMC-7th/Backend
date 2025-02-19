@@ -14,16 +14,16 @@ datasource db {
 }
 
 model User {
-  userId      Int      @id @default(autoincrement()) @map("user_id")
-  email       String   @db.VarChar(100)
-  password    String   @db.VarChar(100)
-  birth       DateTime @db.DateTime(6)
-  name        String   @db.VarChar(100)
-  nickname    String   @default("") @db.VarChar(100)
-  phoneNum    String   @map("phone_num") @db.VarChar(100)
-  purpose     String   @db.Text
-  profileImage  String   @default("") @map("profile_image") @db.Text
-  loginMethod String   @default("") @map("login_method") @db.VarChar(100)
+  userId       Int      @id @default(autoincrement()) @map("user_id")
+  email        String   @db.VarChar(100)
+  password     String   @db.VarChar(100)
+  birth        DateTime @db.DateTime(6)
+  name         String   @db.VarChar(100)
+  nickname     String   @default("") @db.VarChar(100)
+  phoneNum     String   @map("phone_num") @db.VarChar(100)
+  purpose      String   @db.Text
+  profileImage String   @default("") @map("profile_image") @db.Text
+  loginMethod  String   @default("") @map("login_method") @db.VarChar(100)
 
   agreement       Agreement[]
   markMaterials   MarkMaterial[]
@@ -34,6 +34,7 @@ model User {
   DeliveryAddress DeliveryAddress[]
   Survey          Survey[]
   HealthScore     HealthScore[]
+
   @@map("user")
 }
 
@@ -61,8 +62,8 @@ model MealUser {
   isMark     Boolean  @default(false) @map("is_mark")
   isLike     Boolean  @default(false) @map("is_like")
   isHate     Boolean  @default(false) @map("is_hate")
-  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  meal Meal @relation(fields: [mealId], references: [mealId])
+  user       User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  meal       Meal     @relation(fields: [mealId], references: [mealId])
 
   @@map("meal_user")
 }
@@ -74,7 +75,7 @@ model Meal {
   material      String  @db.VarChar(200)
   calorieDetail String  @map("calorie_detail") @db.VarChar(200)
   price         Int
-  difficulty    Int   
+  difficulty    Int
   recipe        String  @db.Text
   addedByUser   Boolean @default(false) @map("added_by_user")
 
@@ -83,16 +84,6 @@ model Meal {
   MealUser MealUser[]
 
   @@map("meal")
-}
-
-model MarkMaterial {
-  markId   Int    @id @default(autoincrement()) @map("mark_id")
-  userId   Int    @map("user_id")
-  material String @db.VarChar(100)
-
-  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
-
-  @@map("mark_material")
 }
 
 model Agreement {
@@ -177,47 +168,84 @@ model ImageFood {
   @@map("image_food")
 }
 
+model Variety {
+  varietyId Int        @id @default(autoincrement()) @map("variety_id")
+  name      String     @db.VarChar(100)
+  Material  Material[]
+
+  @@map("variety")
+}
+
+model Material {
+  materialId Int    @id @default(autoincrement()) @map("material_id")
+  itemId     Int    @map("item_id")
+  varietyId  Int    @map("variety_id")
+  name       String @db.VarChar(100)
+  unit       String @db.VarChar(100)
+  delta      Float  @db.Float
+
+  variety      Variety       @relation(fields: [varietyId], references: [varietyId], onDelete: Cascade)
+  HotMaterial  HotMaterial?
+  MarkMaterial MarkMaterial?
+
+  @@map("material")
+}
+
+model MarkMaterial {
+  markId     Int @id @default(autoincrement()) @map("mark_id")
+  userId     Int @map("user_id")
+  materialId Int @unique @map("item_id")
+
+  material Material @relation(fields: [materialId], references: [materialId], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@map("mark_material")
+}
+
 model HotMaterial {
-  hotId    Int    @id @default(autoincrement()) @map("hot_id")
-  text     String @db.Text
-  material String @db.VarChar(100)
+  hotId      Int    @id @default(autoincrement()) @map("hot_id")
+  text       String @db.Text
+  materialId Int    @unique @map("item_id")
+
+  material Material @relation(fields: [materialId], references: [materialId], onDelete: Cascade)
 
   @@map("hot_material")
 }
 
 model Survey {
-  surveyId        Int      @id @default(autoincrement()) @map("survey_id")
-  userId          Int      @map("user_id")
-  goal            String   @db.VarChar(100)      
-  meals           String   @db.VarChar(200)      
-  allergy         String   @db.VarChar(100)      
-  allergyDetails  String?  @db.VarChar(200)  
-  healthCondition String   @db.VarChar(100)   
-  healthConditionDetails String?   @db.VarChar(200)   
-  gender          String   @db.VarChar(10)       
-  birthYear       Int      @map("birth_year")    
-  height          Int      @db.Int              
-  currentWeight   Int      @map("current_weight")
-  targetWeight    Int      @map("target_weight") 
-  skeletalMuscleMass Float? @map("skeletal_Mucle_Mass")
-  bodyFatPercentage Float? @map("body_fat_percentage")
-  exerciseFrequency Int    @map("exercise_frequency") 
-  job             String   @db.VarChar(100)      
+  surveyId               Int     @id @default(autoincrement()) @map("survey_id")
+  userId                 Int     @map("user_id")
+  goal                   String  @db.VarChar(100)
+  meals                  String  @db.VarChar(200)
+  allergy                String  @db.VarChar(100)
+  allergyDetails         String? @db.VarChar(200)
+  healthCondition        String  @db.VarChar(100)
+  healthConditionDetails String? @db.VarChar(200)
+  gender                 String  @db.VarChar(10)
+  birthYear              Int     @map("birth_year")
+  height                 Int     @db.Int
+  currentWeight          Int     @map("current_weight")
+  targetWeight           Int     @map("target_weight")
+  skeletalMuscleMass     Float?  @map("skeletal_Mucle_Mass")
+  bodyFatPercentage      Float?  @map("body_fat_percentage")
+  exerciseFrequency      Int     @map("exercise_frequency")
+  job                    String  @db.VarChar(100)
 
-  user            User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
 
   @@map("survey")
 }
 
 model HealthScore {
-  healthscoreId   Int      @id @default(autoincrement()) @map("healthscore_id")
-  userId          Int      @map("user_id")
-  healthScore     Int    @map("health_score")  
-  comparison      Float?   @map("comparison")
-  createdAt       DateTime @default(now())      
-  updatedAt       DateTime @updatedAt    
+  healthscoreId Int      @id @default(autoincrement()) @map("healthscore_id")
+  userId        Int      @map("user_id")
+  healthScore   Int      @map("health_score")
+  comparison    Float?   @map("comparison")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  user            User     @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  
-  @@map("healthscore")     
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+
+  @@map("healthscore")
 }
