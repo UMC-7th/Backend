@@ -13,7 +13,7 @@ export const markMaterial = async (
     try {
         if (!userId) 
             throw new InvalidInputError("잘못된 토큰 값입니다.", "입력 값: " + req.headers.authorization);
-        const markMaterial = await markMaterialService(userId, req.body.material);
+        const markMaterial = await markMaterialService(userId, req.body.materialId);
         res.status(StatusCodes.OK).success({
             isSuccess: true,
             markMaterial: markMaterial
@@ -52,7 +52,7 @@ export const deleteMarkMaterial = async (
     try {
         if (!userId) 
             throw new InvalidInputError("잘못된 토큰 값입니다.", "입력 값: " + req.headers.authorization);
-        const markMaterial = await deleteMarkMaterialService(userId, req.body.material);
+        const markMaterial = await deleteMarkMaterialService(userId, req.body.materialId);
         res.status(StatusCodes.OK).success({
             isSuccess: true,
             markMaterial: markMaterial

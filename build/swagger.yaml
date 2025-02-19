@@ -2559,9 +2559,9 @@ paths:
             schema:
               type: object
               properties:
-                material:
-                  type: string
-                  example: "사과"
+                materialId:
+                  type: integer
+                  example: 0
       responses:
         "200":
           description: Successful operation
@@ -2583,8 +2583,18 @@ paths:
                       isSucess:
                         type: boolean
                         example: true
-                      material:
-                        $ref: "#/components/schemas/Material"
+                      markMaterial:
+                        type: object
+                        properties:
+                          markId:
+                            type: integer
+                            example: 0
+                          userId:
+                            type: integer
+                            example: 0
+                          materialId:
+                            type: integer
+                            example: 0
         "500":
           description: Fail operation
           content:
@@ -2618,7 +2628,13 @@ paths:
                       markList:
                         type: array
                         items:
-                          $ref: "#/components/schemas/Material"
+                          type: object
+                          properties:
+                            markId:
+                              type: integer
+                              default: 0
+                            material:
+                              $ref: "#/components/schemas/Material"
         "500":
           description: Fail operation
           content:
@@ -2638,9 +2654,9 @@ paths:
             schema:
               type: object
               properties:
-                material:
-                  type: string
-                  example: "사과"
+                materialId:
+                  type: integer
+                  example: 0
       responses:
         "200":
           description: Successful operation
@@ -2662,8 +2678,18 @@ paths:
                       isSucess:
                         type: boolean
                         example: true
-                      material:
-                        $ref: "#/components/schemas/Material"
+                      markMaterial:
+                        type: object
+                        properties:
+                          markId:
+                            type: integer
+                            example: 0
+                          userId:
+                            type: integer
+                            example: 0
+                          materialId:
+                            type: integer
+                            example: 0
         "500":
           description: Fail operation
           content:

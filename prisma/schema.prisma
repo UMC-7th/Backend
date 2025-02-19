@@ -194,7 +194,7 @@ model Material {
 model MarkMaterial {
   markId     Int @id @default(autoincrement()) @map("mark_id")
   userId     Int @map("user_id")
-  materialId Int @unique @map("item_id")
+  materialId Int @unique @map("material_id")
 
   material Material @relation(fields: [materialId], references: [materialId], onDelete: Cascade)
 
@@ -206,7 +206,7 @@ model MarkMaterial {
 model HotMaterial {
   hotId      Int    @id @default(autoincrement()) @map("hot_id")
   text       String @db.Text
-  materialId Int    @unique @map("item_id")
+  materialId Int    @unique @map("material_id")
 
   material Material @relation(fields: [materialId], references: [materialId], onDelete: Cascade)
 
