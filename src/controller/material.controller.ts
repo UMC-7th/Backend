@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { InvalidInputError } from "../util/error.js";
-import { deleteMarkMaterialService, getAllMaterialService, getMarkMaterialListService, getRankAllMaterialService, markMaterialService, searchMaterialService } from "../service/material.service.js";
+import { deleteMarkMaterialService, getAllMaterialService, getMarkMaterialListService, getRankAllMaterialService, getRankVarietyMaterialService, markMaterialService, searchMaterialService } from "../service/material.service.js";
 
 //식재료 북마크 추가
 export const markMaterial = async (
@@ -96,7 +96,7 @@ export const searchMaterial = async (
     }
 };
 
-//식재료 전체 조회
+//전체 식재료 랭킹 조회
 export const getRankAllMaterial = async (
     req: Request,
     res: Response,
@@ -104,6 +104,23 @@ export const getRankAllMaterial = async (
 ) => {
     try {
         const materialList = await getRankAllMaterialService();
+        res.status(StatusCodes.OK).success({
+            isSuccess: true,
+            data: materialList
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+//품종별 식재료 랭킹킹 검색
+export const getRankVarietyMaterial = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const materialList = await getRankVarietyMaterialService(req.params.name);
         res.status(StatusCodes.OK).success({
             isSuccess: true,
             data: materialList

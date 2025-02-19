@@ -1,4 +1,4 @@
-import { deleteMarkMaterial, getAllMaterial, getMarkMaterial, getMarkMaterialList, getRankAllMaterial, getVariety, markMaterial, searchMaterial } from "../repository/material.repository.js";
+import { deleteMarkMaterial, getAllMaterial, getMarkMaterial, getMarkMaterialList, getRankAllMaterial, getRankVarietyMaterial, getVariety, markMaterial, searchMaterial } from "../repository/material.repository.js";
 import { InvalidInputError } from "../util/error.js";
 
 //식재료 북마크 추가
@@ -49,5 +49,16 @@ export const searchMaterialService = async (name: string) => {
 //전체 식재료 랭킹 조회
 export const getRankAllMaterialService = async () => {
     const materialList = await getRankAllMaterial();
+    return materialList;
+}
+
+//품종별 식재료 랭킹 조회
+export const getRankVarietyMaterialService = async (name: string) => {
+    const variety = await getVariety(name);
+    if(variety==null)
+        throw new InvalidInputError("해당 품종을 찾을 수 없습니다.", name);
+
+    const materialList = await getRankVarietyMaterial(variety.varietyId);
+
     return materialList;
 }

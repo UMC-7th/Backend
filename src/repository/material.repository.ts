@@ -81,7 +81,8 @@ export const getRankAllMaterial = async () => {
         const materialList = await prisma.material.findMany({
             orderBy: {
                 delta: "desc"
-            }
+            },
+            take: 10
         });
         return materialList;
     } catch (error) {
@@ -114,5 +115,23 @@ export const searchMaterial = async (varietyId: number) => {
         return materialList;
     } catch (error) {
         throw new DBError("식재료 검색 중 오류가 발생했습니다.", error);
+    }
+};
+
+//식재료 품종 검색
+export const getRankVarietyMaterial = async (varietyId: number) => {
+    try {
+        const materialList = await prisma.material.findMany({
+            where:{
+                varietyId: varietyId
+            },
+            orderBy: {
+                delta: "desc"
+            },
+            take: 10
+        });
+        return materialList;
+    } catch (error) {
+        throw new DBError("식재료 랭킹 조회 중 오류가 발생했습니다.", error);
     }
 };
