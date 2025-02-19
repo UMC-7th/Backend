@@ -16,6 +16,9 @@ import axios from "axios";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { v4 as uuidv4 } from "uuid";
 import multer from "multer";
+import {Mutex} from "async-mutex";
+
+
 
 export const getUserProfile = async (userId: number) => {
   const user = await findUserProfile(userId);
@@ -78,46 +81,47 @@ export const getGoalProfile = async (userId: number) => {
   return goal;
 };
 
+const healthScoreMutex = new Mutex();
+
 export const getHealthScoreProfile = async (userId: number) => {
   const apiKey = process.env.OPENAI_API_KEY;
 
-  //오늘 갱신한 건강 점수가 있는지 확인
-  let score = await confirmHealthScore(userId);
-  if(score == null){
-    score = await createHealthScore(userId);
-  }
-  else if(score.healthScore > 0){
-    return score
-  }
+  return healthScoreMutex.runExclusive(async () => {
+    let score = await confirmHealthScore(userId);
+    if (score == null) {
+      score = await createHealthScore(userId);
+    } else if (score.healthScore > 0) {
+      return score;
+    }
 
-  const surveyData = await findhealthscoreProfile(userId);
-  if (!surveyData) {
-    throw new NotFoundError("존재하지 않는 데이터", "입력 값:" + surveyData);
-  }
+    const surveyData = await findhealthscoreProfile(userId);
+    if (!surveyData) {
+      throw new NotFoundError("존재하지 않는 데이터", "입력 값:" + surveyData);
+    }
 
-  const prompt = `유저의 건강 점수 평가
-  - 목표: ${surveyData.goal}
-  - 식사: ${surveyData.meals}
-  - 알레르기 유무: ${surveyData.allergy}
-  - 알레르기:  ${surveyData.allergyDetails}
-  - 건강 상태 유무: ${surveyData.healthCondition}
-  - 건강 상태: ${surveyData.healthConditionDetails}
-  - 성별: ${surveyData.gender}
-  - 출생년도: ${surveyData.birthYear}
-  - 키: ${surveyData.height}cm
-  - 현재 체중: ${surveyData.currentWeight}kg
-  - 목표 체중: ${surveyData.targetWeight}kg
-  - 골격근량: ${surveyData.skeletalMuscleMass}kg
-  - 체지방률: ${surveyData.bodyFatPercentage}%
-  - 운동 빈도: 주 ${surveyData.exerciseFrequency}회
-  - 직업: ${surveyData.job}`;
+    const prompt = `유저의 건강 점수 평가
+    - 목표: ${surveyData.goal}
+    - 식사: ${surveyData.meals}
+    - 알레르기 유무: ${surveyData.allergy}
+    - 알레르기:  ${surveyData.allergyDetails}
+    - 건강 상태 유무: ${surveyData.healthCondition}
+    - 건강 상태: ${surveyData.healthConditionDetails}
+    - 성별: ${surveyData.gender}
+    - 출생년도: ${surveyData.birthYear}
+    - 키: ${surveyData.height}cm
+    - 현재 체중: ${surveyData.currentWeight}kg
+    - 목표 체중: ${surveyData.targetWeight}kg
+    - 골격근량: ${surveyData.skeletalMuscleMass}kg
+    - 체지방률: ${surveyData.bodyFatPercentage}%
+    - 운동 빈도: 주 ${surveyData.exerciseFrequency}회
+    - 직업: ${surveyData.job}`;
 
-  const messages = [
-    {
-      role: "system",
-      content: `Please analyze the user's health information and return a JSON response in the following format:
+    const messages = [
+      {
+        role: "system",
+        content: `Please analyze the user's health information and return a JSON response in the following format:
 {
-  "healthScore": "점수 (0~100 사이의 숫자)",
+  "healthScore": "점수 (0~100 사이의 숫자)"
 }
 
 The healthScore should be based on:
@@ -126,49 +130,51 @@ The healthScore should be based on:
 
 Example output:
 {
-  "healthScore": 90,
+  "healthScore": 90
 }
 
 You should follow Example output.
 `,
-    },
-    {
-      role: "user",
-      content: `${prompt}`,
-    },
-  ];
-
-  let result;
-  try {
-    result = await axios.post(
-      "https://api.openai.com/v1/chat/completions",
-      {
-        model: "gpt-3.5-turbo",
-        temperature: 0.7,
-        messages: messages,
       },
       {
-        headers: {
-          Authorization: `Bearer ${apiKey}`,
-          "Content-Type": "application/json",
+        role: "user",
+        content: `${prompt}`,
+      },
+    ];
+
+    let result;
+    try {
+      result = await axios.post(
+        "https://api.openai.com/v1/chat/completions",
+        {
+          model: "gpt-3.5-turbo",
+          temperature: 0.7,
+          messages: messages,
         },
-      }
-    );
-  } catch (error) {
-    throw new Error("GPT 요청 중 에러 발생");
-  }
+        {
+          headers: {
+            Authorization: `Bearer ${apiKey}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    } catch (error) {
+      throw new Error("GPT 요청 중 에러 발생");
+    }
 
-  try {
-    const gptResult = JSON.parse(result.data.choices[0].message.content);
-    const healthScore = gptResult.healthScore;
+    try {
+      const gptResult = JSON.parse(result.data.choices[0].message.content);
+      const healthScore = gptResult.healthScore;
 
-    const savedHealthScore = await saveHealthScore(userId, score.healthscoreId, healthScore);
-    return savedHealthScore;
-  } catch (error) {
-    console.error("Error parsing GPT response:", error);
-    throw new Error("GPT 응답 중 에러 발생");
-  }
+      const savedHealthScore = await saveHealthScore(userId, score.healthscoreId, healthScore);
+      return savedHealthScore;
+    } catch (error) {
+      console.error("Error parsing GPT response:", error);
+      throw new Error("GPT 응답 중 에러 발생");
+    }
+  });
 };
+
 
 export const getResultProfile = async (userId: number) => {
   const apiKey = process.env.OPENAI_API_KEY;
