@@ -980,6 +980,82 @@ paths:
   #================================== 구독 관련 api==================================#
   # 식단 장바구니 추가 api
   /api/v1/subscribes/meals/cart:
+    get:
+      tags:
+        - Subscribe
+      summary: Get Cart List
+      description: 장바구니 리스트 조회 API
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: SUCCESS
+                  error:
+                    type: object
+                    nullable: true
+                  success:
+                    type: object
+                    properties:
+                      kartList:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            kardId:
+                              type: integer
+                            userId:
+                              type: integer
+                            mealSubId:
+                              type: integer
+                            cnt:
+                              type: integer
+                            mealSub:
+                              type: object
+                              properties:
+                                mealSubId:
+                                  type: integer
+                                mealId:
+                                  type: integer
+                                categoryId:
+                                  type: integer
+                                time:
+                                  type: string
+                                mealDate:
+                                  type: string
+                                  format: date-time
+                                meal:
+                                  type: object
+                                  properties:
+                                    mealId:
+                                      type: integer
+                                    food:
+                                      type: string
+                                    calorieTotal:
+                                      type: integer
+                                    material:
+                                      type: string
+                                    calorieDetail:
+                                      type: string
+                                    price:
+                                      type: integer
+                                    difficulty:
+                                      type: integer
+                                    recipe:
+                                      type: string
+                                    addedByUser:
+                                      type: boolean
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
     post:
       tags:
         - Subscribe
