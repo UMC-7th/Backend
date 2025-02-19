@@ -1,5 +1,21 @@
 import { APIError, InvalidInputError, NotFoundError, AlreadyExistError } from "../util/error.js";
-import { getMealSubById, getKartSubById, addToCart, deleteKartSub, getSubListCalendar, getSubList, searchSubList } from "../repository/subscribe.repository.js";
+import { getKartList, getMealSubById, getKartSubById, addToCart, deleteKartSub, getSubListCalendar, getSubList, searchSubList } from "../repository/subscribe.repository.js";
+
+
+export const getCartListService = async (userId: number) => {
+    try {
+
+        // 장바구니 리스트 가져오기
+        const kartList = await getKartList(userId);
+        if (kartList === null) {
+            throw new NotFoundError("해당 사용자의 장바구니가 비어있습니다.", "사용자 아이디: " + userId)
+        }
+
+        return kartList;
+    } catch (error: any) {
+        throw new Error("식단 장바구니 리스트 가져오기 중 에러 발생 " + error);
+    }
+}
 
 export const addCartService = async (userId: number, data: any) => {
     try {
