@@ -1,0 +1,30 @@
+config:
+  target: 'http://localhost:3000/api/v1'
+  phases:
+    - duration: 3
+      arrivalRate: 30
+ 
+before:
+  flow:
+    - log: 'Get auth token'
+    - post:
+        url: '/users/login'
+        json:
+          email: 'test@test.test'
+          password: 'test'
+        capture:
+            json: '$.success.accessToken'     #1
+            as: 'token' 
+scenarios:
+  - flow:
+      # # 배송지 조회
+      # - get:
+      #     url: '/deliveryAddress'
+      #     headers:
+      #       authorization: 'Bearer {{ token }}'
+  
+      # # 기본 배송지 조회
+      # - get:
+      #     url: '/deliveryAddress/default'
+      #     headers:
+      #       authorization: 'Bearer {{ token }}'
