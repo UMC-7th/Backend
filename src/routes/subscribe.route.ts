@@ -1,8 +1,11 @@
 import express from "express";
-import { addCart, deleteCart, getSubList, getSubListCalendar, searchSubList } from "../controller/subscribe.controller.js";
+import { getCartList, addCart, deleteCart, getSubList, getSubListCalendar, searchSubList } from "../controller/subscribe.controller.js";
 import { jwtAuthMiddleware } from "../util/jwt.middleware.js";
 
 const router = express.Router();
+
+// 식단 장바구니 리스트 API
+router.get("/meals/cart", jwtAuthMiddleware, getCartList);
 
 // 식단 장바구니 추가 api
 router.post("/meals/cart", jwtAuthMiddleware, addCart);
