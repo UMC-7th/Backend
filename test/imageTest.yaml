@@ -1,0 +1,32 @@
+config:
+    target: "http://localhost:3000/api/v1"
+    phases:
+        - duration: 1
+          arrivalRate: 5
+
+before:
+    flow:
+        - log: "Get auth token"
+        - post:
+              url: "/users/login"
+              json:
+                  email: "test@gmail.com"
+                  password: "password123"
+              capture:
+                  json: "$.success.accessToken"
+                  as: "token"
+scenarios:
+    - flow:
+          # # 식재료 이미지 조회
+          # - get:
+          #       url: "/images/material?name=무화과"
+          #       capture:
+          #           json: "$"
+          #           as: "response"
+
+          # # 식단 이미지 조회
+          # - get:
+          #       url: "/images/meal?name=밥, 닭볶음탕, 계란말이, 미역줄기볶음, 깍두기"
+          #       capture:
+          #           json: "$"
+          #           as: "response"
