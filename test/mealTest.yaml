@@ -1,0 +1,50 @@
+config:
+  target: 'http://localhost:3000/api/v1'
+  phases:
+    - duration: 3
+      arrivalRate: 30
+ 
+before:
+  flow:
+    - log: 'Get auth token'
+    - post:
+        url: '/users/login'
+        json:
+          email: 'test@test.test'
+          password: 'test'
+        capture:
+            json: '$.success.accessToken'     #1
+            as: 'token' 
+scenarios:
+  - flow:
+      # # 일일 식단 생성
+      # - post:
+      #     url: '/meals/daily'
+      #     headers:
+      #       authorization: 'Bearer {{ token }}'
+      #     json:
+      #       mealDate: "2025-02-28T12:34:56.789Z"
+
+      # #수동 식단 조회
+      # - get:
+      #     url: '/meals/manual/list'
+      #     headers:
+      #       authorization: 'Bearer {{ token }}'
+
+      # #식단 상세 조회
+      # - get:
+      #     url: '/meals/detail/list?mealId=9'
+      #     headers:
+      #       authorization: 'Bearer {{ token }}'  
+
+      # #선호 식단 칼로리순 조회
+      # - get:
+      #     url: '/meals/favorite/list/calorie'
+      #     headers:
+      #       authorization: 'Bearer {{ token }}'
+
+      # #선호 식단 최신순 조회
+      # - get:
+      #     url: '/meals/favorite/list/latest'
+      #     headers:
+      #       authorization: 'Bearer {{ token }}'  
