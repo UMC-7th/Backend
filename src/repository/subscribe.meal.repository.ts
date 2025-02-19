@@ -1,4 +1,5 @@
 import { prisma } from "../db.config.js";
+import { DBError } from "../util/error.js";
 
 //식단을 저장하는 함수
 export const addMeal = async (data: any) => {
@@ -19,13 +20,18 @@ export const addMeal = async (data: any) => {
 };
 
 export const getCategoryIdByCategory = async (category: string) => {
-  const result = await prisma.mealSubCategory.findFirstOrThrow({
-    where: {
-      name: category,
-    },
-  });
-
-  return result?.categoryId;
+  try{
+    const result = await prisma.mealSubCategory.findFirstOrThrow({
+      where: {
+        name: category,
+      },
+    });
+  
+    return result?.categoryId;
+  }catch(error){
+    throw new DBError("카테고리 조회 중 오류가 발생했습니다.", error);    
+  }
+  
 };
 export const addSubMeal = async (
   categoryId: number,
@@ -63,7 +69,7 @@ export const getSubMealIdsByDate = async (
   const start = new Date(dateObj.setHours(0, 0, 0, 0));
   const end = new Date(dateObj.setHours(23, 59, 59, 999));
 
-  const meals = await prisma.mealSub.findFirstOrThrow({
+  const meals = await prisma.mealSub.findFirst({
     where: {
       categoryId: categoryId,
       time: time,
