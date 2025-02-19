@@ -1,0 +1,43 @@
+config:
+  target: 'http://localhost:3000/api/v1'
+  phases:
+    - duration: 3
+      arrivalRate: 30
+ 
+before:
+  flow:
+    - log: 'Get auth token'
+    - post:
+        url: '/users/login'
+        json:
+          email: 'test@test.test'
+          password: 'test'
+        capture:
+            json: '$.success.accessToken'     #1
+            as: 'token' 
+scenarios:
+  - flow:
+      # #구독 식단 조회
+      # - get:
+      #     url: '/subscribes/meals/list?category=간단 식사 구독'
+      #     headers:
+      #       authorization: 'Bearer {{ token }}'
+
+      # #구독한 식단 캘린더형 조회
+      # - get:
+      #     url: '/subscribes/users/calendar'
+      #     headers:
+      #       authorization: 'Bearer {{ token }}'
+
+      # #구독한 식단 리스트형 조회
+      # - get:
+      #     url: '/subscribes/users/list'
+      #     headers:
+      #       authorization: 'Bearer {{ token }}'
+
+      #구독한 식단 검색
+      - get:
+          url: '/subscribes/users/search?date=2025-02-20'
+          headers:
+            authorization: 'Bearer {{ token }}'
+          
