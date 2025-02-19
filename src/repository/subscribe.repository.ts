@@ -21,6 +21,28 @@ export const getKartSubById = async (userId: number, cartId: number) => {
   }
 };
 
+// 식단 장바구니 리스트 조회
+export const getKartList = async (userId: number) => {
+    try {
+        const kartList = await prisma.kartSub.findMany({
+            where: {
+                userId: userId
+            },
+            include: {
+                mealSub: {
+                    include: {
+                        meal: true
+                    }
+                }
+            }
+        })
+
+        return kartList;
+    } catch (error) {
+        throw new DBError("장바구니 리스트 조회 중 오류가 발생했습니다.", error);
+    }
+}
+
 // 식단 장바구니 추가
 export const addToCart = async (userId: number, mealSubId: number, count: number) => {
     try {
