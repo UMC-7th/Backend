@@ -1,6 +1,6 @@
 import express from "express";
 import { jwtAuthMiddleware } from "../util/jwt.middleware.js";
-import { deleteMarkMaterial, getAllMaterial, getMarkMaterialList, getRankAllMaterial, markMaterial, searchMaterial } from "../controller/material.controller.js";
+import { deleteMarkMaterial, getAllMaterial, getMarkMaterialList, getRankAllMaterial, getRankVarietyMaterial, markMaterial, searchMaterial } from "../controller/material.controller.js";
 
 const router = express.Router();
 
@@ -16,5 +16,7 @@ router.get("/all", getAllMaterial);
 router.get("/variety", searchMaterial);
 //전체 식재료 랭킹 조회
 router.get("/rank/all", getRankAllMaterial);
+//품종별 식재료 랭킹 조회
+router.get("/rank/variety", getRankVarietyMaterial);
 
 export default router;

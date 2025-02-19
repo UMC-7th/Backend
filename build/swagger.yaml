@@ -2693,6 +2693,46 @@ paths:
                       data:
                         type: array
                         items:
+                          $ref: "#/components/schemas/Material"
+  #식재료 품종 검색 api
+  /api/v1/materials/rank/variety:
+    get:
+      tags:
+        - Material
+      summary: get rank Material
+      description: 식재료 품종 기준으로 랭킹를 조회하는 API
+      parameters:
+          - in: query
+            name: name
+            schema:
+              type: string
+              example: 식량작물
+            required: true
+            description: 품종 이름
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      isSucess:
+                        type: boolean
+                        example: true
+                      data:
+                        type: array
+                        items:
                           $ref: "#/components/schemas/Material"                                                    
   #식재료 즐겨찾기 관련 api
   /api/v1/materials/mark:
