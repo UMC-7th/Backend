@@ -980,6 +980,82 @@ paths:
   #================================== 구독 관련 api==================================#
   # 식단 장바구니 추가 api
   /api/v1/subscribes/meals/cart:
+    get:
+      tags:
+        - Subscribe
+      summary: Get Cart List
+      description: 장바구니 리스트 조회 API
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: SUCCESS
+                  error:
+                    type: object
+                    nullable: true
+                  success:
+                    type: object
+                    properties:
+                      kartList:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            kardId:
+                              type: integer
+                            userId:
+                              type: integer
+                            mealSubId:
+                              type: integer
+                            cnt:
+                              type: integer
+                            mealSub:
+                              type: object
+                              properties:
+                                mealSubId:
+                                  type: integer
+                                mealId:
+                                  type: integer
+                                categoryId:
+                                  type: integer
+                                time:
+                                  type: string
+                                mealDate:
+                                  type: string
+                                  format: date-time
+                                meal:
+                                  type: object
+                                  properties:
+                                    mealId:
+                                      type: integer
+                                    food:
+                                      type: string
+                                    calorieTotal:
+                                      type: integer
+                                    material:
+                                      type: string
+                                    calorieDetail:
+                                      type: string
+                                    price:
+                                      type: integer
+                                    difficulty:
+                                      type: integer
+                                    recipe:
+                                      type: string
+                                    addedByUser:
+                                      type: boolean
+        "500":
+          description: Fail operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse"
     post:
       tags:
         - Subscribe
@@ -2514,24 +2590,13 @@ paths:
               schema:
                 $ref: "#/components/schemas/FailResponse"
   #==================================재료 관련 api==================================#
-  #식재료 즐겨찾기 관련 api
-  /api/v1/materials/mark:
-    #식재료 즐겨찾기 추가 api
-    post:
+  #식재료 전체 조회 api
+  /api/v1/materials/all:
+    get:
       tags:
         - Material
-      summary: mark Material
-      description: 사용자가 즐겨찾기한 식재료를 추가하는 API
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                material:
-                  type: string
-                  example: "사과"
+      summary: get All Material
+      description: 전체 식재료 조회하는 API
       responses:
         "200":
           description: Successful operation
@@ -2553,8 +2618,173 @@ paths:
                       isSucess:
                         type: boolean
                         example: true
-                      material:
-                        $ref: "#/components/schemas/Material"
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Material"
+  #식재료 품종 검색 api
+  /api/v1/materials/variety:
+    get:
+      tags:
+        - Material
+      summary: search Material
+      description: 식재료 품종 기준으로 검색하는 API
+      parameters:
+          - in: query
+            name: name
+            schema:
+              type: string
+              example: 식량작물
+            required: true
+            description: 품종 이름
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      isSucess:
+                        type: boolean
+                        example: true
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Material"
+  #전체 식재료 랭킹 조회 api
+  /api/v1/materials/rank/all:
+    get:
+      tags:
+        - Material
+      summary: get Rank All Material
+      description: 전체 식재료의 랭킹을 조회하는 API
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      isSucess:
+                        type: boolean
+                        example: true
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Material"
+  #식재료 품종 검색 api
+  /api/v1/materials/rank/variety:
+    get:
+      tags:
+        - Material
+      summary: get rank Material
+      description: 식재료 품종 기준으로 랭킹를 조회하는 API
+      parameters:
+          - in: query
+            name: name
+            schema:
+              type: string
+              example: 식량작물
+            required: true
+            description: 품종 이름
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      isSucess:
+                        type: boolean
+                        example: true
+                      data:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Material"                                                    
+  #식재료 즐겨찾기 관련 api
+  /api/v1/materials/mark:
+    #식재료 즐겨찾기 추가 api
+    post:
+      tags:
+        - Material
+      summary: mark Material
+      description: 사용자가 즐겨찾기한 식재료를 추가하는 API
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                materialId:
+                  type: integer
+                  example: 0
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  resultType:
+                    type: string
+                    example: "SUCCESS"
+                  error:
+                    type: string
+                    nullable: true
+                    example: null
+                  success:
+                    type: object
+                    properties:
+                      isSucess:
+                        type: boolean
+                        example: true
+                      markMaterial:
+                        type: object
+                        properties:
+                          markId:
+                            type: integer
+                            example: 0
+                          userId:
+                            type: integer
+                            example: 0
+                          materialId:
+                            type: integer
+                            example: 0
         "500":
           description: Fail operation
           content:
@@ -2588,7 +2818,13 @@ paths:
                       markList:
                         type: array
                         items:
-                          $ref: "#/components/schemas/Material"
+                          type: object
+                          properties:
+                            markId:
+                              type: integer
+                              default: 0
+                            material:
+                              $ref: "#/components/schemas/Material"
         "500":
           description: Fail operation
           content:
@@ -2608,9 +2844,9 @@ paths:
             schema:
               type: object
               properties:
-                material:
-                  type: string
-                  example: "사과"
+                materialId:
+                  type: integer
+                  example: 0
       responses:
         "200":
           description: Successful operation
@@ -2632,8 +2868,18 @@ paths:
                       isSucess:
                         type: boolean
                         example: true
-                      material:
-                        $ref: "#/components/schemas/Material"
+                      markMaterial:
+                        type: object
+                        properties:
+                          markId:
+                            type: integer
+                            example: 0
+                          userId:
+                            type: integer
+                            example: 0
+                          materialId:
+                            type: integer
+                            example: 0
         "500":
           description: Fail operation
           content:
@@ -2774,12 +3020,21 @@ components:
         materialId:
           type: integer
           default: 0
-        userId:
+        itemId:
           type: integer
           default: 0
-        material:
+        varietyId:
+          type: integer
+          default: 0
+        name:
           type: string
           default: "사과"
+        unit:
+          type: string
+          default: "10kg"
+        delta:
+          type: float
+          default: 0.0
   #보안 처리
   securitySchemes:
     Bearer:
