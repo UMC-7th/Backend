@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { InvalidInputError } from "../util/error.js";
-import { deleteMarkMaterialService, getAllMaterialService, getMarkMaterialListService, markMaterialService } from "../service/material.service.js";
+import { deleteMarkMaterialService, getAllMaterialService, getMarkMaterialListService, markMaterialService, searchMaterialService } from "../service/material.service.js";
 
 //식재료 북마크 추가
 export const markMaterial = async (
@@ -70,6 +70,23 @@ export const getAllMaterial = async (
 ) => {
     try {
         const materialList = await getAllMaterialService();
+        res.status(StatusCodes.OK).success({
+            isSuccess: true,
+            data: materialList
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+//식재료 품종 검색
+export const searchMaterial = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const materialList = await searchMaterialService(req.params.name);
         res.status(StatusCodes.OK).success({
             isSuccess: true,
             data: materialList

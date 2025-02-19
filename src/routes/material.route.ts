@@ -1,6 +1,6 @@
 import express from "express";
 import { jwtAuthMiddleware } from "../util/jwt.middleware.js";
-import { deleteMarkMaterial, getAllMaterial, getMarkMaterialList, markMaterial } from "../controller/material.controller.js";
+import { deleteMarkMaterial, getAllMaterial, getMarkMaterialList, markMaterial, searchMaterial } from "../controller/material.controller.js";
 
 const router = express.Router();
 
@@ -12,5 +12,6 @@ router.get("/mark", jwtAuthMiddleware, getMarkMaterialList);
 router.delete("/mark", jwtAuthMiddleware, deleteMarkMaterial);
 //식재료 전체 조회
 router.get("/all", getAllMaterial);
-
+//식재료 품좀 검색
+router.get("/variety", searchMaterial);
 export default router;
