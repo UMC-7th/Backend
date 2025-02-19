@@ -35,9 +35,9 @@ scenarios:
       #     headers:
       #       authorization: 'Bearer {{ token }}'
 
-      #구독한 식단 검색
-      - get:
-          url: '/subscribes/users/search?date=2025-02-20'
-          headers:
-            authorization: 'Bearer {{ token }}'
+      # #구독한 식단 검색
+      # - get:
+      #     url: '/subscribes/users/search?date=2025-02-20'
+      #     headers:
+      #       authorization: 'Bearer {{ token }}'
           
