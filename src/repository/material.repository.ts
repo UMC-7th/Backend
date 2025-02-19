@@ -68,7 +68,17 @@ export const deleteMarkMaterial = async (markId: number) => {
 export const getAllMaterial = async () => {
     try {
         const materialList = await prisma.material.findMany({
-            
+            select: {
+                materialId:true,
+                itemId:true,
+                name: true,
+                unit: true,
+                variety: {
+                    select:{
+                        name: true
+                    }
+                }
+            }
         });
         return materialList;
     } catch (error) {
@@ -79,6 +89,17 @@ export const getAllMaterial = async () => {
 export const getRankAllMaterial = async () => {
     try {
         const materialList = await prisma.material.findMany({
+            select: {
+                materialId:true,
+                itemId:true,
+                name: true,
+                unit: true,
+                variety: {
+                    select:{
+                        name: true
+                    }
+                }
+            },
             orderBy: {
                 delta: "desc"
             },
@@ -108,6 +129,17 @@ export const getVariety = async (name: string) => {
 export const searchMaterial = async (varietyId: number) => {
     try {
         const materialList = await prisma.material.findMany({
+            select: {
+                materialId:true,
+                itemId:true,
+                name: true,
+                unit: true,
+                variety: {
+                    select:{
+                        name: true
+                    }
+                }
+            },
             where:{
                 varietyId: varietyId
             }
@@ -122,6 +154,17 @@ export const searchMaterial = async (varietyId: number) => {
 export const getRankVarietyMaterial = async (varietyId: number) => {
     try {
         const materialList = await prisma.material.findMany({
+            select: {
+                materialId:true,
+                itemId:true,
+                name: true,
+                unit: true,
+                variety: {
+                    select:{
+                        name: true
+                    }
+                }
+            },
             where:{
                 varietyId: varietyId
             },
