@@ -1,4 +1,4 @@
-import { deleteMarkMaterial, getAllMaterial, getMarkMaterial, getMarkMaterialList, getVariety, markMaterial, searchMaterial } from "../repository/material.repository.js";
+import { deleteMarkMaterial, getAllMaterial, getMarkMaterial, getMarkMaterialList, getRankAllMaterial, getVariety, markMaterial, searchMaterial } from "../repository/material.repository.js";
 import { InvalidInputError } from "../util/error.js";
 
 //식재료 북마크 추가
@@ -43,5 +43,11 @@ export const searchMaterialService = async (name: string) => {
 
     const materialList = await searchMaterial(variety.varietyId);
 
+    return materialList;
+}
+
+//전체 식재료 랭킹 조회
+export const getRankAllMaterialService = async () => {
+    const materialList = await getRankAllMaterial();
     return materialList;
 }

@@ -75,7 +75,21 @@ export const getAllMaterial = async () => {
         throw new DBError("식재료 전체 조회 중 오류가 발생했습니다.", error);
     }
 };
+//식재료 랭킹 조회
+export const getRankAllMaterial = async () => {
+    try {
+        const materialList = await prisma.material.findMany({
+            orderBy: {
+                delta: "desc"
+            }
+        });
+        return materialList;
+    } catch (error) {
+        throw new DBError("식재료 랭킹 조회 중 오류가 발생했습니다.", error);
+    }
+};
 
+//품종 조회
 export const getVariety = async (name: string) => {
     try {
         const variety = await prisma.variety.findFirst({
