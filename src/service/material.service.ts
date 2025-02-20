@@ -99,8 +99,8 @@ export const getMaterialDataService = async () => {
             {
                 params: {
                     action: "dailySalesList",
-                    p_cert_key: "1177e9f8-8f03-45ec-9cef-318101246a8d",
-                    p_cert_id: 5258,
+                    p_cert_key: process.env.KAMIS_API_KEY,
+                    p_cert_id: process.env.KAMIS_API_ID,
                     p_returntype: "json",
                 },
             }
