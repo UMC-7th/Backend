@@ -4,4 +4,6 @@ export interface addMaterialDto{
     delta: number;
     unit: string;
     varietyId: number;
+    deltaAbs: number;
+    type: string;
 }

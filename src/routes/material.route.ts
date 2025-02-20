@@ -20,6 +20,6 @@ router.get("/rank/all", getRankAllMaterial);
 router.get("/rank/variety", getRankVarietyMaterial);
 
 //식재료 추가
-//router.get("/", addMaterial);
+router.get("/", addMaterial);
 
 export default router;

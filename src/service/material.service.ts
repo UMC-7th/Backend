@@ -71,12 +71,23 @@ export const addMaterialService = async () => {
     const data = materialData
 
     data.price.map((material)=>{
+        let sign;
+        if(parseFloat(material.direction) == 0){
+            sign = -1;
+        } else if(parseFloat(material.direction) == 1){
+            sign = 1;
+        } else{
+            sign = 0;
+        }
+
         const materialDto:addMaterialDto = {
             itemId: parseInt(material.productno),
             name: material.item_name,
             delta: parseFloat(material.value),
+            deltaAbs: parseFloat(material.value) * sign,
             unit: material.unit,
-            varietyId: parseInt(material.category_code)
+            varietyId: parseInt(material.category_code),
+            type: material.product_cls_name
         }
 
         addMaterial(materialDto);

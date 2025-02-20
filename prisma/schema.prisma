@@ -183,6 +183,8 @@ model Material {
   name       String @db.VarChar(100)
   unit       String @db.VarChar(100)
   delta      Float  @db.Float
+  deltaAbs   Float  @map("delta_abs") @db.Float
+  type       String @db.VarChar(100)
 
   variety      Variety       @relation(fields: [varietyId], references: [varietyId], onDelete: Cascade)
   HotMaterial  HotMaterial?

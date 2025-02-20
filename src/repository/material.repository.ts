@@ -191,8 +191,10 @@ export const addMaterial = async (data: addMaterialDto) => {
                 itemId: data.itemId,
                 name: data.name,
                 delta: data.delta,
+                deltaAbs: data.deltaAbs,
                 unit: data.unit,
-                varietyId: data.varietyId
+                varietyId: data.varietyId,
+                type: data.type
             }
         })
     } catch (error) {
