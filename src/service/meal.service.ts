@@ -119,6 +119,7 @@ Please generate 5 different meal options for ${data.time} with these guidelines:
 - Different cooking methods for each meal
 - Diverse vegetable side dishes
 - Various types of soup/stew (국, 찌개, 탕)
+-레시피를 제공할때는 앞에 1. 2. 를 제공하세요  ex 1. 갈치에 소금을 뿌려 양념 재료와 함께 재워 구워낸다. 2. 시금치는 삶아 물기를 짠 후
       {
         "day": string (e.g., "2025-01-15"),
         "mealTime": "${data.time}",
@@ -281,6 +282,8 @@ export const refreshMealService = async (data: BaseMealActionDTO) => {
   - "difficulty": an integer indicating the preparation difficulty (default: 1, range: 1 to 5, where 1 is easiest and 5 is hardest).
   - "material": a string listing the key ingredients used in the meal (e.g., "쌀, 된장, 두부, 삼겹살, 마늘, 고춧가루").
   - "recipe": a string providing a simple step-by-step cooking guide for dishes that require actual preparation. Very simple foods like 김치 or 계란프라이 should not have a recipe.
+    -레시피를 제공할때는 앞에 1. 2. 를 제공하세요  ex 1. 갈치에 소금을 뿌려 양념 재료와 함께 재워 구워낸다. 2. 시금치는 삶아 물기를 짠 후
+   
 
 The diet plan should:
 - Be balanced and nutritious, with a focus on variety in food items for each meal.
