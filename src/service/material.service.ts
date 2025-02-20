@@ -83,8 +83,8 @@ export const addMaterialService = async () => {
         const materialDto:addMaterialDto = {
             itemId: parseInt(material.productno),
             name: material.item_name,
-            delta: parseFloat(material.value),
-            deltaAbs: parseFloat(material.value) * sign,
+            delta: parseFloat(material.value) * sign,
+            deltaAbs: parseFloat(material.value),
             unit: material.unit,
             varietyId: parseInt(material.category_code),
             type: material.product_cls_name

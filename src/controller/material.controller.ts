@@ -114,7 +114,7 @@ export const getRankAllMaterial = async (
     }
 };
 
-//품종별 식재료 랭킹킹 검색
+//품종별 식재료 랭킹 검색
 export const getRankVarietyMaterial = async (
     req: Request,
     res: Response,
