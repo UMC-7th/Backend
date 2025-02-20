@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { InvalidInputError } from "../util/error.js";
-import { addMaterialService, deleteMarkMaterialService, getAllMaterialService, getMarkMaterialListService, getRankAllMaterialService, getRankVarietyMaterialService, markMaterialService, searchMaterialService } from "../service/material.service.js";
+import { deleteMarkMaterialService, getAllMaterialService, getMarkMaterialListService, getRankAllMaterialService, getRankVarietyMaterialService, markMaterialService, searchMaterialService } from "../service/material.service.js";
 
 //식재료 북마크 추가
 export const markMaterial = async (
@@ -126,22 +126,6 @@ export const getRankVarietyMaterial = async (
         res.status(StatusCodes.OK).success({
             isSuccess: true,
             data: materialList
-        });
-    } catch (error) {
-        next(error);
-    }
-};
-
-//식재료 추가
-export const addMaterial = async (
-    req: Request,
-    res: Response,
-    next: NextFunction
-) => {
-    try {
-        await addMaterialService()
-        res.status(StatusCodes.OK).success({
-            isSuccess: true
         });
     } catch (error) {
         next(error);

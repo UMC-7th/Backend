@@ -14,7 +14,7 @@ import {
   kakaoStrategy,
   naverStrategy,
 } from "./config/passport.js";
-import { addMaterialService, getMaterialDataService } from "./service/material.service.js";
+import { getMaterialDataService } from "./service/material.service.js";
 
 dotenv.config();
 
@@ -89,9 +89,8 @@ app.use(errorMiddleware);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
-  addMaterialService();
 });
 
 app.listen(3001, () => {
-  scheduleJob('26 17 * * *', getMaterialDataService);
+  scheduleJob('0 16 * * *', getMaterialDataService);
 });

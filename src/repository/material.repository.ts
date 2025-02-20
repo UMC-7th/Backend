@@ -208,8 +208,8 @@ export const addMaterial = async (data: addMaterialDto) => {
             data: {
                 itemId: data.itemId,
                 name: data.name,
-                delta: data.delta|0,
-                deltaAbs: data.deltaAbs|0,
+                delta: data.delta,
+                deltaAbs: data.deltaAbs,
                 unit: data.unit,
                 varietyId: data.varietyId,
                 type: data.type
