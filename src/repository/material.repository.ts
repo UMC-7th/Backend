@@ -176,7 +176,6 @@ export const getRankVarietyMaterial = async (varietyId: number) => {
             },
             where:{
                 varietyId: varietyId,
-                delta: {lt: 0}
             },
             orderBy: {
                 delta: "asc"
