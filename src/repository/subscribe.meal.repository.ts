@@ -20,18 +20,17 @@ export const addMeal = async (data: any) => {
 };
 
 export const getCategoryIdByCategory = async (category: string) => {
-  try{
+  try {
     const result = await prisma.mealSubCategory.findFirstOrThrow({
       where: {
         name: category,
       },
     });
-  
+
     return result?.categoryId;
-  }catch(error){
-    throw new DBError("카테고리 조회 중 오류가 발생했습니다.", error);    
+  } catch (error) {
+    throw new DBError("카테고리 조회 중 오류가 발생했습니다.", error);
   }
-  
 };
 export const addSubMeal = async (
   categoryId: number,

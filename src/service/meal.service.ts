@@ -30,6 +30,7 @@ import {
   deleteDislikeMeal,
   getFavoritMealByIdLatest,
   updateMeal,
+  getEatMealByIds,
 } from "../repository/meal.repository.js";
 import { addMealToUser } from "../repository/meal.repository.js";
 import { getUserById } from "../repository/user.repository.js";
@@ -391,16 +392,26 @@ export const getMealDetailService = async (data: BaseMealActionDTO) => {
     throw new NotFoundError("존재하지 않는 유저입니다", data.userId);
   }
 
-  const meal = await getMealById(data.mealId);
-
-  if (!meal) {
+  const mealDetail = await getMealById(data.mealId);
+  if (!mealDetail) {
     throw new NotFoundError("존재하지 않는 식단입니다", data.mealId);
   }
 
-  const mealDetail = await getMealById(data.mealId);
-
+  // 식단 유저 정보 조회
   const mealUser = await getmealUserByIds(data);
-  return { mealDetail, mealUser };
+
+  // 사용자의 식단 섭취 여부 조회
+  const eatMeal = await getEatMealByIds(data);
+
+  let eat: boolean;
+
+  if (eatMeal.length != 0) {
+    eat = true;
+  } else {
+    eat = false;
+  }
+
+  return { mealDetail, mealUser, eat };
 };
 
 // 식단 완료

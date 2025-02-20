@@ -1893,6 +1893,9 @@ paths:
                           isHate:
                             type: boolean
                             example: false
+                      eat:
+                        type: boolean
+                        example: false
         "500":
           description: Fail operation
           content:
@@ -2630,13 +2633,13 @@ paths:
       summary: search Material
       description: 식재료 품종 기준으로 검색하는 API
       parameters:
-          - in: query
-            name: name
-            schema:
-              type: string
-              example: 식량작물
-            required: true
-            description: 품종 이름
+        - in: query
+          name: name
+          schema:
+            type: string
+            example: 식량작물
+          required: true
+          description: 품종 이름
       responses:
         "200":
           description: Successful operation
@@ -2702,13 +2705,13 @@ paths:
       summary: get rank Material
       description: 식재료 품종 기준으로 랭킹를 조회하는 API
       parameters:
-          - in: query
-            name: name
-            schema:
-              type: string
-              example: 식량작물
-            required: true
-            description: 품종 이름
+        - in: query
+          name: name
+          schema:
+            type: string
+            example: 식량작물
+          required: true
+          description: 품종 이름
       responses:
         "200":
           description: Successful operation
@@ -2733,7 +2736,7 @@ paths:
                       data:
                         type: array
                         items:
-                          $ref: "#/components/schemas/Material"                                                    
+                          $ref: "#/components/schemas/Material"
   #식재료 즐겨찾기 관련 api
   /api/v1/materials/mark:
     #식재료 즐겨찾기 추가 api
@@ -3029,10 +3032,16 @@ components:
         unit:
           type: string
           default: "10kg"
+        delta:
+          type: float
+          default: 0.1
+        type:
+          type: string
+          default: "도매"
         variety:
           type: object
           properties:
-            name: 
+            name:
               type: string
               default: "식량작물"
   #보안 처리
