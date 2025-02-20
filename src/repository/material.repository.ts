@@ -120,6 +120,8 @@ export const getVariety = async (name: string) => {
                 name: name
             }
         });
+        console.log(name);
+        console.log(variety);
         return variety;
     } catch (error) {
         throw new DBError("품종 검색 중 오류가 발생했습니다.", error);

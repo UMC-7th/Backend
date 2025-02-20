@@ -85,8 +85,9 @@ export const searchMaterial = async (
     res: Response,
     next: NextFunction
 ) => {
+    const data = req.query as { name: string };
     try {
-        const materialList = await searchMaterialService(req.params.name);
+        const materialList = await searchMaterialService(data.name);
         res.status(StatusCodes.OK).success({
             isSuccess: true,
             data: materialList
@@ -119,8 +120,9 @@ export const getRankVarietyMaterial = async (
     res: Response,
     next: NextFunction
 ) => {
+    const data = req.query as { name: string };
     try {
-        const materialList = await getRankVarietyMaterialService(req.params.name);
+        const materialList = await getRankVarietyMaterialService(data.name);
         res.status(StatusCodes.OK).success({
             isSuccess: true,
             data: materialList
