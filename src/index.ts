@@ -5,6 +5,7 @@ import swaggerUi from "swagger-ui-express";
 import YAML from "yamljs";
 import path from "path";
 import passport from "passport";
+import { scheduleJob } from 'node-schedule';
 import { errorMiddleware, successMiddleware } from "./util/middleware.js";
 import mainRouter from "./routes/index.route.js";
 import { socialAuthCallback } from "./controller/user.controller.js";
@@ -13,6 +14,7 @@ import {
   kakaoStrategy,
   naverStrategy,
 } from "./config/passport.js";
+import { addMaterialService, getMaterialDataService } from "./service/material.service.js";
 
 dotenv.config();
 
@@ -87,4 +89,9 @@ app.use(errorMiddleware);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
+  addMaterialService();
+});
+
+app.listen(3001, () => {
+  scheduleJob('26 17 * * *', getMaterialDataService);
 });

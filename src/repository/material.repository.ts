@@ -189,24 +189,34 @@ export const getRankVarietyMaterial = async (varietyId: number) => {
     }
 };
 
-export const addMaterial = async (data: addMaterialDto) => {
-    try{
+//식재료 전체 삭제
+export const deleteAllMaterial = async () => {
+    try {
         //모든 식재료 삭제
         await prisma.material.deleteMany()
+        await prisma.$queryRaw`ALTER TABLE material AUTO_INCREMENT = 0`;    //index 값 초기화
 
-        //삭제 후 삽입
+    } catch (error) {
+        throw new DBError("식재료 삭제 중 오류가 발생했습니다.", error);
+    }
+}
+
+//식재료 추가
+export const addMaterial = async (data: addMaterialDto) => {
+    try{
         await prisma.material.create({
             data: {
                 itemId: data.itemId,
                 name: data.name,
-                delta: data.delta,
-                deltaAbs: data.deltaAbs,
+                delta: data.delta|0,
+                deltaAbs: data.deltaAbs|0,
                 unit: data.unit,
                 varietyId: data.varietyId,
                 type: data.type
             }
         })
     } catch (error) {
+        console.log(data);
         throw new DBError("식재료 생성 중 오류가 발생했습니다.", error);
     }
 };
