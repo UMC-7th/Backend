@@ -310,3 +310,12 @@ export const getDislikeMeal = async (userId: number) => {
   });
   return dislikeMeals;
 };
+export const getEatMealByIds = async (data: BaseMealActionDTO) => {
+  const eatMeal = await prisma.eatMeal.findMany({
+    where: {
+      userId: data.userId,
+      mealId: data.mealId,
+    },
+  });
+  return eatMeal;
+};
