@@ -70,10 +70,12 @@ export const getAllMaterial = async () => {
     try {
         const materialList = await prisma.material.findMany({
             select: {
-                materialId:true,
-                itemId:true,
+                materialId: true,
+                itemId: true,
                 name: true,
                 unit: true,
+                delta: true,
+                type: true,
                 variety: {
                     select:{
                         name: true
@@ -95,6 +97,8 @@ export const getRankAllMaterial = async () => {
                 itemId:true,
                 name: true,
                 unit: true,
+                delta: true,
+                type: true,
                 variety: {
                     select:{
                         name: true
@@ -102,7 +106,7 @@ export const getRankAllMaterial = async () => {
                 }
             },
             orderBy: {
-                delta: "desc"
+                deltaAbs: "desc"
             },
             take: 10
         });
@@ -120,8 +124,6 @@ export const getVariety = async (name: string) => {
                 name: name
             }
         });
-        console.log(name);
-        console.log(variety);
         return variety;
     } catch (error) {
         throw new DBError("품종 검색 중 오류가 발생했습니다.", error);
@@ -133,10 +135,12 @@ export const searchMaterial = async (varietyId: number) => {
     try {
         const materialList = await prisma.material.findMany({
             select: {
-                materialId:true,
-                itemId:true,
+                materialId: true,
+                itemId: true,
                 name: true,
                 unit: true,
+                delta: true,
+                type: true,
                 variety: {
                     select:{
                         name: true
@@ -153,7 +157,7 @@ export const searchMaterial = async (varietyId: number) => {
     }
 };
 
-//식재료 품종 검색
+//식재료 품목별 랭크 조회
 export const getRankVarietyMaterial = async (varietyId: number) => {
     try {
         const materialList = await prisma.material.findMany({
@@ -162,6 +166,8 @@ export const getRankVarietyMaterial = async (varietyId: number) => {
                 itemId:true,
                 name: true,
                 unit: true,
+                delta: true,
+                type: true,
                 variety: {
                     select:{
                         name: true
@@ -169,10 +175,11 @@ export const getRankVarietyMaterial = async (varietyId: number) => {
                 }
             },
             where:{
-                varietyId: varietyId
+                varietyId: varietyId,
+                delta: {lt: 0}
             },
             orderBy: {
-                delta: "desc"
+                delta: "asc"
             },
             take: 10
         });

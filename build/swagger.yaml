@@ -3029,6 +3029,12 @@ components:
         unit:
           type: string
           default: "10kg"
+        delta:
+          type: float
+          default: 0.1
+        type:
+          type: string
+          default: "도매"
         variety:
           type: object
           properties:
