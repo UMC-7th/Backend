@@ -1,5 +1,8 @@
-import { deleteMarkMaterial, getAllMaterial, getMarkMaterial, getMarkMaterialList, getRankAllMaterial, getRankVarietyMaterial, getVariety, markMaterial, searchMaterial } from "../repository/material.repository.js";
+import { addMaterial, deleteMarkMaterial, getAllMaterial, getMarkMaterial, getMarkMaterialList, getRankAllMaterial, getRankVarietyMaterial, getVariety, markMaterial, searchMaterial } from "../repository/material.repository.js";
 import { InvalidInputError } from "../util/error.js";
+import { materialData } from "../util/material.js";
+import { addMaterialDto } from "../dto/material.dto.js";
+
 
 //식재료 북마크 추가
 export const markMaterialService = async (userId: number, materialId: number) => {
@@ -61,4 +64,33 @@ export const getRankVarietyMaterialService = async (name: string) => {
     const materialList = await getRankVarietyMaterial(variety.varietyId);
 
     return materialList;
+}
+
+//식재료 생성
+export const addMaterialService = async () => {
+    const data = materialData
+
+    data.price.map((material)=>{
+        let sign;
+        if(parseFloat(material.direction) == 0){
+            sign = -1;
+        } else if(parseFloat(material.direction) == 1){
+            sign = 1;
+        } else{
+            sign = 0;
+        }
+
+        const materialDto:addMaterialDto = {
+            itemId: parseInt(material.productno),
+            name: material.item_name,
+            delta: parseFloat(material.value),
+            deltaAbs: parseFloat(material.value) * sign,
+            unit: material.unit,
+            varietyId: parseInt(material.category_code),
+            type: material.product_cls_name
+        }
+
+        addMaterial(materialDto);
+    });
+    return;
 }

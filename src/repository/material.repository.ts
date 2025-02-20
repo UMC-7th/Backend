@@ -1,4 +1,5 @@
 import { prisma } from "../db.config.js";
+import { addMaterialDto } from "../dto/material.dto.js";
 import { DBError } from "../util/error.js";
 
 //식재료 북마크 단일 조회
@@ -119,6 +120,8 @@ export const getVariety = async (name: string) => {
                 name: name
             }
         });
+        console.log(name);
+        console.log(variety);
         return variety;
     } catch (error) {
         throw new DBError("품종 검색 중 오류가 발생했습니다.", error);
@@ -176,5 +179,27 @@ export const getRankVarietyMaterial = async (varietyId: number) => {
         return materialList;
     } catch (error) {
         throw new DBError("식재료 랭킹 조회 중 오류가 발생했습니다.", error);
+    }
+};
+
+export const addMaterial = async (data: addMaterialDto) => {
+    try{
+        //모든 식재료 삭제
+        await prisma.material.deleteMany()
+
+        //삭제 후 삽입
+        await prisma.material.create({
+            data: {
+                itemId: data.itemId,
+                name: data.name,
+                delta: data.delta,
+                deltaAbs: data.deltaAbs,
+                unit: data.unit,
+                varietyId: data.varietyId,
+                type: data.type
+            }
+        })
+    } catch (error) {
+        throw new DBError("식재료 생성 중 오류가 발생했습니다.", error);
     }
 };
