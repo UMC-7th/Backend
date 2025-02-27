@@ -30,3 +30,7 @@
 * Redis
 * Swagger
 <br><br>
+
+<br><br>
+## 🔧 아키텍처 구조
+![image](https://github.com/user-attachments/assets/87740596-3d67-434f-a76f-827826ec1d38)
